@@ -1,5 +1,18 @@
 # CPSC 304 Project Breakdown #
 
+## Group Members ##
+* k4q8w
+* u6u4a
+* n0x9v
+
+## Project Description ##
+we plan to model a database for the Pokémon franchise (with slight variations 
+to better suit CPSC 304 project requirements), highlighting some key behaviours 
+that a player would use while interacting with the game. The purpose of this application 
+is to monitor trainers’ progress (including collected pokémon, badges earned, items collected, 
+and gym battle records) and the development of their pokémon (such as levels and evolutions).
+
+
 ### Elements required in application (Brainstorm) ###
 
 1. ***Landing page*** 
