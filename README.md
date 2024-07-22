@@ -30,10 +30,12 @@ and gym battle records) and the development of their pokémon (such as levels an
    1. Displays all gyms with their attributes
    2. Challenge button. If you press it, a new gym challenge + battle is made and stored in database. 
       The user sees whether they win or lose. If they win, the appropriate badge is added to the badge table
-5. ***Pokedex Page - on sidebar***
+5. ***Pokedex Page (Must login to view) - on sidebar***
     1. Displays all pokemon and items in tables 
     2. Displays type chart
     3. Ability to search pokemon by name or filter by type (dropdown menu for type?)
     4. Two drop downs that let you enter two types to view effectiveness
-    5. Search items by name  
+    5. Search items by name
+6. ***Store Page (Must login to view) - on sidebar***
+   1. List all items available in game. Each item has a "get" button (adds to player inventory) 
 
