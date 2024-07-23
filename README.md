@@ -113,4 +113,9 @@ across these pages.
 8. Build .SQL init files (Dana) - July 29
 9. Final debugging and details (All) - Aug 2-Aug 4
         
-
+### Potential Challenges ###
+- None of us have much experience building full stack applications, so we 
+anticipate that we will have to problem-solve a lot during this project, particularly dealing with
+different users trying to access their accounts through the database
+- We may also have some trouble adjusting to the file hierarchies and syntax for a Javascript project, since we
+are all new to the language. 
