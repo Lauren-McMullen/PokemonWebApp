@@ -7,9 +7,15 @@
   "author": {
     "name": "Zoe Yuan"
   },
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
     "oracledb": "^5.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
