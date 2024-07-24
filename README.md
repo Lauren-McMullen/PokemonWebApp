@@ -6,7 +6,7 @@
 * n0x9v
 
 ## Project Description ##
-This is renbo testing. We plan to model a database for the Pokémon franchise (with slight variations 
+This is anther renbo testing 2. We plan to model a database for the Pokémon franchise (with slight variations 
 to better suit CPSC 304 project requirements), highlighting some key behaviours 
 that a player would use while interacting with the game. The purpose of this application 
 is to monitor trainers’ progress (including collected pokémon, badges earned, items collected, 
