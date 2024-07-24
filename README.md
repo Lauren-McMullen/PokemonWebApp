@@ -31,11 +31,91 @@ and gym battle records) and the development of their pokémon (such as levels an
    2. Challenge button. If you press it, a new gym challenge + battle is made and stored in database. 
       The user sees whether they win or lose. If they win, the appropriate badge is added to the badge table
 5. ***Pokedex Page (Must login to view) - on sidebar***
-    1. Displays all pokemon and items in tables 
-    2. Displays type chart
-    3. Ability to search pokemon by name or filter by type (dropdown menu for type?)
+    1. Displays all pokemon in tables 
+    2. Displays evolution chart
+    3. Ability to search pokemon by name or filter by type (dropdown menu for type)
     4. Two drop downs that let you enter two types to view effectiveness
-    5. Search items by name
 6. ***Store Page (Must login to view) - on sidebar***
    1. List all items available in game. Each item has a "get" button (adds to player inventory) 
 
+### Project Timeline  ###
+
+We have decided to use end-to-end development to construct our timeline so that our group members can all practice
+front end and back end skills. Because our application has 6 distinct web pages, it makes sense to split development 
+across these pages.
+
+1. Home/landing page (Assigned to: Renbo)
+    1. Front End Needed - July 28
+       1. Welcome font and inputs for username and password
+       2. Dialog box to create a new account
+       3. Buttons for 'login' and 'sign up'
+    2. Back End Needed - Aug 2
+       1. Set up username-password validation 
+       2. Trigger sign up dialog on 'sign up' click
+       3. Handle user input on 'login' click
+
+2. Team page (Assigned to: Dana)
+    1. Front End Needed - July 28
+       1. Sections titles
+       2. Table display for bag, badges, and player pokemon
+       3. 'train' and 'release' buttons
+       4. Selected pokemon display
+    2. Back End Needed - Aug 2
+        1. Fill tables with user assets via database
+        2. Change displayed pokemon based on what is selected
+        3. Fetch data to fill out table on refresh 
+
+3. Pokemon Catching page (Assigned to: Lauren)
+    1. Front End Needed - July 28
+        1. Page titles
+        2. 'catch now' button
+        3. Display for the randomly selected 'caught' pokemon 
+    2. Back End Needed - Aug 2
+        1. Randomized pokemon selected from pokedex list
+        2. Add pokemon to player pokemon once 'caught'
+        3. Fetch data to fill out table on refresh
+
+4. Gym Page (Assigned to: Dana)
+    1. Front End Needed - July 28
+        1. Page titles 
+        2. Gym table 
+        3. 'Fight' button 
+    2. Back End Needed - Aug 2
+        1. Fetch data to fill out table on refresh
+        2. Calculate win/loss result randomly
+
+5. Pokedex Page (Assigned to: Lauren)
+    1. Front End Needed - July 28
+        1. Titles and section titles
+        2. Tables for Pokemon and evolutions
+        3. input bars for pokemon and type effectiveness
+        4. Drop down menu to filter pokemon by type
+        5. Special display for currently selected pokemon 
+    2. Back End Needed - Aug 2
+        1. Fetch data to fill out table on refresh
+        2. Refresh results based on filters and searches
+        3. Query to return type effectiveness when 'get effectiveness' is clicked
+
+6. Store Page (Assigned to: Renbo)
+    1. Front End Needed - July 28
+        1. Titles and section titles
+        2. Table for items available in game
+        3. Input for search bar
+        4. Special display for currently selected item 
+    2. Back End Needed - Aug 2
+        1. Fetch data to fill out table on refresh
+        2. Refresh results based on search
+        3. Add item to trainer bag on 'buy' click
+        4. Special display based on what is currently selected 
+  
+    ***MISC.***
+7. Build Navigation bar / logic (Lauren) - July 29
+8. Build .SQL init files (Dana) - July 29
+9. Final debugging and details (All) - Aug 2-Aug 4
+        
+### Potential Challenges ###
+- None of us have much experience building full stack applications, so we 
+anticipate that we will have to problem-solve a lot during this project, particularly dealing with
+different users trying to access their accounts through the database
+- We may also have some trouble adjusting to the file hierarchies and syntax for a Javascript project, since we
+are all new to the language. 
