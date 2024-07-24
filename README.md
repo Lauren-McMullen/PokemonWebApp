@@ -129,6 +129,7 @@ are all new to the language.
 - basic setup in /public/scripts.js
 - .env, .gitignore, .json package, remote-start.sh
 - utils folder/file
+- pixabay.com was used to source svg files
 
 
 
