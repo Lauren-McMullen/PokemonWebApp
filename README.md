@@ -121,10 +121,13 @@ different users trying to access their accounts through the database
 are all new to the language. 
 
 # References #
+***TODO: Write these out properly***
+
 - server, appcontroller, appservice boilerplate
 - scripts folder (all)
 - basic setup in /public/scripts.js
 - .env, .gitignore, .json package, remote-start.sh
 - utils folder/file
+
 
 
