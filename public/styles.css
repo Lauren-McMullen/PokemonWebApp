@@ -43,7 +43,7 @@ tr:hover {
 }
 
 button {
-    background-color: rgb(32, 107, 227);
+    background-color: #313131;
     color: #fff;
     padding: 10px 20px;
     font-size: 16px;
@@ -55,11 +55,26 @@ button {
 }
 
 button:hover {
-    background-color: rgb(22, 87, 207);
+    background-color: #CC0000;
 }
 
 button:active {
     background-color: rgb(12, 67, 187);
+}
+
+#catch {
+    background-color: #99cc00;
+}
+
+h1 {
+    font-size: 60px;
+    font-family: Roboto, sans-serif;
+}
+
+.result-component {
+    display: flex;
+    margin-top: 50px;
+
 }
 
 /* INPUT STYLES */
@@ -79,8 +94,4 @@ input::placeholder, textarea::placeholder {
     color: #aaa;
 }
 
-/* OTHER STYLES */
-.loading-gif {
-    height: 1em;
-    vertical-align: middle;
-}
+
