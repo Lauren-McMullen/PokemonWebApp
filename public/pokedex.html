@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Pokedex</title>
+</head>
+<body id="pokedex">
+    <h1> View Pokedex</h1>
+
+    <h2>Pokemon</h2>
+    <div>
+
+        <table id="pokedex-pokemon-table">
+            <thead>
+            <tr>
+                <th>NAME</th>
+                <th>TYPE</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div class="result-component" id="pokemon-result">
+            <img src="img/pokeball.png" alt="picture of a pokeball" width="300" height="300">
+            <div class="attribute-list" id="caught-pokemon-attribute-list">
+                <p class="attribute">NAME:</p>
+                <p class="attribute">HP:</p>
+                <p class="attribute">ATTACK:</p>
+                <p class="attribute">DEFENCE:</p>
+                <p class="attribute">SPEED:</p>
+                <p class="attribute">GENERATION:</p>
+                <p class="attribute">MOVES:</p>
+            </div>
+        </div>
+
+        <form class="search-input" id="pokemon-name-search">
+            SEARCH BY NAME: <input type="text" id="searchName" placeholder="Enter NAME" required> <br>
+            <button type="submit"> Search </button> <br>
+        </form>
+
+        <div class="type-input" id="pokemon-type-search">
+            SEARCH BY TYPE: <select name="pokemon-type" id="pokemonType" >
+                                <option value="normal">NORMAL</option>
+                                <option value="water">WATER</option>
+                                <option value="fire">FIRE</option>
+                                <option value="grass">GRASS</option>
+                                <option value="electric">ELECTRIC</option>
+                                <option value="ice">ICE</option>
+                                <option value="fighting">FIGHTING</option>
+                                <option value="poison">POISON</option>
+                                <option value="ground">GROUND</option>
+                                <option value="flying">FLYING</option>
+                                <option value="psychic">PSYCHIC</option>
+                                <option value="bug">BUG</option>
+                                <option value="rock">ROCK</option>
+                                <option value="ghost">GHOST</option>
+                                <option value="dragon">DRAGON</option>
+                                <option value="dark">DARK</option>
+                                <option value="steel">STEEL</option>
+                                <option value="fairy">FAIRY</option>
+
+                            </select>
+
+            <br>
+            <button type="submit"> Search </button> <br>
+        </div>
+
+
+    </div>
+
+
+    <h2>Evolutions</h2>
+
+    <table id="pokedex-evolution-table">
+        <thead>
+        <tr>
+            <th>NAME</th>
+            <th>EVOLVES TO</th>
+            <th>AT LEVEL</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <h2>Type Effectiveness</h2>
+
+    <div class="flex-container" id="effectiveness-options">
+        <div class="type-input" id="pokemon-attack-type">
+            ATTACK TYPE: <select  name="pokemon-attack-type" id="pokemonAttackType" >
+            <option value="normal">NORMAL</option>
+            <option value="water">WATER</option>
+            <option value="fire">FIRE</option>
+            <option value="grass">GRASS</option>
+            <option value="electric">ELECTRIC</option>
+            <option value="ice">ICE</option>
+            <option value="fighting">FIGHTING</option>
+            <option value="poison">POISON</option>
+            <option value="ground">GROUND</option>
+            <option value="flying">FLYING</option>
+            <option value="psychic">PSYCHIC</option>
+            <option value="bug">BUG</option>
+            <option value="rock">ROCK</option>
+            <option value="ghost">GHOST</option>
+            <option value="dragon">DRAGON</option>
+            <option value="dark">DARK</option>
+            <option value="steel">STEEL</option>
+            <option value="fairy">FAIRY</option>
+        </select>
+        </div>
+
+        <div class="type-input" id="pokemon-defence-type">
+                DEFENCE TYPE: <select  name="pokemon-defence-type" id="pokemonDefenceType" >
+                <option value="normal">NORMAL</option>
+                <option value="water">WATER</option>
+                <option value="fire">FIRE</option>
+                <option value="grass">GRASS</option>
+                <option value="electric">ELECTRIC</option>
+                <option value="ice">ICE</option>
+                <option value="fighting">FIGHTING</option>
+                <option value="poison">POISON</option>
+                <option value="ground">GROUND</option>
+                <option value="flying">FLYING</option>
+                <option value="psychic">PSYCHIC</option>
+                <option value="bug">BUG</option>
+                <option value="rock">ROCK</option>
+                <option value="ghost">GHOST</option>
+                <option value="dragon">DRAGON</option>
+                <option value="dark">DARK</option>
+                <option value="steel">STEEL</option>
+                <option value="fairy">FAIRY</option>
+            </select>
+        </div>
+        <p>RESULT: </p>
+    </div>
+
+
+        <button type="submit"> Get Effectiveness </button>
+
+
+
+
+</body>
+</html>

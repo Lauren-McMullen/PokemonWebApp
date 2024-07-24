@@ -66,6 +66,10 @@ button:active {
     background-color: #99cc00;
 }
 
+#pokedex {
+    background-color: #e6b3ff;
+}
+
 h1 {
     font-size: 60px;
     font-family: Roboto, sans-serif;
@@ -76,6 +80,25 @@ h1 {
     margin-top: 50px;
 
 }
+
+.flex-container {
+    display: flex;
+    margin-top: 10px;
+
+}
+
+.search-input {
+    margin: 20px;
+}
+.type-input {
+    margin: 20px;
+}
+
+#effectiveness-options {
+    padding: 20px;
+}
+
+
 
 /* INPUT STYLES */
 input, textarea {
