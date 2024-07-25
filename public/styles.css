@@ -1,9 +1,9 @@
 /* GLOBAL STYLES */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    padding: 40px;
+    padding: 0;
     max-width: 800px;
-    margin: auto;
+    margin: 0;
     line-height: 1.6;
     background-color: #fffef5f9;
     color: #313131;
@@ -71,6 +71,7 @@ button:active {
 }
 
 h1 {
+    margin: 0;
     font-size: 60px;
     font-family: Roboto, sans-serif;
 }
@@ -99,6 +100,42 @@ h1 {
 }
 
 
+.navBar ul {
+    margin: 0;
+    padding: 0;
+    position:fixed;
+    height: 100pc;
+    width: 12pc;
+    list-style-type: none;
+    background-color:#3c3c54
+}
+
+.navBar a {
+    padding: 12px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 24px;
+    display:block;
+    color:#ccc
+}
+
+.navBar a:hover {
+    background-color:#242432;
+    color:white;
+}
+
+.navSelected {
+    font-weight: bolder;
+    border-right: solid;
+    border-left: solid;
+    border-width: 7px;
+    border-right-color: rgb(129, 125, 229);
+    border-left-color:transparent;
+}
+
+.main {
+    margin-left: 12pc;
+}
 
 /* INPUT STYLES */
 input, textarea {
