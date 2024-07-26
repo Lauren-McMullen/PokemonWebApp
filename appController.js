@@ -64,5 +64,10 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+router.get('/player-pokemon', async (req, res) => {
+    const tableContent = await appService.fetchPlayerPokemonFromDb();
+    res.json({data: tableContent});
+});
+
 
 module.exports = router;

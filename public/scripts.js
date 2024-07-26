@@ -37,11 +37,12 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayUsers() {
-    const tableElement = document.getElementById('demotable');
+// Modified this so that it updates any table with data fetched from 'endpoint'
+async function fetchAndDisplayUsers(elementID, endpoint) {
+    const tableElement = document.getElementById(elementID);
     const tableBody = tableElement.querySelector('tbody');
 
-    const response = await fetch('/demotable', {
+    const response = await fetch(endpoint, {
         method: 'GET'
     });
 
@@ -170,5 +171,6 @@ window.onload = function() {
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    fetchAndDisplayUsers();
+    fetchAndDisplayUsers('demotable', '/demotable');
+    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
 }

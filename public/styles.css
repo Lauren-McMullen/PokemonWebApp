@@ -70,6 +70,14 @@ button:active {
     background-color: #e6b3ff;
 }
 
+#team {
+    background-color: #f9e2ef;
+}
+
+#gym {
+    background-color: #6183e8;
+}
+
 h1 {
     margin: 0;
     font-size: 60px;
@@ -134,7 +142,7 @@ h1 {
 }
 
 .main {
-    margin-left: 12pc;
+    margin-left: 15pc;
 }
 
 /* INPUT STYLES */
