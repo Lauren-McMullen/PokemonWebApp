@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html lang="'en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login Page</title>
     <link rel="stylesheet" href="loginstyle.css">
 </head>
-<body>
-<div class="login_div">
-    <h1>Login or Sign Up</h1>
-    <form>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter your username">
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="text" id="password" placeholder="Enter your password">
-        </div>
-        <br>
 
-        <button class="login-btn">Login</button>
-        <button class="signup-btn">SignUp</button>
-    </form>
-</div>
+<body class="login-body">
+    <div class="login_div">
+        <h1>Login or SignUp</h1>
+        <form>
+            <div class="username">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            <br>
+            <div class="passward">
+                <label for="password">Password</label>
+                <input type="text" id="password" placeholder="Enter your password">
+            </div>
+        </form>
+        <br>
+        <br>
+        <div class="button">
+            <button id="login-btn" class="button0">Login</button>
+            <button id="signup-btn" class="button0">SignUp</button>
+        </div>
+        <script>
+            /* Press the signup-btn and direct to the registration form*/
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('signup-btn').addEventListener('click', function () {
+                    window.location.href = 'signup.html';
+                });
+            });
+        </script>
+        <img src="img/pokemon_logo.png" width="300">
+        <img src="img/login.png" width="300">
+    </div>
 </body>
 
 </html>

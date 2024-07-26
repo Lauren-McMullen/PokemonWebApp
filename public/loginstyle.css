@@ -1,13 +1,15 @@
-/* Login page style*/
-
+/* Login page style */
 body{
     height:100%;
-    margin:0;
+    margin: 0;
     display:grid;
     place-items:center;
-    background-color: #ffcccb;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: white;   
+}
+
+.login-body {
+    background-color: #ffcccb;
 }
 
 h1{
@@ -16,39 +18,68 @@ h1{
     text-align: center;
 }
 
-.form-group label {
+form label {
     display:block;
     margin-bottom: 10px;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 20px;
+form input {
+    width: 300px;
+    padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .login_div{
-    height:100%;
-    margin: 0;
     display:grid;
     place-items:center;
     background-color: palevioletred;
-    width: 600px;
-    height: 300px;
+    width: 500px;
+    height: 650px;
     padding: 60px;
     border-radius: 50px;
 }
 
-
 button {
-    width: 200px;
+    width: 100px;
     height: 30px;
-    background-color: #4CAF50;
-    color: white; 
     font-size:large;
     border: 2px solid #4CAF50;
+    color: white; 
     border-radius: 8px;
 }
 
+
+/* SignUp page style */
+.signup_div{
+    height:100%;
+    margin: 0;
+    display:grid;
+    place-items:center;
+    background-color:#3CB371;
+    width: 500px;
+    height: 800px;
+    padding: 60px;
+    border-radius: 50px;
+}
+
+.signup-body {
+    background-color: #E6f0dc;
+}
+
+.button0 {
+    background-color: #4CAF50;  
+}
+
+.button1 {
+    background-color: black;
+}
+
+select {
+    width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
