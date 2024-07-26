@@ -1,0 +1,54 @@
+/* Login page style*/
+
+body{
+    height:100%;
+    margin:0;
+    display:grid;
+    place-items:center;
+    background-color: #ffcccb;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;   
+}
+
+h1{
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: white;
+    text-align: center;
+}
+
+.form-group label {
+    display:block;
+    margin-bottom: 10px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.login_div{
+    height:100%;
+    margin: 0;
+    display:grid;
+    place-items:center;
+    background-color: palevioletred;
+    width: 600px;
+    height: 300px;
+    padding: 60px;
+    border-radius: 50px;
+}
+
+
+button {
+    width: 200px;
+    height: 30px;
+    background-color: #4CAF50;
+    color: white; 
+    font-size:large;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+}
+
