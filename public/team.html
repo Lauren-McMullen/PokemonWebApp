@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <link rel="stylesheet" href="styles.css">  
+
+    <title>Team</title>
+</head>
+
+<body id="team"> 
+    <nav class="navBar">
+        <ul>
+            <li><a href = "/"> Home </a></li>
+            <li class="navSelected"><a href = "/team.html"> Team </a></li>
+            <li><a href = "/catch.html"> Catch </a></li>
+            <li><a href = "/gym.html"> Gym </a></li>
+            <li><a href = "/pokedex.html"> Pokedex </a></li>
+            <li><a href = "/store.html"> Store </a></li>
+        </ul>
+    </nav>
+    
+    <div class=main>
+        <h1> User's Team </h1>
+
+        <h2>Pokemon</h2>
+        <div>
+            <table id="pokedex-pokemon-table">
+                <thead>
+                <tr>
+                    <th>NICKNAME</th>
+                    <th>NAME</th>
+                    <th>LEVEL</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+    
+            <div class="result-component" id="pokemon-result">
+                <img src="img/pokeball.png" alt="picture of a pokeball" width="300" height="300">
+                <div class="attribute-list" id="caught-pokemon-attribute-list">
+                    <p class="attribute">NAME:</p>
+                    <p class="attribute">NICKNAME:</p>
+                    <p class="attribute">LEVEL:</p>
+                    <p class="attribute">HP:</p>
+                    <p class="attribute">ATTACK:</p>
+                    <p class="attribute">DEFENCE:</p>
+                    <p class="attribute">SPEED:</p>
+                    <p class="attribute">GENERATION:</p>
+                    <p class="attribute">MOVES:</p>
+                </div>
+            </div>
+            <script src="scripts.js"></script>
+    </main>
+</body>
+</html>
