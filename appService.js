@@ -85,6 +85,15 @@ async function fetchDemotableFromDb() {
     });
 }
 
+async function fetchPlayerPokemonFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT nickname, name, pp_level FROM Player_Pokemon');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -148,5 +157,6 @@ module.exports = {
     initiateDemotable,
     insertDemotable,
     updateNameDemotable,
-    countDemotable
+    countDemotable,
+    fetchPlayerPokemonFromDb
 };
