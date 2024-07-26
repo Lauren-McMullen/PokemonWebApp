@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html lang="'en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="loginstyle.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Store</title>
 </head>
-<body>
-<div class="login_div">
-    <h1>Login or Sign Up</h1>
-    <form>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter your username">
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="text" id="password" placeholder="Enter your password">
-        </div>
-        <br>
 
-        <button id="login-btn">Login</button>
-        <button id="signup-btn">SignUp</button>
+<body id="store">
+    <h1> Store </h1>
 
-        <dialog id="signup-dialog">
-            <p> This is a dialog box!</p>
-            <button id="close-dialog">Close</button>
-        </dialog>
-        <script>
-            document.getElementById("signup-btn").addEventListener('click', function() {
-            window.location.href = "signup.html";
-            });
-        </script>
+    <h2> Available items to purphase</h2>
+
+    <div>
+        <table id="item-table">
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>EFFECT</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="result-component" id="item-result">
+        <img src="img/hello_kitty_shopping.png" width="260" height="260">
+        <div class="attribute-list" id="item-attribute-list">
+            <p class="attribute">NAME:</p>
+            <p class="attribute">EFFECTS:</p>
+        </div>
+    </div>
+
+    <div class="select-item" id="select-item">
+        <label for="items">FILTER BY TYPE</label>
+        <select name="itmes" id="'items">
+            <option value="berries">BERRIES</option>
+            <option value="medicine">MEDICINE</option>
+        </select>
+    </div>
+    <br>
+    <form class="search-name" id="item-name-search">
+        FIND BY NAME: <input type="text" id="findbyname" placeholder="Enter item name">
+        <button type="submit"> Find by Name </button> <br>
     </form>
-</div>
 </body>
-
 </html>
