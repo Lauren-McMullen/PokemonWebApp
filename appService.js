@@ -94,6 +94,15 @@ async function fetchPlayerPokemonFromDb() {
     });
 }
 
+async function fetchGymsFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Gym');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -158,5 +167,6 @@ module.exports = {
     insertDemotable,
     updateNameDemotable,
     countDemotable,
-    fetchPlayerPokemonFromDb
+    fetchPlayerPokemonFromDb,
+    fetchGymsFromDb
 };

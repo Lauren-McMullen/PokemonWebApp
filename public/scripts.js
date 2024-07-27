@@ -16,14 +16,14 @@
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
     const statusElem = document.getElementById('dbStatus');
-    const loadingGifElem = document.getElementById('loadingGif');
+    // const loadingGifElem = document.getElementById('loadingGif');
 
     const response = await fetch('/check-db-connection', {
         method: "GET"
     });
 
     // Hide the loading GIF once the response is received.
-    loadingGifElem.style.display = 'none';
+    // loadingGifElem.style.display = 'none';
     // Display the statusElem's text in the placeholder.
     statusElem.style.display = 'inline';
 
@@ -160,17 +160,24 @@ async function countDemotable() {
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
-    checkDbConnection();
     fetchTableData();
-    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    if (document.body.id == 'home') {
+        checkDbConnection();
+        document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+        document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+        document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+        document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    }
 };
 
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    fetchAndDisplayUsers('demotable', '/demotable');
-    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    if (document.body.id == 'home') {
+        fetchAndDisplayUsers('demotable', '/demotable');
+    } else if (document.body.id == 'team') {
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    } else if (document.body.id == 'gym') {
+        fetchAndDisplayUsers('gym-table', '/gym');
+    }
 }
