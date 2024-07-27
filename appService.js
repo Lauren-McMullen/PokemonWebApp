@@ -94,6 +94,36 @@ async function fetchPlayerPokemonFromDb() {
     });
 }
 
+/*Renbo: fetch items table from database*/
+async function fetchItemstableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Items');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+/*Renbo: fetch item berry table from database*/
+async function fetchItemsberryFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute("SELECT * FROM Items WHERE NAME LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+/*Renbo: fetch item medicine table from database*/
+async function fetchItemsmedicineFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute("SELECT * FROM Items WHERE NAME NOT LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -158,5 +188,8 @@ module.exports = {
     insertDemotable,
     updateNameDemotable,
     countDemotable,
-    fetchPlayerPokemonFromDb
+    fetchPlayerPokemonFromDb,
+    fetchItemstableFromDb,
+    fetchItemsberryFromDb,
+    fetchItemsmedicineFromDb
 };

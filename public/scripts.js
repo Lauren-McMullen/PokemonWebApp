@@ -173,4 +173,9 @@ window.onload = function() {
 function fetchTableData() {
     fetchAndDisplayUsers('demotable', '/demotable');
     fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    fetchAndDisplayUsers('item-table', '/store'); //Renbo added
+    fetchAndDisplayUsers('item-table', '/store_berries'); //Renbo added
+    fetchAndDisplayUsers('item-table', '/store_medicine'); //Renbo added
 }
+
+//

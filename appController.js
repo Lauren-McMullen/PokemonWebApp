@@ -69,5 +69,22 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+/*Renbo*/
+router.get('/store', async (req, res) => {
+    const tableContent = await appService.fetchItemstableFromDb();
+    res.json({data: tableContent});
+});
+
+/*Renbo*/
+router.get('/store_berries', async (req, res) => {
+    const tableContent = await appService. fetchItemsberryFromDb();
+    res.json({data: tableContent});
+});
+
+/*Renbo*/
+router.get('/store_medicine', async (req, res) => {
+    const tableContent = await appService. fetchItemsmedicineFromDb();
+    res.json({data: tableContent});
+});
 
 module.exports = router;
