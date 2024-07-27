@@ -103,6 +103,14 @@ async function fetchGymsFromDb() {
     });
 }
 
+async function fetchPokemonFromDb() {
+    return await withOracleDB(async (connection) => {
+       const result = await connection.execute('SELECT * FROM Pokemon');
+    }).catch(()=> {
+        return [];
+    });
+}
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {

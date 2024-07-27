@@ -74,4 +74,9 @@ router.get('/gym', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/pokedex', async (req, res) => {
+    const tableContent = await appService.fetchPokemonFromDb();
+    res.json({data: tableContent});
+});
+
 module.exports = router;

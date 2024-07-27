@@ -179,5 +179,7 @@ function fetchTableData() {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
     } else if (document.body.id == 'gym') {
         fetchAndDisplayUsers('gym-table', '/gym');
+    } else if (document.body.id == 'pokedex') {
+        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
     }
 }
