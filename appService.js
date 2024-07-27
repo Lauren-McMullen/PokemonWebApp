@@ -105,7 +105,8 @@ async function fetchGymsFromDb() {
 
 async function fetchPokemonFromDb() {
     return await withOracleDB(async (connection) => {
-       const result = await connection.execute('SELECT * FROM Pokemon');
+       const result = await connection.execute('SELECT name FROM Pokemon');
+       return result.rows;
     }).catch(()=> {
         return [];
     });
