@@ -162,20 +162,37 @@ async function countDemotable() {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    // document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+    // document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    // document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    // document.getElementById("items").addEventListener("change", handleSelectChange); //Renbo: add event listener to selection
+    console.log("javascript is running correct!");
 };
 
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    fetchAndDisplayUsers('demotable', '/demotable');
-    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    // fetchAndDisplayUsers('demotable', '/demotable');
+    // fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
     fetchAndDisplayUsers('item-table', '/store'); //Renbo added
-    fetchAndDisplayUsers('item-table', '/store_berries'); //Renbo added
-    fetchAndDisplayUsers('item-table', '/store_medicine'); //Renbo added
+    console.log("item table loaded correctly")
 }
 
-//
+// Renbo: handle the event listener
+function handleSelectChange(event) {
+    const selectedValue = event.target.value;
+    switch(selectedValue) {
+        case "berries":
+            alert("Berries selected !");
+            console.log("Berries selected !");
+            break;
+        case "medicine":
+            alert("Medicine selected");
+            console.log("Berries selected !");
+            break;
+        default:
+            alert("nothing selected!");
+            console.log("Berries selected !");
+    }
+}
