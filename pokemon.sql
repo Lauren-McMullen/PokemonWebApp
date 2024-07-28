@@ -89,7 +89,7 @@ CREATE TABLE Badge(
 
 /*Battle*/
 CREATE TABLE Battle(
-  id INTEGER PRIMARY KEY,
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   battle_date DATE,
   winner CHAR(6)
 );
@@ -1702,7 +1702,7 @@ INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
 VALUES('weedle', 'kakuna', 7);
 
 INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
-VALUES('weedle', 'kakuna', 10);
+VALUES('kakuna', 'beedrill', 10);
 
 INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
 VALUES('pidgey', 'pidgeotto', 18);
@@ -1917,26 +1917,26 @@ VALUES('Gold Badge', 'Hammerlocke Stadium');
  
 
 -- BATTLE
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(1, '10-JUL-24', 'leader');
+INSERT INTO Battle(battle_date, winner)
+VALUES('10-JUL-24', 'leader');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(2, '10-JUL-24', 'player');
+INSERT INTO Battle(battle_date, winner)
+VALUES('10-JUL-24', 'player');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(3, '14-JUL-24', 'player');
+INSERT INTO Battle(battle_date, winner)
+VALUES('14-JUL-24', 'player');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(4, '15-JUL-24', 'leader');
+INSERT INTO Battle(battle_date, winner)
+VALUES('15-JUL-24', 'leader');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(5, '16-JUL-24', 'player');
+INSERT INTO Battle(battle_date, winner)
+VALUES('16-JUL-24', 'player');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(6, '16-JUL-24', 'player');
+INSERT INTO Battle(battle_date, winner)
+VALUES('16-JUL-24', 'player');
 
-INSERT INTO Battle(id, battle_date, winner)
-VALUES(7, '17-JUL-24', 'player');
+INSERT INTO Battle(battle_date, winner)
+VALUES('17-JUL-24', 'player');
 
 -- TIMEZONE
 INSERT INTO Timezone(zip_postal_code, timezone)
