@@ -227,7 +227,7 @@ function fetchTableData() {
     } else if (document.body.id == 'pokedex') {
         fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
         fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
-    } 
-   
-    fetchAndDisplayUsers('item-table', '/store'); //Renbo added
+    } else if (document.body.id == 'store') {
+        fetchAndDisplayUsers('item-table', '/store'); //Renbo added
+    }
 }
