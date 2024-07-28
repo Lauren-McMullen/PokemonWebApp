@@ -65,7 +65,7 @@ router.get('/count-demotable', async (req, res) => {
 });
 
 router.get('/player-pokemon', async (req, res) => {
-    const tableContent = await appService.fetchPlayerPokemonFromDb();
+    const tableContent = await appService.fetchPlayerPokemonFromDb(req.headers['username']);
     res.json({data: tableContent});
 });
 

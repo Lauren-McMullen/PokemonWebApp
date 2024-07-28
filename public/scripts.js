@@ -12,6 +12,8 @@
  *
  */
 
+// TODO: update this, using for now in place of login
+const username = 'Suicune7';
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -38,12 +40,15 @@ async function checkDbConnection() {
 
 // Fetches data from the demotable and displays it.
 // Modified this so that it updates any table with data fetched from 'endpoint'
-async function fetchAndDisplayUsers(elementID, endpoint) {
+async function fetchAndDisplayUsers(elementID, endpoint, user = null) {
     const tableElement = document.getElementById(elementID);
     const tableBody = tableElement.querySelector('tbody');
 
     const response = await fetch(endpoint, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'username': user
+        }
     });
 
     const responseData = await response.json();
@@ -176,7 +181,7 @@ function fetchTableData() {
     if (document.body.id == 'home') {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
-        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', username);
     } else if (document.body.id == 'gym') {
         fetchAndDisplayUsers('gym-table', '/gym');
     } else if (document.body.id == 'pokedex') {
