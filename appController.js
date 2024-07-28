@@ -113,20 +113,41 @@ router.get('/store/:name', async (req, res) => {
 });
 
 
+//Get pokemon for display in the pokedex 
 router.get('/pokedex', async (req, res) => {
     const tableContent = await appService.fetchPokemonFromDb();
     res.json({data: tableContent});
 });
 
-
+//Get pokemon evolutions for display in the pokedex 
 router.get('/pokedex/evolutions', async (req, res) => {
     const tableContent = await appService.fetchEvolutionsFromDb();
     res.json({data: tableContent});
 });
 
+// Get all pokemon that match the requested type
 router.get('/pokedex/type-filter/:type', async (req, res) => {
     const tableContent = await appService.fetchTypeFiltersFromDb(req.params.type);
     res.json({data: tableContent});
+});
+
+// Get the type effectiveness match-up of the requested types
+router.get('/pokedex/effectiveness', async (req, res) => {
+    const {attack, defence} = req.headers;
+    const multiplier = await appService.fetchTypeMatchupFromDb(attack, defence);
+
+    if (multiplier >= 0) {
+        res.json({
+            success: true,
+            num: multiplier
+        });
+    } else {
+        res.status(500).json({
+            success: false,
+            count: multiplier
+        });
+    }
+
 });
 
 

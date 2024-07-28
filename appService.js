@@ -251,6 +251,20 @@ async function countDemotable() {
 }
 
 
+async function fetchTypeMatchupFromDb(attack, defence) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`, 
+            [attack, defence],
+            { autoCommit: true }
+        );
+        return result.rows[0][0];
+    }).catch(()=> {
+        return -1;
+    });
+
+}
+
+
 
 module.exports = {
     testOracleConnection,
@@ -268,5 +282,6 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
-    insertBattle
+    insertBattle,
+    fetchTypeMatchupFromDb
 };

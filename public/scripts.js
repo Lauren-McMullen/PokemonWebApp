@@ -194,6 +194,33 @@ async function filterPokemonType() {
     });
 }
 
+async function getEffectiveness() {
+    const attackTypeElement = document.getElementById('pokemonAttackType');
+    const defenceTypeElement = document.getElementById('pokemonDefenceType');
+    const attackType = attackTypeElement.value;
+    const defenceType = defenceTypeElement.value;
+
+    const response = await fetch("/pokedex/effectiveness", {
+        method: 'GET',
+        headers: {
+            'attack': attackType,
+            'defence': defenceType
+        }
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('effectivenessMsg');
+
+    if (responseData.success) {
+        const effectiveness = responseData.num;
+        console.log(effectiveness);
+        messageElement.textContent = `${effectiveness} X Effectiveness`;
+    } else {
+        alert("Error in retrieving data");
+    }
+
+}
+
 
 // 
 async function challengeGym() {
@@ -280,6 +307,7 @@ window.onload = function() {
         document.getElementById("countDemotable").addEventListener("click", countDemotable);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+        document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
