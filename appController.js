@@ -80,5 +80,25 @@ router.get('/store', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/pokedex', async (req, res) => {
+    const tableContent = await appService.fetchPokemonFromDb();
+    res.json({data: tableContent});
+});
+
+
+router.get('/pokedex/evolutions', async (req, res) => {
+    const tableContent = await appService.fetchEvolutionsFromDb();
+    res.json({data: tableContent});
+});
+
+router.get('/pokedex/type-filter/:type', async (req, res) => {
+    const tableContent = await appService.fetchTypeFiltersFromDb(req.params.type);
+    res.json({data: tableContent});
+});
+
+
+
+
+
 
 module.exports = router;

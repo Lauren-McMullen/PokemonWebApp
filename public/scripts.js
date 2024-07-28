@@ -160,22 +160,74 @@ async function countDemotable() {
     }
 }
 
+// Filters visable pokemon in the pokedex according to user-selected type.
+async function filterPokemonType() {
+    const typeElement = document.getElementById('pokemonType');
+    const type = typeElement.value;
+
+    const tableElement = document.getElementById("pokedex-pokemon-table");
+    const tableBody = tableElement.querySelector('tbody');
+
+    if(type == "all") {
+        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
+        return;
+    }
+
+    console.log(type);
+
+    const response = await fetch(`/pokedex/type-filter/${type}`, {
+        method: 'GET', 
+    });
+
+    const responseData = await response.json();
+    const tableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    tableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     fetchTableData();
-    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    if (document.body.id == 'home') {
+        checkDbConnection();
+        document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+        document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+        document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+        document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    } else if (document.body.id == 'pokedex') {
+        document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+    }
 };
 
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    fetchAndDisplayUsers('demotable', '/demotable');
-    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    if (document.body.id == 'home') {
+        fetchAndDisplayUsers('demotable', '/demotable');
+    } else if (document.body.id == 'team') {
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', username);
+    } else if (document.body.id == 'gym') {
+        fetchAndDisplayUsers('gym-table', '/gym');
+    } else if (document.body.id == 'pokedex') {
+        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
+        fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
+    } 
+   
     fetchAndDisplayUsers('item-table', '/store'); //Renbo added
 }
