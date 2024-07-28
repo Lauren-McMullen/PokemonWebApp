@@ -112,6 +112,32 @@ async function fetchPokemonFromDb() {
     });
 }
 
+async function fetchEvolutionsFromDb() {
+    return await withOracleDB(async (connection) => {
+       const result = await connection.execute('SELECT * FROM Evolutions');
+       return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+async function fetchTypeFiltersFromDb(type) {
+    return await withOracleDB(async (connection) => {
+        console.log(type);
+        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type=${type}`);
+        return result.rows;
+    }).catch(() => {
+        return -1;
+    });
+}
+
+
+
+
+
+
+
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -169,6 +195,8 @@ async function countDemotable() {
     });
 }
 
+
+
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
@@ -178,5 +206,7 @@ module.exports = {
     countDemotable,
     fetchPlayerPokemonFromDb,
     fetchGymsFromDb,
-    fetchPokemonFromDb
+    fetchPokemonFromDb,
+    fetchEvolutionsFromDb, 
+    fetchTypeFiltersFromDb
 };

@@ -155,6 +155,44 @@ async function countDemotable() {
     }
 }
 
+// Filters visable pokemon in the pokedex according to user-selected type.
+async function filterPokemonType() {
+    const typeElement = document.getElementById('pokemonType');
+    const type = typeElement.value;
+
+    const tableElement = document.getElementById("pokedex-pokemon-table");
+    const tableBody = tableElement.querySelector('tbody');
+
+    if(type == "all") {
+        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
+        return;
+    }
+
+    console.log(type);
+
+    const response = await fetch(`/pokedex/type-filter/${type}`, {
+        method: 'GET', 
+    });
+
+    const responseData = await response.json();
+    const tableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    tableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -167,6 +205,8 @@ window.onload = function() {
         document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
         document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
         document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    } else if (document.body.id == 'pokedex') {
+        document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
     }
 };
 
@@ -181,5 +221,6 @@ function fetchTableData() {
         fetchAndDisplayUsers('gym-table', '/gym');
     } else if (document.body.id == 'pokedex') {
         fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
+        fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
     }
 }
