@@ -21,10 +21,14 @@ table {
     background-color: #fff;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    overflow-y: scroll;
+    height: 300px;
+    display: block;
 }
 
 th, td {
     padding: 12px 15px;
+    width: 100%;
     border-bottom: 1px solid #ddd;
 }
 
@@ -33,9 +37,14 @@ th {
     font-weight: bold;
 }
 
+tr {
+    width: 100%
+}
+
 tr:last-child td {
     border-bottom: none;
 }
+
 
 tr:hover {
     background-color: #f5f5f5;
@@ -75,7 +84,7 @@ button:active {
 }
 
 #gym {
-    background-color: #6183e8;
+    background-color: #a0bbe7;
 }
 
 #store {
@@ -97,7 +106,7 @@ h1 {
 .flex-container {
     display: flex;
     margin-top: 10px;
-
+    align-items: center;
 }
 
 .search-input {
@@ -105,6 +114,10 @@ h1 {
 }
 .type-input {
     margin: 20px;
+}
+
+.fight-gym {
+    margin: 30px 0px;
 }
 
 #effectiveness-options {

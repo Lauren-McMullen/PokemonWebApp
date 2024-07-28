@@ -9,12 +9,25 @@
 
     </head>
     <body id="catch">
+
+    <nav class="navBar">
+        <ul>
+            <li><a href = "/"> Home </a></li>
+            <li><a href = "./team.html"> Team </a></li>
+            <li class="navSelected"><a href = "./catch.html"> Catch </a></li>
+            <li><a href = "./gym.html"> Gym </a></li>
+            <li><a href = "./pokedex.html"> Pokedex </a></li>
+            <li><a href = "./store.html"> Store </a></li>
+        </ul>
+    </nav>
+
+    <div class="main">
         <h1>Catch New Pokemon</h1>
         <button class="button" id="catch-button" type="button">Catch new pokemon</button>
         <div class="result-component" id="catch-result">
             <img src="img/tall-grass.svg" alt="picture of wild grass" width="200">
             <div class="attribute-list" id="caught-pokemon-attribute-list">
-                <p class="attribute">NAME:</p>
+                <p class="attribute">TEST:</p>
                 <p class="attribute">ATTACK:</p>
                 <p class="attribute">HP:</p>
                 <p class="attribute">DEFENCE:</p>
@@ -22,7 +35,7 @@
                 <p class="attribute">GENERATION:</p>
             </div>
         </div>
-
+    </div>
 
         <script src="scripts.js"></script>
     </body>

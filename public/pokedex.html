@@ -8,16 +8,27 @@
     <title>Pokedex</title>
 </head>
 <body id="pokedex">
+
+    <nav class="navBar">
+        <ul>
+            <li><a href = "/"> Home </a></li>
+            <li><a href = "./team.html"> Team </a></li>
+            <li><a href = "./catch.html"> Catch </a></li>
+            <li><a href = "./gym.html"> Gym </a></li>
+            <li class="navSelected"><a href = "./pokedex.html"> Pokedex </a></li>
+            <li><a href = "./store.html"> Store </a></li>
+        </ul>
+    </nav>
+
+    <div class="main">
     <h1> View Pokedex</h1>
 
     <h2>Pokemon</h2>
-    <div>
-
+    <div class="flex-container">
         <table id="pokedex-pokemon-table">
             <thead>
             <tr>
                 <th>NAME</th>
-                <th>TYPE</th>
             </tr>
             </thead>
             <tbody>
@@ -33,10 +44,11 @@
                 <p class="attribute">DEFENCE:</p>
                 <p class="attribute">SPEED:</p>
                 <p class="attribute">GENERATION:</p>
+                <p class="attribute">TYPE:</p>
                 <p class="attribute">MOVES:</p>
             </div>
         </div>
-
+    </div>
         <form class="search-input" id="pokemon-name-search">
             SEARCH BY NAME: <input type="text" id="searchName" placeholder="Enter NAME" required> <br>
             <button type="submit"> Search </button> <br>
@@ -70,7 +82,7 @@
         </div>
 
 
-    </div>
+    
 
 
     <h2>Evolutions</h2>
@@ -143,7 +155,7 @@
         <button type="submit"> Get Effectiveness </button>
 
 
-
-
+    </div>
+    <script src="scripts.js"></script>
 </body>
 </html>

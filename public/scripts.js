@@ -12,18 +12,20 @@
  *
  */
 
+// TODO: update this, using for now in place of login
+const username = 'Suicune7';
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
     const statusElem = document.getElementById('dbStatus');
-    const loadingGifElem = document.getElementById('loadingGif');
+    // const loadingGifElem = document.getElementById('loadingGif');
 
     const response = await fetch('/check-db-connection', {
         method: "GET"
     });
 
     // Hide the loading GIF once the response is received.
-    loadingGifElem.style.display = 'none';
+    // loadingGifElem.style.display = 'none';
     // Display the statusElem's text in the placeholder.
     statusElem.style.display = 'inline';
 
@@ -38,12 +40,15 @@ async function checkDbConnection() {
 
 // Fetches data from the demotable and displays it.
 // Modified this so that it updates any table with data fetched from 'endpoint'
-async function fetchAndDisplayUsers(elementID, endpoint) {
+async function fetchAndDisplayUsers(elementID, endpoint, user = null) {
     const tableElement = document.getElementById(elementID);
     const tableBody = tableElement.querySelector('tbody');
 
     const response = await fetch(endpoint, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'username': user
+        }
     });
 
     const responseData = await response.json();
@@ -160,39 +165,16 @@ async function countDemotable() {
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
-    checkDbConnection();
     fetchTableData();
-    // document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-    // document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    // document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-    // document.getElementById("countDemotable").addEventListener("click", countDemotable);
-    // document.getElementById("items").addEventListener("change", handleSelectChange); //Renbo: add event listener to selection
-    console.log("javascript is running correct!");
+    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("countDemotable").addEventListener("click", countDemotable);
 };
 
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
-    // fetchAndDisplayUsers('demotable', '/demotable');
-    // fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
-    fetchAndDisplayUsers('item-table', '/store'); //Renbo added
-    console.log("item table loaded correctly")
-}
-
-// Renbo: handle the event listener
-function handleSelectChange(event) {
-    const selectedValue = event.target.value;
-    switch(selectedValue) {
-        case "berries":
-            alert("Berries selected !");
-            console.log("Berries selected !");
-            break;
-        case "medicine":
-            alert("Medicine selected");
-            console.log("Berries selected !");
-            break;
-        default:
-            alert("nothing selected!");
-            console.log("Berries selected !");
-    }
+    fetchAndDisplayUsers('demotable', '/demotable');
+    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
 }

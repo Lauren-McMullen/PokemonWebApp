@@ -65,26 +65,14 @@ router.get('/count-demotable', async (req, res) => {
 });
 
 router.get('/player-pokemon', async (req, res) => {
-    const tableContent = await appService.fetchPlayerPokemonFromDb();
+    const tableContent = await appService.fetchPlayerPokemonFromDb(req.headers['username']);
     res.json({data: tableContent});
 });
 
-/*Renbo: Display items*/
-router.get('/store', async (req, res) => {
-    const tableContent = await appService.fetchItemstableFromDb();
+router.get('/gym', async (req, res) => {
+    const tableContent = await appService.fetchGymsFromDb();
     res.json({data: tableContent});
 });
 
-/*Renbo: Display item_berries*/
-router.get('/store_berries', async (req, res) => {
-    const tableContent = await appService. fetchItemsberryFromDb();
-    res.json({data: tableContent});
-});
-
-/*Renbo: Display item_medicine*/
-router.get('/store_medicine', async (req, res) => {
-    const tableContent = await appService. fetchItemsmedicineFromDb();
-    res.json({data: tableContent});
-});
 
 module.exports = router;
