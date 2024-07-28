@@ -133,19 +133,22 @@ async function fetchGymsFromDb() {
     });
 }
 
+// inserts battle and returns auto generated battle id
 async function insertBattle(date, winner) {
     return await withOracleDB(async (connection) => {
         console.log(date);
         console.log(winner);
-        let id = '10-JUL-24';
+        let battle_date = date;
         const result = await connection.execute(
-            `INSERT INTO Battle (battle_date, winner) VALUES (TO_DATE(:id, 'dd/mm/yyyy'), :winner)`,
-            [id, winner],
+            `INSERT INTO Battle (battle_date, winner) VALUES (TO_DATE(:battle_date, 'dd/mm/yyyy'), :winner)`,
+            [battle_date, winner],
             { autoCommit: true }
         );
-        return result.rowsAffected && result.rowsAffected > 0;
+        console.log(result.lastRowid);
+        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = '${result.lastRowid}'`);
+        return battleid.rows[0][0];
     }).catch(() => {
-        return false;
+        return -1;
     });
 }
 

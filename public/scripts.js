@@ -212,6 +212,14 @@ async function challengeGym() {
             winner: 'Test'
         })
     });
+    const responseData = await response.json();
+    const messageElement = document.getElementById('gymResultMsg');
+    console.log(responseData.id);
+    // if (responseData.success) {
+    //     messageElement.textContent = `Data inserted successfully! id: ${responseData.id} `;
+    // } else {
+    //     messageElement.textContent = "Error inserting data!";
+    // }
 
 }
 
