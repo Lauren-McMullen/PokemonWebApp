@@ -173,8 +173,6 @@ async function filterPokemonType() {
         return;
     }
 
-    console.log(type);
-
     const response = await fetch(`/pokedex/type-filter/${type}`, {
         method: 'GET', 
     });

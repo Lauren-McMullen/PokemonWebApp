@@ -154,7 +154,7 @@ async function fetchEvolutionsFromDb() {
 async function fetchTypeFiltersFromDb(type) {
     return await withOracleDB(async (connection) => {
         console.log(type);
-        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type=${type}`);
+        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
         return result.rows;
     }).catch(() => {
         return -1;
