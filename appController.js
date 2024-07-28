@@ -85,9 +85,21 @@ router.post("/insert-battle", async (req, res) => {
 });
 
 
-/*Renbo*/
+//get items from database
 router.get('/store', async (req, res) => {
     const tableContent = await appService.fetchItemstableFromDb();
+    res.json({data: tableContent});
+});
+
+//get items_berries from databse
+router.get('/store_berry', async (req, res) => {
+    const tableContent = await appService.fetchItemsberryFromDb();
+    res.json({data: tableContent});
+});
+
+//get items_medicine from databse
+router.get('/store_medicine', async (req, res) => {
+    const tableContent = await appService.fetchItemsmedicineFromDb();
     res.json({data: tableContent});
 });
 

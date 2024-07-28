@@ -215,6 +215,26 @@ async function challengeGym() {
 
 }
 
+// Filter items by dropdown menue
+async function filterItems() {
+    const itemElement = document.getElementById("items");
+    const item = itemElement.value;
+
+    const tableElement = document.getElementById("item-table");
+    const tableBody = tableElement.querySelector('tbody');
+
+    if (item == "berries") {
+        await fetchAndDisplayUsers('item-table', '/store_berry');
+        return;
+    } else if (item == 'medicine') {
+        fetchAndDisplayUsers('item-table', '/store_medicine');
+        return;
+    } else {
+        fetchAndDisplayUsers('item-table', '/store');
+        return;
+    }
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -233,6 +253,8 @@ window.onload = function() {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
+    } else if (document.body.id == 'store') {
+        document.getElementById("findbytype-button").addEventListener("click", filterItems);
     }
 };
 
@@ -249,6 +271,6 @@ function fetchTableData() {
         fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
         fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
     } else if (document.body.id == 'store') {
-        fetchAndDisplayUsers('item-table', '/store'); //Renbo added
+        fetchAndDisplayUsers('item-table', '/store');
     }
 }

@@ -40,9 +40,8 @@
 
         <div class="result-component" id="item-result">
             <img src="img/hello_kitty_shopping.png" width="260" height="260">
-            <div class="attribute-list" id="item-attribute-list">
-                <p class="attribute">NAME:</p>
-                <p class="attribute">EFFECTS:</p>
+            <div class="item-to-buy" id="item-to-buy">
+                ITEM TO BUY <input type="text" id="item-to-buy" placeholder="Enter the item you want to buy">
                 <button type="buy"> BUY IT NOW </button> <br>
             </div>
         </div>
@@ -50,10 +49,12 @@
         <div class="select-item" id="select-item">
             <label for="items">FILTER BY TYPE</label>
             <select name="items" id="items">
+                <option value="all">ALL</option>
                 <option value="berries">BERRIES</option>
                 <option value="medicine">MEDICINE</option>
             </select>
         </div>
+        <button type="submit" id="findbytype-button"> Find by Type </button> <br>
         <br>
         <form class="search-name" id="item-name-search">
             FIND BY NAME: <input type="text" id="findbyname" placeholder="Enter item name">
