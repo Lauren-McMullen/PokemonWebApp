@@ -114,10 +114,21 @@ async function fetchItemsberryFromDb() {
     });
 }
 
-/*Renbo: fetch item medicine table from database*/
+//fetch item medicine table from database*/
 async function fetchItemsmedicineFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute("SELECT * FROM Items WHERE NAME NOT LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+//funtion to filter item by name
+async function fetchItembyNameFromDb(name) {
+    return await withOracleDB(async (connection) => {
+        //Pass name as a variable to sql query
+        const result = await connection.execute(`SELECT * FROM Items WHERE NAME = :name`, [name]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -256,5 +267,6 @@ module.exports = {
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
+    fetchItembyNameFromDb,
     insertBattle
 };

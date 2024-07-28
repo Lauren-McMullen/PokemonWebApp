@@ -104,6 +104,15 @@ router.get('/store_medicine', async (req, res) => {
     res.json({data: tableContent});
 });
 
+//get items by name from databse
+router.get('/store/:name', async (req, res) => {
+    //parse the parameter from address
+    const name = req.params.name;
+    const tableContent = await appService.fetchItembyNameFromDb(name);
+    res.json({data: tableContent});
+});
+
+
 router.get('/pokedex', async (req, res) => {
     const tableContent = await appService.fetchPokemonFromDb();
     res.json({data: tableContent});

@@ -243,6 +243,27 @@ async function filterItems() {
     }
 }
 
+// Find items by enter name
+async function findItemByName() {
+    const item = document.getElementById("findbyname").value;
+    const tableElement = document.getElementById("item-table");
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch(`/store/${item}`, {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+
+    // If no items are found
+    if (responseData.data.length == 0) {
+        console.log("No item found");
+        return;
+    }
+
+    fetchAndDisplayUsers('item-table', `/store/${item}`);
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -263,6 +284,7 @@ window.onload = function() {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
+        document.getElementById("findbyname-button").addEventListener("click", findItemByName);
     }
 };
 
