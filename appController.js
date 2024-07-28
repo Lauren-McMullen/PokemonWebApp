@@ -77,10 +77,11 @@ router.get('/gym', async (req, res) => {
 router.post("/insert-battle", async (req, res) => {
     const {date, winner } = req.body;
     const insertResult = await appService.insertBattle(date, winner);
-    if (insertResult) {
-        res.json({ success: true });
+    console.log(insertResult);
+    if (insertResult > 0) {
+        res.json({ success: true , id: insertResult});
     } else {
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false , id: -1});
     }
 });
 
