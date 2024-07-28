@@ -14,6 +14,7 @@
 
 // TODO: update this, using for now in place of login
 const username = 'Suicune7';
+var trainer = ""; //initial setup of global variable trainer
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -264,6 +265,29 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
+// Verify login information
+//Use username: Suicune7, password: cpsc304IsCool to test for now
+async function verifyLogin() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    console.log(username, password);
+
+    const response = await fetch(`/login/${username}/${password}`, {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+
+    // If username and password does not match, pop up alert window.
+    if (responseData.data.length == 0) {
+        alert("username and password combination is wrong. pleaese try again or do you want to sign up (๑❛ᴗ❛๑) ?");
+        return;
+    }
+
+    // If username and password match, direct to index.html
+    trainer = username; // set the global variable trainer to username;
+    window.location.href = 'index.html';
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -285,6 +309,13 @@ window.onload = function() {
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
+    } else if (document.body.id == 'login') {
+        //sign up button direct to signup page
+        document.getElementById("signup-btn").addEventListener("click", function () {
+            window.location.href = 'signup.html';
+        });
+        //login button to login
+        document.getElementById("login-btn").addEventListener("click", verifyLogin);
     }
 };
 

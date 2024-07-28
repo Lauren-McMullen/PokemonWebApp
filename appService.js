@@ -135,6 +135,17 @@ async function fetchItembyNameFromDb(name) {
     });
 }
 
+//function to fetch trainer by username and password
+//Use username: Suicune7, password: cpsc304IsCool to test for now
+async function fetchUserFromDb(username, password) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username = :username AND password = :password`, { username: username, password: password });
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchGymsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Gym');
@@ -268,5 +279,6 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
+    fetchUserFromDb,
     insertBattle
 };
