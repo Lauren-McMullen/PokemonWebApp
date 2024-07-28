@@ -195,6 +195,32 @@ async function filterPokemonType() {
     });
 }
 
+async function getEffectiveness() {
+    const attackTypeElement = document.getElementById('pokemonAttackType');
+    const defenceTypeElement = document.getElementById('pokemonDefenceType');
+    const attackType = attackTypeElement.value;
+    const defenceType = defenceTypeElement.value;
+
+    const response = await fetch("/pokedex/effectiveness", {
+        method: 'GET',
+        headers: {
+            'attack': attackType,
+            'defence': defenceType
+        }
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('effectivenessMsg');
+
+    if (responseData.success) {
+        const effectiveness = responseData.num;
+        messageElement.textContent = `${effectiveness} X Effectiveness`;
+    } else {
+        alert("Error in retrieving data");
+    }
+
+}
+
 
 // 
 async function challengeGym() {
@@ -244,6 +270,13 @@ async function filterItems() {
     }
 }
 
+// Find and display the pokemon with the user-inputted name
+async function getPokemonByName() {
+    const name = document.getElementById("nameInput").value.toLowerCase();
+    console.log(name);
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+}
+
 // Find items by enter name
 async function findItemByName() {
     const item = document.getElementById("findbyname").value;
@@ -263,6 +296,15 @@ async function findItemByName() {
     }
 
     fetchAndDisplayUsers('item-table', `/store/${item}`);
+}
+
+// Simply helper to allow Pokemon search by name at "enter" press
+async function searchEnter(e) {
+    console.log('entered function');
+    if(e.key =='Enter') {
+        console.log('enter detected');
+        getPokemonByName();
+    }
 }
 
 // Verify login information
@@ -304,6 +346,10 @@ window.onload = function() {
         document.getElementById("countDemotable").addEventListener("click", countDemotable);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+        document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
+        document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
+        document.getElementById("reset-button").addEventListener("click", fetchTableData);
+        document.getElementById("nameInput").addEventListener('keypress', searchEnter);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
