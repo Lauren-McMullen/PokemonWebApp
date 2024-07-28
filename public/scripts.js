@@ -177,4 +177,5 @@ window.onload = function() {
 function fetchTableData() {
     fetchAndDisplayUsers('demotable', '/demotable');
     fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+    fetchAndDisplayUsers('item-table', '/store'); //Renbo added
 }

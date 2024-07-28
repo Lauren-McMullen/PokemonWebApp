@@ -7,45 +7,60 @@
     <title>Store</title>
 </head>
 
+
 <body id="store">
-    <h1> Store </h1>
+    <nav class="navBar">
+        <ul>
+            <li><a href="/"> Home </a></li>
+            <li><a href="./team.html"> Team </a></li>
+            <li><a href="./catch.html"> Catch </a></li>
+            <li><a href="./gym.html"> Gym </a></li>
+            <li class="navSelected"><a href="./pokedex.html"> Pokedex </a></li>
+            <li><a href="./store.html"> Store </a></li>
+        </ul>
+    </nav>
 
-    <h2> Available items to purphase</h2>
+    <div class=main>
+        <h1> Store </h1>
 
-    <div>
-        <table id="item-table">
-            <thead>
-                <tr>
-                    <th>NAME</th>
-                    <th>EFFECT</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
+        <h2> Available items to purphase</h2>
 
-    <div class="result-component" id="item-result">
-        <img src="img/hello_kitty_shopping.png" width="260" height="260">
-        <div class="attribute-list" id="item-attribute-list">
-            <p class="attribute">NAME:</p>
-            <p class="attribute">EFFECTS:</p>
-            <button type="buy"> BUY IT NOW </button> <br>
+        <div>
+            <table id="item-table">
+                <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>EFFECT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <div class="select-item" id="select-item">
-        <label for="items">FILTER BY TYPE</label>
-        <select name="items" id="items">
-            <option value="berries">BERRIES</option>
-            <option value="medicine">MEDICINE</option>
-        </select>
-    </div>
-    <br>
-    <form class="search-name" id="item-name-search">
-        FIND BY NAME: <input type="text" id="findbyname" placeholder="Enter item name">
-        <button type="submit" id="'findbyname-button"> Find by Name </button> <br>
-    </form>
-    <script src="scripts.js"></script>
+        <div class="result-component" id="item-result">
+            <img src="img/hello_kitty_shopping.png" width="260" height="260">
+            <div class="attribute-list" id="item-attribute-list">
+                <p class="attribute">NAME:</p>
+                <p class="attribute">EFFECTS:</p>
+                <button type="buy"> BUY IT NOW </button> <br>
+            </div>
+        </div>
+
+        <div class="select-item" id="select-item">
+            <label for="items">FILTER BY TYPE</label>
+            <select name="items" id="items">
+                <option value="berries">BERRIES</option>
+                <option value="medicine">MEDICINE</option>
+            </select>
+        </div>
+        <br>
+        <form class="search-name" id="item-name-search">
+            FIND BY NAME: <input type="text" id="findbyname" placeholder="Enter item name">
+            <button type="submit" id="'findbyname-button"> Find by Name </button> <br>
+        </form>
+        <script src="scripts.js"></script>
+        </main>
 </body>
+
 </html>

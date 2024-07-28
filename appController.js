@@ -74,5 +74,11 @@ router.get('/gym', async (req, res) => {
     res.json({data: tableContent});
 });
 
+/*Renbo*/
+router.get('/store', async (req, res) => {
+    const tableContent = await appService.fetchItemstableFromDb();
+    res.json({data: tableContent});
+});
+
 
 module.exports = router;
