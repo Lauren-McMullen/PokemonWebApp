@@ -1653,6 +1653,24 @@ VALUES('metapod', 50, 20, 55, 30, 1);
 INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
 VALUES('butterfree', 60, 45, 50, 70, 1);
 
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('weedle', 40, 35, 30, 50, 1);
+
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('kakuna', 45, 25, 50, 35, 1);
+
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('beedrill', 65, 80, 40, 75, 1);
+
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('pidgey', 40, 45, 40, 56, 1);
+
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('pidgeotto', 63, 60, 55, 71, 1);
+
+INSERT INTO Pokemon(name, hp, attack, defence, speed, generation)
+VALUES('pidgeot', 83, 80, 75, 91, 1);
+
 
 -- EVOLUTIONS
 
@@ -1680,6 +1698,17 @@ VALUES('caterpie', 'metapod', 7);
 INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
 VALUES('metapod', 'butterfree', 10);
 
+INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
+VALUES('weedle', 'kakuna', 7);
+
+INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
+VALUES('weedle', 'kakuna', 10);
+
+INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
+VALUES('pidgey', 'pidgeotto', 18);
+
+INSERT INTO Evolutions(from_pokemon, to_pokemon, evolution_level)
+VALUES('pidgeotto', 'pidgeot', 36);
 
 
 -- POKEMON_TYPE
@@ -1734,6 +1763,42 @@ VALUES('butterfree', 'bug');
 
 INSERT INTO Pokemon_Type(name, type)
 VALUES('butterfree', 'flying');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('weedle', 'bug');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('weedle', 'poison');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('kakuna', 'bug');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('kakuna', 'poison');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('beedrill', 'bug');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('beedrill', 'poison');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgey', 'normal');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgey', 'flying');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgeotto', 'normal');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgeotto', 'flying');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgeot', 'normal');
+
+INSERT INTO Pokemon_Type(name, type)
+VALUES('pidgeot', 'flying');
 
 
 -- REGION_CITY
@@ -2115,6 +2180,54 @@ VALUES('confusion','butterfree');
 
 INSERT INTO Can_Learn(move, pokemon)
 VALUES('gust','butterfree');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('poison sting','weedle');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('bug bite','weedle');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('poison sting','kakuna');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('bug bite','kakuna');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('bug bite','beedrill');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('poison sting','beedrill');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('confusion','beedrill');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('air slash','pidgey');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('acrobatics','pidgey');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('air slash','pidgeotto');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('acrobatics','pidgeotto');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('fly','pidgeotto');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('air slash','pidgeot');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('acrobatics','pidgeot');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('fly','pidgeot');
+
+INSERT INTO Can_Learn(move, pokemon)
+VALUES('gust','pidgeot');
 
 -- LEARNED_MOVES
 INSERT INTO Learned_Moves(move,name,nickname,tr_username)
