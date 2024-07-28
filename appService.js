@@ -94,23 +94,16 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
-<<<<<<< HEAD
 /*Renbo: fetch items table from database*/
 async function fetchItemstableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Items');
-=======
-async function fetchGymsFromDb() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Gym');
->>>>>>> 543e127c7fc56ec675fffe9cccf92c08c33208e5
         return result.rows;
     }).catch(() => {
         return [];
     });
 }
 
-<<<<<<< HEAD
 /*Renbo: fetch item berry table from database*/
 async function fetchItemsberryFromDb() {
     return await withOracleDB(async (connection) => {
@@ -127,13 +120,6 @@ async function fetchItemsmedicineFromDb() {
         const result = await connection.execute("SELECT * FROM Items WHERE NAME NOT LIKE '%berry%' ");
         return result.rows;
     }).catch(() => {
-=======
-async function fetchPokemonFromDb() {
-    return await withOracleDB(async (connection) => {
-       const result = await connection.execute('SELECT name FROM Pokemon');
-       return result.rows;
-    }).catch(()=> {
->>>>>>> 543e127c7fc56ec675fffe9cccf92c08c33208e5
         return [];
     });
 }
@@ -203,12 +189,7 @@ module.exports = {
     updateNameDemotable,
     countDemotable,
     fetchPlayerPokemonFromDb,
-<<<<<<< HEAD
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb
-=======
-    fetchGymsFromDb,
-    fetchPokemonFromDb
->>>>>>> 543e127c7fc56ec675fffe9cccf92c08c33208e5
 };
