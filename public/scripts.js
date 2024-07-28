@@ -297,7 +297,7 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
-// Simply helper to allow Pokemon search by name at "enter" press
+// Simple helper to allow Pokemon search by name at "enter" press
 async function searchEnter(e) {
     console.log('entered function');
     if(e.key =='Enter') {

@@ -264,9 +264,8 @@ async function fetchTypeMatchupFromDb(attack, defence) {
 
 async function fetchPokemonByNameFromDb(name) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT name FROM Pokemon WHERE name=:name`, 
-            [name]
-        );
+        const result = await connection.execute(`SELECT name FROM Pokemon 
+                                                WHERE name LIKE '%${name}%'`);
         return result.rows;
     }).catch(()=> {
         return [];
