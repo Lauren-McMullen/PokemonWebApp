@@ -124,6 +124,24 @@ async function fetchItemsmedicineFromDb() {
     });
 }
 
+async function fetchGymsFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Gym');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchPokemonFromDb() {
+    return await withOracleDB(async (connection) => {
+       const result = await connection.execute('SELECT name FROM Pokemon');
+       return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
 async function fetchEvolutionsFromDb() {
     return await withOracleDB(async (connection) => {
        const result = await connection.execute('SELECT * FROM Evolutions');
@@ -142,12 +160,6 @@ async function fetchTypeFiltersFromDb(type) {
         return -1;
     });
 }
-
-
-
-
-
-
 
 
 async function initiateDemotable() {
@@ -217,17 +229,11 @@ module.exports = {
     updateNameDemotable,
     countDemotable,
     fetchPlayerPokemonFromDb,
-<<<<<<< HEAD
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
-    fetchTypeFiltersFromDb
-||||||| 543e127
-    fetchGymsFromDb,
-    fetchPokemonFromDb
-=======
+    fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb
->>>>>>> origin/main
 };
