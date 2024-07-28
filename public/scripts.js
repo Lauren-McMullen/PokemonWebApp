@@ -297,6 +297,15 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
+// Simply helper to allow Pokemon search by name at "enter" press
+async function searchEnter(e) {
+    console.log('entered function');
+    if(e.key =='Enter') {
+        console.log('enter detected');
+        getPokemonByName();
+    }
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -316,6 +325,7 @@ window.onload = function() {
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
         document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
         document.getElementById("reset-button").addEventListener("click", fetchTableData);
+        document.getElementById("nameInput").addEventListener('keypress', searchEnter);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
