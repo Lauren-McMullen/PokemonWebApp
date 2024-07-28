@@ -126,6 +126,12 @@ router.get('/pokedex/evolutions', async (req, res) => {
 });
 
 // Get all pokemon that match the requested type
+router.get('/pokedex/find-by-name/:name', async (req, res) => {
+    const tableContent = await appService.fetchPokemonByNameFromDb(req.params.name);
+    res.json({data: tableContent});
+});
+
+// Get all pokemon that match the requested type
 router.get('/pokedex/type-filter/:type', async (req, res) => {
     const tableContent = await appService.fetchTypeFiltersFromDb(req.params.type);
     res.json({data: tableContent});

@@ -213,7 +213,6 @@ async function getEffectiveness() {
 
     if (responseData.success) {
         const effectiveness = responseData.num;
-        console.log(effectiveness);
         messageElement.textContent = `${effectiveness} X Effectiveness`;
     } else {
         alert("Error in retrieving data");
@@ -270,6 +269,13 @@ async function filterItems() {
     }
 }
 
+// Find and display the pokemon with the user-inputted name
+async function getPokemonByName() {
+    const name = document.getElementById("nameInput").value.toLowerCase();
+    console.log(name);
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+}
+
 // Find items by enter name
 async function findItemByName() {
     const item = document.getElementById("findbyname").value;
@@ -308,6 +314,8 @@ window.onload = function() {
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
+        document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
+        document.getElementById("reset-button").addEventListener("click", fetchTableData);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {

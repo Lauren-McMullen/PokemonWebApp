@@ -184,7 +184,6 @@ async function fetchEvolutionsFromDb() {
 
 async function fetchTypeFiltersFromDb(type) {
     return await withOracleDB(async (connection) => {
-        console.log(type);
         const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
         return result.rows;
     }).catch(() => {
@@ -254,12 +253,23 @@ async function countDemotable() {
 async function fetchTypeMatchupFromDb(attack, defence) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`, 
-            [attack, defence],
-            { autoCommit: true }
+            [attack, defence]
         );
         return result.rows[0][0];
     }).catch(()=> {
         return -1;
+    });
+
+}
+
+async function fetchPokemonByNameFromDb(name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT name FROM Pokemon WHERE name=:name`, 
+            [name]
+        );
+        return result.rows;
+    }).catch(()=> {
+        return [];
     });
 
 }
@@ -283,5 +293,6 @@ module.exports = {
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
     insertBattle,
-    fetchTypeMatchupFromDb
+    fetchTypeMatchupFromDb,
+    fetchPokemonByNameFromDb
 };
