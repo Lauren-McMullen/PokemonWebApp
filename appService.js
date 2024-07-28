@@ -106,7 +106,6 @@ async function fetchGymsFromDb() {
 async function fetchPokemonFromDb() {
     return await withOracleDB(async (connection) => {
        const result = await connection.execute('SELECT name FROM Pokemon');
-       console.log(result);
        return result.rows;
     }).catch(()=> {
         return [];
@@ -178,5 +177,6 @@ module.exports = {
     updateNameDemotable,
     countDemotable,
     fetchPlayerPokemonFromDb,
-    fetchGymsFromDb
+    fetchGymsFromDb,
+    fetchPokemonFromDb
 };
