@@ -22,8 +22,10 @@
     
     <div class=main>
         <h1> Challenge Gyms </h1>
-
+        
         <h2>All Gyms</h2>
+        <div class="gym-information">
+            <div>
             <table id="gym-table">
                 <thead>
                 <tr>
@@ -36,6 +38,9 @@
                 <tbody>
                 </tbody>
             </table>
+            </div>
+            <img src="img/gym-logo.png" alt="pokemon gym symbol" width="300" height="300" style="padding-left: 100px;">
+        </div>
 
             <form class="fight-gym" id="gym-search">
                 GYM NAME: <input type="text" id="searchName" placeholder="Enter GYM NAME" required> <br>
@@ -43,6 +48,7 @@
             </form>
 
             <p>RESULT: </p>
+            <div id="insertResultMsg"></div>
 
             <script src="scripts.js"></script>
 

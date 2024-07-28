@@ -133,6 +133,23 @@ async function fetchGymsFromDb() {
     });
 }
 
+async function insertBattle(date, winner) {
+    return await withOracleDB(async (connection) => {
+        console.log(date);
+        console.log(winner);
+        let id = '10-JUL-24';
+        const result = await connection.execute(
+            `INSERT INTO Battle (battle_date, winner) VALUES (TO_DATE(:id, 'dd/mm/yyyy'), :winner)`,
+            [id, winner],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+
 async function fetchPokemonFromDb() {
     return await withOracleDB(async (connection) => {
        const result = await connection.execute('SELECT name FROM Pokemon');
@@ -235,5 +252,6 @@ module.exports = {
     fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
-    fetchItemsmedicineFromDb
+    fetchItemsmedicineFromDb,
+    insertBattle
 };

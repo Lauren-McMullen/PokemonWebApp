@@ -74,6 +74,17 @@ router.get('/gym', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.post("/insert-battle", async (req, res) => {
+    const {date, winner } = req.body;
+    const insertResult = await appService.insertBattle(date, winner);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+
 /*Renbo*/
 router.get('/store', async (req, res) => {
     const tableContent = await appService.fetchItemstableFromDb();

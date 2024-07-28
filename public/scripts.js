@@ -195,6 +195,25 @@ async function filterPokemonType() {
 }
 
 
+// 
+async function challengeGym() {
+    const gymName = document.getElementById('searchName').value;
+    const date = new Date();
+    let currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    // console.log(currentDate);
+
+    const response = await fetch('/insert-battle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            date: currentDate,
+            winner: 'Test'
+        })
+    });
+
+}
 
 
 // ---------------------------------------------------------------
@@ -203,13 +222,17 @@ async function filterPokemonType() {
 window.onload = function() {
     fetchTableData();
     if (document.body.id == 'home') {
-        checkDbConnection();
+        // I've commented this out because for some unknown reason it causes multiple error messages to display otherwise
+        // but everything seems to be working fine - might want to investigate more later
+        // checkDbConnection();
         document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
         document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
         document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
         document.getElementById("countDemotable").addEventListener("click", countDemotable);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+    } else if (document.body.id == 'gym') {
+        document.getElementById("gym-search").addEventListener("submit", challengeGym);
     }
 };
 

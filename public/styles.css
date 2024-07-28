@@ -103,6 +103,12 @@ h1 {
 
 }
 
+.gym-information {
+    display: flex;
+    margin-top: 50px;
+
+}
+
 .flex-container {
     display: flex;
     margin-top: 10px;
