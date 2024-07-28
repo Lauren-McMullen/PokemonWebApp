@@ -85,9 +85,9 @@ async function fetchDemotableFromDb() {
     });
 }
 
-async function fetchPlayerPokemonFromDb() {
+async function fetchPlayerPokemonFromDb(username) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT nickname, name, pp_level FROM Player_Pokemon');
+        const result = await connection.execute(`SELECT nickname, name, pp_level FROM Player_Pokemon WHERE tr_username = '${username}'`);
         return result.rows;
     }).catch(() => {
         return [];
