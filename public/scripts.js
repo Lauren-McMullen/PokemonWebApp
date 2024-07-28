@@ -204,6 +204,7 @@ async function filterPokemonType() {
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     fetchTableData();
+<<<<<<< HEAD
     if (document.body.id == 'home') {
         checkDbConnection();
         document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
@@ -213,11 +214,26 @@ window.onload = function() {
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
     }
+||||||| 543e127
+    if (document.body.id == 'home') {
+        checkDbConnection();
+        document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+        document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+        document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+        document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    }
+=======
+    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
+    document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("countDemotable").addEventListener("click", countDemotable);
+>>>>>>> origin/main
 };
 
 // General function to refresh the displayed table data.
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
+<<<<<<< HEAD
     if (document.body.id == 'home') {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
@@ -228,4 +244,18 @@ function fetchTableData() {
         fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
         fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
     }
+||||||| 543e127
+    if (document.body.id == 'home') {
+        fetchAndDisplayUsers('demotable', '/demotable');
+    } else if (document.body.id == 'team') {
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', username);
+    } else if (document.body.id == 'gym') {
+        fetchAndDisplayUsers('gym-table', '/gym');
+    } else if (document.body.id == 'pokedex') {
+        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
+    }
+=======
+    fetchAndDisplayUsers('demotable', '/demotable');
+    fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
+>>>>>>> origin/main
 }

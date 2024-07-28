@@ -94,20 +94,32 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
-async function fetchGymsFromDb() {
+/*Renbo: fetch items table from database*/
+async function fetchItemstableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Gym');
+        const result = await connection.execute('SELECT * FROM Items');
         return result.rows;
     }).catch(() => {
         return [];
     });
 }
 
-async function fetchPokemonFromDb() {
+/*Renbo: fetch item berry table from database*/
+async function fetchItemsberryFromDb() {
     return await withOracleDB(async (connection) => {
-       const result = await connection.execute('SELECT name FROM Pokemon');
-       return result.rows;
-    }).catch(()=> {
+        const result = await connection.execute("SELECT * FROM Items WHERE NAME LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+/*Renbo: fetch item medicine table from database*/
+async function fetchItemsmedicineFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute("SELECT * FROM Items WHERE NAME NOT LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
         return [];
     });
 }
@@ -205,8 +217,17 @@ module.exports = {
     updateNameDemotable,
     countDemotable,
     fetchPlayerPokemonFromDb,
+<<<<<<< HEAD
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
     fetchTypeFiltersFromDb
+||||||| 543e127
+    fetchGymsFromDb,
+    fetchPokemonFromDb
+=======
+    fetchItemstableFromDb,
+    fetchItemsberryFromDb,
+    fetchItemsmedicineFromDb
+>>>>>>> origin/main
 };
