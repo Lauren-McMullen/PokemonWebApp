@@ -176,13 +176,10 @@ function fetchTableData() {
     if (document.body.id == 'home') {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
-        console.log("At team fetch launch");
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon');
     } else if (document.body.id == 'gym') {
-        console.log("At gym fetch launch");
         fetchAndDisplayUsers('gym-table', '/gym');
     } else if (document.body.id == 'pokedex') {
-        console.log("At Pokedex fetch launch");
         fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
     }
 }
