@@ -255,6 +255,7 @@ async function insertGymChallenge(gym, username, battle) {
 }
 
 
+// fetches all pokemon names in the current databse
 async function fetchPokemonFromDb() {
     return await withOracleDB(async (connection) => {
        const result = await connection.execute('SELECT name FROM Pokemon');
@@ -264,6 +265,7 @@ async function fetchPokemonFromDb() {
     });
 }
 
+// Fetches the evolutions chart from the database
 async function fetchEvolutionsFromDb() {
     return await withOracleDB(async (connection) => {
        const result = await connection.execute('SELECT * FROM Evolutions');
@@ -273,6 +275,7 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
+// Fetches pokemon with the given type. MUlti-typed pokemon will still show up in the result
 async function fetchTypeFiltersFromDb(type) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
@@ -340,7 +343,7 @@ async function countDemotable() {
     });
 }
 
-
+// Fetches the effectiveness multiplier for the given attack and defense type
 async function fetchTypeMatchupFromDb(attack, defence) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`, 
@@ -353,6 +356,8 @@ async function fetchTypeMatchupFromDb(attack, defence) {
 
 }
 
+
+// Fetches the pokemon mathcing a given name in the database
 async function fetchPokemonByNameFromDb(name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT name FROM Pokemon 
@@ -364,12 +369,24 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
+// Queries HP, ATTACK, DEFENCE, SPEED, GENERATION, TYPES, MOVES of a pokemon by NAME
+// Note: Return is an array of rows:
+// ex. name = 'butterfree'
+//     result = rows: [
+//     [ 60, 45, 50, 70, 1, 'bug', 'air slash' ],
+//     [ 60, 45, 50, 70, 1, 'bug', 'bug bite' ],
+//     [ 60, 45, 50, 70, 1, 'bug', 'confusion' ],
+//     [ 60, 45, 50, 70, 1, 'bug', 'gust' ],
+//     [ 60, 45, 50, 70, 1, 'flying', 'air slash' ],
+//     [ 60, 45, 50, 70, 1, 'flying', 'bug bite' ],
+//     [ 60, 45, 50, 70, 1, 'flying', 'confusion' ],
+//     [ 60, 45, 50, 70, 1, 'flying', 'gust' ]
+//   ]
 async function fetchPokemonStatsFromDb(pokemonName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
                                                 FROM Pokemon p, Pokemon_Type t, Can_Learn l
                                                 WHERE p.name='${pokemonName}' and t.name='${pokemonName}' and l.pokemon='${pokemonName}'`);
-        console.log(result);
         return result.rows; 
     }).catch(()=> {
         return [];

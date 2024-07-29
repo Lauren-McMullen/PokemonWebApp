@@ -419,58 +419,27 @@ async function populatePokemonStats(pokemonName) {
     const moveAttribute = document.getElementById('pokemon-stats-moves');
 }
 
-// Helper to reset result block for pokedex (may refactor)
+
+
+// Helpers to reset result block for pokedex
 async function resetStats() {
 
-    const nameAttribute = document.getElementById('pokemon-stats-name');
+    resetStatsHelper('pokemon-stats-name', "NAME: ");
+    resetStatsHelper('pokemon-stats-hp', "HP: ");
+    resetStatsHelper('pokemon-stats-attack', "ATTACK: ");
+    resetStatsHelper('pokemon-stats-defence', "DEFENCE: ");
+    resetStatsHelper('pokemon-stats-speed', "SPEED: ");
+    resetStatsHelper('pokemon-stats-gen', "GENERATION: ");
+    resetStatsHelper('pokemon-stats-type', "TYPE: ");
+    resetStatsHelper('pokemon-stats-moves', "MOVES: ");
+}
+
+async function resetStatsHelper(elementID, text) {
+    const attribute = document.getElementById(elementID);
     const strongName = document.createElement('strong');
-    strongName.textContent = 'NAME: '; 
-    nameAttribute.textContent = '';
-    nameAttribute.appendChild(strongName);
-
-    const hPAttribute = document.getElementById('pokemon-stats-hp');
-    const strongHP= document.createElement('strong');
-    strongHP.textContent = 'HP: ';
-    hPAttribute.textContent = ''; 
-    hPAttribute.appendChild(strongHP);
-
-    const attackAttribute = document.getElementById('pokemon-stats-attack');
-    const strongAttack= document.createElement('strong');
-    strongAttack.textContent = 'ATTACK: ';
-    attackAttribute.textContent = ''; 
-    attackAttribute.appendChild(strongAttack);
-
-    const defenceAttribute = document.getElementById('pokemon-stats-defence');
-    const strongDefence= document.createElement('strong');
-    strongDefence.textContent = 'DEFENCE: ';
-    defenceAttribute.textContent = ''; 
-    defenceAttribute.appendChild(strongDefence);
-
-    const speedAttribute = document.getElementById('pokemon-stats-speed');
-    const strongSpeed = document.createElement('strong');
-    strongSpeed.textContent = 'SPEED: ';
-    speedAttribute.textContent = ''; 
-    speedAttribute.appendChild(strongSpeed);
-
-    const genAttribute = document.getElementById('pokemon-stats-gen');
-    const strongGen = document.createElement('strong');
-    strongGen.textContent = 'GENERATION: ';
-    genAttribute.textContent = ''; 
-    genAttribute.appendChild(strongGen);
-
-    const typeAttribute = document.getElementById('pokemon-stats-type');
-    const strongType = document.createElement('strong');
-    strongType.textContent = 'TYPE: ';
-    typeAttribute.textContent = ''; 
-    typeAttribute.appendChild(strongType);
-
-
-    const movesAttribute = document.getElementById('pokemon-stats-moves');
-    const strongMoves = document.createElement('strong');
-    strongMoves.textContent = 'MOVES: ';
-    movesAttribute.textContent = ''; 
-    movesAttribute.appendChild(strongMoves);
-
+    strongName.textContent = text; 
+    attribute.textContent = '';
+    attribute.appendChild(strongName);
 }
 
 // Verify login information

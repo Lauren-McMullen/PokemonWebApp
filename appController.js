@@ -215,6 +215,7 @@ router.get('/pokedex/effectiveness', async (req, res) => {
 
 });
 
+// Get pokemon stats from database
 router.get('/pokemon/stats/:name', async (req, res) => {
     const content = await appService.fetchPokemonStatsFromDb(req.params.name);
     res.json({data: content});
