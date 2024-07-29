@@ -331,6 +331,51 @@ async function verifyLogin() {
     window.location.href = 'index.html';
 }
 
+// Inserts new user information into the trainer table
+async function insertUser(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const nickname = document.getElementById('nickname').value;
+    const zipcode = document.getElementById('zipcode').value;
+    const startdate = new Date();
+    const timezone = document.getElementById('timezone').value;
+
+    const response = await fetch('/insert-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            name: nickname,
+            password: password,
+            start_date: startdate,
+            zip_postal_code: zipcode  //do we have timezone table created?
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        console.log("Data inserted successfully!");
+        fetchTableData();
+    } else {
+        console.log("Data inserted NOT WORK");
+    }
+
+
+    // const messageElement = document.getElementById('insertResultMsg');
+
+    // if (responseData.success) {
+    //     messageElement.textContent = "Data inserted successfully!";
+    //     fetchTableData();
+    // } else {
+    //     messageElement.textContent = "Error inserting data!";
+    // }
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -362,6 +407,8 @@ window.onload = function() {
         });
         //login button to login
         document.getElementById("login-btn").addEventListener("click", verifyLogin);
+    } else if (document.body.id == 'signup') {
+        document.getElementById("register-btn").addEventListener("click", insertUser);
     }
 };
 

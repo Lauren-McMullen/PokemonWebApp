@@ -112,6 +112,16 @@ router.get('/store/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.post("/insert-user", async (req, res) => {
+    const { id, name } = req.body;
+    const insertResult = await appService.insertDemotable(id, name);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 //get users by username and password from databse
 //Use username: Suicune7, password: cpsc304IsCool to test for now
 //Issues: the username and password is not case sensitive
@@ -121,7 +131,6 @@ router.get('/login/:username/:password', async (req, res) => {
     const tableContent = await appService.fetchUserFromDb(username, password);
     res.json({data: tableContent});
 });
-
 
 //Get pokemon for display in the pokedex 
 router.get('/pokedex', async (req, res) => {
