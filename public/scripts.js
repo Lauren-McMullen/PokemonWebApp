@@ -382,24 +382,36 @@ async function catchPokemon(event) {
     event.preventDefault();
     let username = sessionStorage.getItem("user");
 
+    resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+
     // Retrieve random pokemon name
     const Nameresponse = await fetch('/pokedex', {
         method: 'GET',
     });
     const NameresponseData = await Nameresponse.json();
     const pokemonList = NameresponseData.data;
-
-  
-
     let num = Math.floor(Math.random() * pokemonList.length);
     let pokemonName = pokemonList[num];
 
-    // GET and display data
+    // GET and display base stats
     populatePokemonStats(pokemonName);
 
     // Pick Learned Moves
     const learnedMoves = await pickLearnedMoves(pokemonName);
     console.log(learnedMoves);
+    
+    // display Learned Moves
+    const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
+
+    while(learnedMoves.length > 0) {
+        const move = learnedMoves.pop();
+        if (learnedMoves.length != 0) {
+            learnedMovesAttribute.innerHTML += `${move}, `;
+        } else {
+            learnedMovesAttribute.innerHTML += `${move}`;
+        }
+        
+    }
    
     
 }
