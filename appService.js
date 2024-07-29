@@ -146,6 +146,36 @@ async function fetchUserFromDb(username, password) {
     });
 }
 
+//function to fetch trainer data and insert new user
+//do we want to write a function to check if the user already exists?
+async function insertUserToDb(username, name, password, startdate, zipcode) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
+            [username, name, password, startdate, zipcode],
+            { autoCommit: true }
+            //question: should I insert into Timezone table as well?
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function insertDemotable(id, name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
+            [id, name],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 async function fetchGymsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Gym');
@@ -303,6 +333,7 @@ module.exports = {
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
     fetchUserFromDb,
+    insertUserToDb,
     insertBattle,
     fetchTypeMatchupFromDb,
     fetchPokemonByNameFromDb
