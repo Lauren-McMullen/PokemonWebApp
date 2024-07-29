@@ -378,9 +378,8 @@ async function searchEnter(e) {
 }
 
 // Allow user to catch a new Pokemon
-async function catchPokemon(event) {
-    event.preventDefault();
-    let username = sessionStorage.getItem("user");
+async function catchPokemon(caughtPokeInfo) {
+    //event.preventDefault();
 
     resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
 
@@ -391,14 +390,14 @@ async function catchPokemon(event) {
     const NameresponseData = await Nameresponse.json();
     const pokemonList = NameresponseData.data;
     let num = Math.floor(Math.random() * pokemonList.length);
-    let pokemonName = pokemonList[num];
+    caughtPokeInfo.name = pokemonList[num];
 
     // GET and display base stats
-    populatePokemonStats(pokemonName);
+    populatePokemonStats(caughtPokeInfo.name);
 
     // Pick Learned Moves
-    const learnedMoves = await pickLearnedMoves(pokemonName);
-    const learnedMovesTemp = new Array().concat(learnedMoves);
+    caughtPokeInfo.learnedMoves = await pickLearnedMoves(caughtPokeInfo.name);
+    const learnedMovesTemp = new Array().concat(caughtPokeInfo.learnedMoves);
 
     // display Learned Moves
     const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
@@ -412,10 +411,20 @@ async function catchPokemon(event) {
         }
         
     }
+}
 
-    // Keep and Release option listeners
-    document.getElementById("keep-button").addEventListener("click", async () => {
+// Callback for realeasing a pokemon on the catch page
+async function releaseCaughtPokemon(caughtPokeInfo) {
+    
+    caughtPokeInfo.name = '';
+    caughtPokeInfo.learnedMoves = "";
+    resetStats();
+    resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+    
+}
 
+async function keepCaughtPokemon(caughtPokeInfo) {
+        const username = sessionStorage.getItem("user");
         const nickname = getNickname();
     
         //Player Pokemon POST
@@ -425,7 +434,7 @@ async function catchPokemon(event) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: pokemonName.toString(),
+                name: caughtPokeInfo.name.toString(),
                 nickname: nickname, 
                 tr_username: username, 
                 pp_level: 1
@@ -437,6 +446,7 @@ async function catchPokemon(event) {
         } 
 
         // Learned Moves POST
+        let learnedMoves = caughtPokeInfo.learnedMoves;
         for(i = 0; i < learnedMoves.length; i++) {
             const response = await fetch('/player-pokemon/learned-move', {
                 method: 'POST',
@@ -445,34 +455,24 @@ async function catchPokemon(event) {
                 },
                 body: JSON.stringify({
                     move: learnedMoves[i].toString(),
-                    name: pokemonName.toString(),
+                    name: caughtPokeInfo.name.toString(),
                     nickname: nickname, 
                     tr_username: username, 
                 })
             });
             const responseData = await response.json();
-            const battleid = responseData.id;
             if (!responseData.success) {
                 alert("Error adding pokemon move!");
-            } else {
-                alert("Pokemon sucessfully added to your team!");
-            }
+            } 
         }
 
-        // Page clean up
+        alert("Pokemon sucessfully added to your team!");
+
+        //Page clean up
+        caughtPokeInfo.name = '';
+        caughtPokeInfo.learnedMoves = "";
         resetStats();
         resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
-
-
-    });
-
-    document.getElementById("release-button").addEventListener("click", () => {
-        resetStats();
-        resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
-    });
-
-
-    
 }
 
 function getNickname() {
@@ -715,7 +715,23 @@ window.onload = function() {
     } else if (document.body.id == 'signup') {
         document.getElementById("register-btn").addEventListener("click", insertUser);
     } else if (document.body.id === 'catch') {
-        document.getElementById('catch-button').addEventListener('click', catchPokemon);
+
+        const caughtPokeInfo = {
+            "Name": "",
+            "Learned Moves": "", 
+        }
+
+        document.getElementById('catch-button').addEventListener('click', () => {
+            catchPokemon(caughtPokeInfo);
+        });
+        document.getElementById('keep-button').addEventListener('click', () => {
+            keepCaughtPokemon(caughtPokeInfo);
+        });
+        document.getElementById('release-button').addEventListener('click', () => {
+            releaseCaughtPokemon(caughtPokeInfo);
+        });
+
+        
     }
 };
 
