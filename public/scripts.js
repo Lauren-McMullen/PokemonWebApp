@@ -319,7 +319,6 @@ async function challengeGym(event) {
 
             messageElement.textContent += ` You aquire the ${newBadge} badge from ${gymNameClean}`;
         }
-
     }
 }
 
@@ -630,50 +629,144 @@ async function verifyLogin() {
     window.location.href = 'index.html';
 }
 
-// Inserts new user information into the trainer table
-async function insertUser(event) {
-    event.preventDefault();
+// Everify if the username already taken when sign up
+async function verifyUsername(username) {
+    const user = username;
+    console.log("verify username function is running");
+    console.log(user);
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const nickname = document.getElementById('nickname').value;
-    const zipcode = document.getElementById('zipcode').value;
-    const startdate = new Date();
-    const timezone = document.getElementById('timezone').value;
+    const response = await fetch(`/login/${user}`, {
+        method: 'GET',
+    });
 
-    const response = await fetch('/insert-user', {
+    const responseData = await response.json();
+
+    if (responseData.data.length == 0) {
+        console.log("user does not exist");
+        return true;
+    } else {
+        console.log("user exists");
+        return false;
+    }    
+};
+//TODO
+// Verify if the zipcode already exist in timezone table
+async function verifyZipcode(zipcode) {
+    const zip = zipcode;
+    const response = await fetch(`/timezone/${zip}`, {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+
+    // If username and password does not match, pop up alert window.
+    if (responseData.data.length == 0) {
+        return true;
+    } else {
+        return false;
+    }    
+};
+
+// Generate new date following specified format
+function getCurrentFormattedDate() {
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const date = new Date();
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
+
+    return `${day}-${month}-${year}`;
+}
+
+// Insert user timezone into timezone
+async function insertZipcode(zipcode, timezone) {
+    const response_timezone = await fetch('/insert-timezone', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            zipcode: zipcode,
+            timezone: timezone
+        })
+    });
+
+    const responseData_timezone = await response_timezone.json();
+    if (responseData_timezone.success) {
+        console.log("Timezone inserted successfully!");
+    } else {
+        console.log("Timezone inserted NOT WORK");
+    }
+    return true;
+}
+
+// Insert new user to trainer table
+async function insertNewUser(username, name, password, startdate, zipcode) {
+    const response_user = await fetch('/insert-user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             username: username,
-            name: nickname,
+            name: name,
             password: password,
-            start_date: startdate,
-            zip_postal_code: zipcode  //do we have timezone table created?
+            startdate: startdate,
+            zipcode: zipcode
         })
     });
 
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        console.log("Data inserted successfully!");
-        fetchTableData();
+    const responseData_user = await response_user.json();
+    if (responseData_user.success) {
+        console.log("User inserted successfully!");
     } else {
-        console.log("Data inserted NOT WORK");
+        console.log("User inserted NOT WORK");
+    }
+}
+
+
+// Inserts new user information into the trainer table
+async function insertUser(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('nickname').value;
+    const zipcode = document.getElementById('zipcode').value;
+    const startdate = getCurrentFormattedDate();
+    const timezone = document.getElementById('timezone').value;
+    console.log("load parameters");
+    console.log(username);
+    console.log(name);
+    console.log(password);
+    console.log(startdate);
+    console.log(zipcode);
+
+    // verify if the username already taken
+    const verify_user_result = await verifyUsername(username); //important to add, otherwise all the other function will run at the same time
+    if (!verify_user_result) {
+        alert("username already exist. please use another one");
+        return; 
+    } 
+    console.log("finish run verify user, start verify zipcode")
+    // verify if the zipcode already in the timezone table
+    const verify_zipcod_result = await verifyZipcode(zipcode);
+
+    if (verify_zipcod_result) {
+        alert("zipcode does not exist. need to insert new row in timezone table");
+        await insertZipcode(zipcode, timezone);
+    } else {
+        alert("zipcode does exist. no need to insert to timezone table");
     }
 
-
-    // const messageElement = document.getElementById('insertResultMsg');
-
-    // if (responseData.success) {
-    //     messageElement.textContent = "Data inserted successfully!";
-    //     fetchTableData();
-    // } else {
-    //     messageElement.textContent = "Error inserting data!";
-    // }
-}
+    console.log("finish run verify zipcode, start insert user");
+    // insert the new user to trainer table;
+    insertNewUser(username, name, password, startdate, zipcode);
+    // redirect to the login page 
+    alert("new user sign up successfully!");
+    window.location.href = 'login.html';
+    }
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.

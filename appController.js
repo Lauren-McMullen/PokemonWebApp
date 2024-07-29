@@ -175,9 +175,19 @@ router.get('/store/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.post("/insert-timezone", async (req, res) => {
+    const { zipcode, timezone } = req.body;
+    const insertResult = await appService.insertTimezoneDb(zipcode, timezone);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.post("/insert-user", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+    const { username, name, password, startdate, zipcode } = req.body;
+    const insertResult = await appService.insertUserToDb(username, name, password, startdate, zipcode);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -192,6 +202,31 @@ router.get('/login/:username/:password', async (req, res) => {
     //parse the parameter from address
     const { username, password } = req.params;
     const tableContent = await appService.fetchUserFromDb(username, password);
+    res.json({data: tableContent});
+});
+
+//Verify username for login and signup
+router.get('/login/:username', async (req, res) => {
+    //parse the parameter from address
+    const { username } = req.params;
+    const tableContent = await appService.fetchUserbyUsernameFromDb(username);
+    res.json({data: tableContent});
+});
+
+//Verify zipcode for signup, 
+//I did not check both zipcode and timezone because timezone depends on zipcode
+// router.get('/timezone/:zipcode/:timezone', async (req, res) => {
+//     //parse the parameter from address
+//     const { zipcode, timezone } = req.params;
+//     const tableContent = await appService.fetchTimezoneFromDb(zipcode, timezone);
+//     res.json({data: tableContent});
+// });
+
+//Verify zipcode for signup.
+//I did not check both zipcode and timezone because timezone depends on zipcode
+router.get('/timezone/:zipcode', async (req, res) => {
+    const { zipcode } = req.params;
+    const tableContent = await appService.fetchTimezoneFromDb(zipcode);
     res.json({data: tableContent});
 });
 
