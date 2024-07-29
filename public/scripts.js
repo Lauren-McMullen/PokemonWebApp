@@ -13,8 +13,8 @@
  */
 
 // TODO: update this, using for now in place of login
-const username = 'Suicune7';
-var trainer = ""; //initial setup of global variable trainer
+
+let trainer = ""; //initial setup of global variable trainer
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
