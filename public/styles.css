@@ -114,6 +114,10 @@ h1 {
 
 }
 
+.nicknameForm {
+    display: none;
+}
+
 .flex-container {
     display: flex;
     margin-top: 10px;
