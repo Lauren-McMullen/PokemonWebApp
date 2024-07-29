@@ -413,10 +413,42 @@ async function populatePokemonStats(pokemonName) {
 
     //TYPE
     const typeAttribute = document.getElementById('pokemon-stats-type');
-    
+    const typeArray = new Array();
+    for(i = 0; i < contentRows.length; i++) {
+        if(!typeArray.includes(contentRows[i][5])) {
+            typeArray.push(contentRows[i][5]);
+        }
+    }
+    while(typeArray.length > 1) {
+        const type = typeArray.pop();
+        typeAttribute.innerHTML += `${type}, `;
+    }
+
+    const type = typeArray.pop();
+    typeAttribute.innerHTML += `${type}`;
 
     //MOVES
     const moveAttribute = document.getElementById('pokemon-stats-moves');
+
+    const moveArray = new Array();
+    for(i = 0; i < contentRows.length; i++) {
+        if(!moveArray.includes(contentRows[i][6])) {
+            moveArray.push(contentRows[i][6]);
+        }
+    }
+    while(moveArray.length > 0) {
+        const move = moveArray.pop();
+        if (moveArray.length != 0) {
+            moveAttribute.innerHTML += `${move}, `;
+        } else {
+            moveAttribute.innerHTML += `${move}`;
+        }
+        
+    }
+
+   
+
+
 }
 
 

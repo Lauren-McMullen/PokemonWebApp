@@ -104,6 +104,10 @@ h1 {
 
 }
 
+#pokedex-pokemon-table {
+    width: 150px;
+}
+
 .gym-information {
     display: flex;
     margin-top: 50px;
