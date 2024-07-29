@@ -94,6 +94,15 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
+async function fetchPlayerBadgesFromDb(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = '${username}'`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 /*Renbo: fetch items table from database*/
 async function fetchItemstableFromDb() {
     return await withOracleDB(async (connection) => {
@@ -160,6 +169,19 @@ async function insertBattle(date, winner) {
         return battleid.rows[0][0];
     }).catch(() => {
         return -1;
+    });
+}
+
+async function insertGymChallenge(gym, username, battle) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Gym_Challenges (gym, username, battle_id) VALUES (:gym, :username, :battle)`,
+            [gym, username, battle],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
     });
 }
 
@@ -268,5 +290,7 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
-    insertBattle
+    insertBattle,
+    fetchPlayerBadgesFromDb,
+    insertGymChallenge
 };

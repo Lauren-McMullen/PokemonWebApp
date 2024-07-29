@@ -195,13 +195,20 @@ async function filterPokemonType() {
 }
 
 
-// 
-async function challengeGym() {
+// Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
+// badges won during challenge to player inventory
+async function challengeGym(event) {
+    event.preventDefault();
+    let winner;
+    Math.random() > 0.5 ? winner = 'player' : winner = 'leader';   // determine battle victor
+
     const gymName = document.getElementById('searchName').value;
+    const gymNameClean = gymName.toLowerCase().split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
+
     const date = new Date();
     let currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    // console.log(currentDate);
 
+    // create battle record
     const response = await fetch('/insert-battle', {
         method: 'POST',
         headers: {
@@ -209,17 +216,39 @@ async function challengeGym() {
         },
         body: JSON.stringify({
             date: currentDate,
-            winner: 'Test'
+            winner: winner
         })
     });
     const responseData = await response.json();
+    const battleid = responseData.id;
+    if (!responseData.success) {
+        alert("Error inserting battle");
+    }
+
+    // challenge gym 
+    const challengeResponse = await fetch('/challenge-gym', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            gym: gymNameClean,
+            username: username,
+            battle: battleid
+        })
+    });
+    const challengeRsponseData = await challengeResponse.json();
     const messageElement = document.getElementById('gymResultMsg');
-    console.log(responseData.id);
-    // if (responseData.success) {
-    //     messageElement.textContent = `Data inserted successfully! id: ${responseData.id} `;
-    // } else {
-    //     messageElement.textContent = "Error inserting data!";
-    // }
+
+    if (challengeRsponseData.success) {
+        messageElement.textContent = `Data inserted successfully! id: ${responseData.id} ${winner} `;
+    } else {
+        messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
+    }
+
+    // get all badges (name) available for that gym
+    // get all badges (name) player currently has at that gym
+    // badge name in array, subtract
 
 }
 
@@ -295,6 +324,7 @@ function fetchTableData() {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', username);
+        fetchAndDisplayUsers('team-badges', '/player-badges', username);
     } else if (document.body.id == 'gym') {
         fetchAndDisplayUsers('gym-table', '/gym');
     } else if (document.body.id == 'pokedex') {

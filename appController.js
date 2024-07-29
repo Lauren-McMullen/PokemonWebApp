@@ -69,6 +69,11 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/player-badges', async (req, res) => {
+    const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username']);
+    res.json({data: tableContent});
+});
+
 router.get('/gym', async (req, res) => {
     const tableContent = await appService.fetchGymsFromDb();
     res.json({data: tableContent});
@@ -82,6 +87,16 @@ router.post("/insert-battle", async (req, res) => {
         res.json({ success: true , id: insertResult});
     } else {
         res.status(500).json({ success: false , id: -1});
+    }
+});
+
+router.post("/challenge-gym", async (req, res) => {
+    const { gym, username, battle } = req.body;
+    const insertResult = await appService.insertGymChallenge(gym, username, battle);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
     }
 });
 
