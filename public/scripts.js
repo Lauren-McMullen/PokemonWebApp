@@ -13,7 +13,8 @@
  */
 
 // TODO: update this, using for now in place of login
-const username = 'Suicune7';
+
+let trainer = ""; //initial setup of global variable trainer
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -194,6 +195,32 @@ async function filterPokemonType() {
     });
 }
 
+async function getEffectiveness() {
+    const attackTypeElement = document.getElementById('pokemonAttackType');
+    const defenceTypeElement = document.getElementById('pokemonDefenceType');
+    const attackType = attackTypeElement.value;
+    const defenceType = defenceTypeElement.value;
+
+    const response = await fetch("/pokedex/effectiveness", {
+        method: 'GET',
+        headers: {
+            'attack': attackType,
+            'defence': defenceType
+        }
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('effectivenessMsg');
+
+    if (responseData.success) {
+        const effectiveness = responseData.num;
+        messageElement.textContent = `${effectiveness} X Effectiveness`;
+    } else {
+        alert("Error in retrieving data");
+    }
+
+}
+
 
 // Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
 // badges won during challenge to player inventory
@@ -272,6 +299,13 @@ async function filterItems() {
     }
 }
 
+// Find and display the pokemon with the user-inputted name
+async function getPokemonByName() {
+    const name = document.getElementById("nameInput").value.toLowerCase();
+    console.log(name);
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+}
+
 // Find items by enter name
 async function findItemByName() {
     const item = document.getElementById("findbyname").value;
@@ -293,6 +327,83 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
+// Simple helper to allow Pokemon search by name at "enter" press
+async function searchEnter(e) {
+    console.log('entered function');
+    if(e.key =='Enter') {
+        console.log('enter detected');
+        getPokemonByName();
+    }
+}
+
+// Verify login information
+//Use username: Suicune7, password: cpsc304IsCool to test for now
+async function verifyLogin() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    console.log(username, password);
+
+    const response = await fetch(`/login/${username}/${password}`, {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+
+    // If username and password does not match, pop up alert window.
+    if (responseData.data.length == 0) {
+        alert("username and password combination is wrong. pleaese try again or do you want to sign up (๑❛ᴗ❛๑) ?");
+        return;
+    }
+
+    // If username and password match, direct to index.html
+    trainer = username; // set the global variable trainer to username;
+    window.location.href = 'index.html';
+}
+
+// Inserts new user information into the trainer table
+async function insertUser(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const nickname = document.getElementById('nickname').value;
+    const zipcode = document.getElementById('zipcode').value;
+    const startdate = new Date();
+    const timezone = document.getElementById('timezone').value;
+
+    const response = await fetch('/insert-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            name: nickname,
+            password: password,
+            start_date: startdate,
+            zip_postal_code: zipcode  //do we have timezone table created?
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        console.log("Data inserted successfully!");
+        fetchTableData();
+    } else {
+        console.log("Data inserted NOT WORK");
+    }
+
+
+    // const messageElement = document.getElementById('insertResultMsg');
+
+    // if (responseData.success) {
+    //     messageElement.textContent = "Data inserted successfully!";
+    //     fetchTableData();
+    // } else {
+    //     messageElement.textContent = "Error inserting data!";
+    // }
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -309,11 +420,24 @@ window.onload = function() {
         document.getElementById("countDemotable").addEventListener("click", countDemotable);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+        document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
+        document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
+        document.getElementById("reset-button").addEventListener("click", fetchTableData);
+        document.getElementById("nameInput").addEventListener('keypress', searchEnter);
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
+    } else if (document.body.id == 'login') {
+        //sign up button direct to signup page
+        document.getElementById("signup-btn").addEventListener("click", function () {
+            window.location.href = 'signup.html';
+        });
+        //login button to login
+        document.getElementById("login-btn").addEventListener("click", verifyLogin);
+    } else if (document.body.id == 'signup') {
+        document.getElementById("register-btn").addEventListener("click", insertUser);
     }
 };
 

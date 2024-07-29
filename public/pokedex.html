@@ -49,11 +49,15 @@
             </div>
         </div>
     </div>
-        <form class="search-input" id="pokemon-name-search">
-            SEARCH BY NAME: <input type="text" id="searchName" placeholder="Enter NAME" required> <br>
-            <button type="submit"> Search </button> <br>
-        </form>
 
+    <div class="type-input">
+        
+            SEARCH BY NAME: <input type="text" id="nameInput" placeholder="Enter NAME" required> <br>
+            <button type="submit" id="name-search-button"> Search </button>   
+        
+    </div>
+
+    
         <div class="type-input" id="pokemon-type-search">
             SEARCH BY TYPE: <select name="pokemon-type" id="pokemonType" >
                                 <option value="all">ALL</option>
@@ -82,8 +86,10 @@
             <button type="submit" id="type-search-button"> Search </button> <br>
         </div>
 
+        <button class="search-input" type="submit" id="reset-button"> Reset Pokemon </button> 
 
-    
+
+        
 
 
     <h2>Evolutions</h2>
@@ -149,11 +155,12 @@
                 <option value="fairy">FAIRY</option>
             </select>
         </div>
-        <p>RESULT: </p>
+        <br>
+        <div><p>RESULT: </p><p id="effectivenessMsg"></p></div>
     </div>
 
 
-        <button type="submit"> Get Effectiveness </button>
+        <button type="submit" id="effectiveness-button"> Get Effectiveness </button>
 
 
     </div>

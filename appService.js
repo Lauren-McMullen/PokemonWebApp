@@ -144,6 +144,47 @@ async function fetchItembyNameFromDb(name) {
     });
 }
 
+//function to fetch trainer by username and password
+//Use username: Suicune7, password: cpsc304IsCool to test for now
+async function fetchUserFromDb(username, password) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username = :username AND password = :password`, { username: username, password: password });
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+//function to fetch trainer data and insert new user
+//do we want to write a function to check if the user already exists?
+async function insertUserToDb(username, name, password, startdate, zipcode) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
+            [username, name, password, startdate, zipcode],
+            { autoCommit: true }
+            //question: should I insert into Timezone table as well?
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function insertDemotable(id, name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
+            [id, name],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 async function fetchGymsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Gym');
@@ -206,7 +247,6 @@ async function fetchEvolutionsFromDb() {
 
 async function fetchTypeFiltersFromDb(type) {
     return await withOracleDB(async (connection) => {
-        console.log(type);
         const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
         return result.rows;
     }).catch(() => {
@@ -273,6 +313,30 @@ async function countDemotable() {
 }
 
 
+async function fetchTypeMatchupFromDb(attack, defence) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`, 
+            [attack, defence]
+        );
+        return result.rows[0][0];
+    }).catch(()=> {
+        return -1;
+    });
+
+}
+
+async function fetchPokemonByNameFromDb(name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT name FROM Pokemon 
+                                                WHERE name LIKE '%${name}%'`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+
+}
+
+
 
 module.exports = {
     testOracleConnection,
@@ -292,5 +356,10 @@ module.exports = {
     fetchItembyNameFromDb,
     insertBattle,
     fetchPlayerBadgesFromDb,
-    insertGymChallenge
+    insertGymChallenge,
+    fetchUserFromDb,
+    insertUserToDb,
+    insertBattle,
+    fetchTypeMatchupFromDb,
+    fetchPokemonByNameFromDb
 };
