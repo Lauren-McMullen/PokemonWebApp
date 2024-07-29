@@ -94,9 +94,14 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
-async function fetchPlayerBadgesFromDb(username) {
+async function fetchPlayerBadgesFromDb(username, gym = null) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = '${username}'`);
+        let result;
+        if (gym == null) {
+            result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = '${username}'`);
+        } else {
+            result = await connection.execute(`SELECT badge FROM Trainer_Badges WHERE username = '${username}' AND gym = '${gym}'`);
+        }
         return result.rows;
     }).catch(() => {
         return [];
@@ -191,6 +196,29 @@ async function fetchGymsFromDb() {
         return result.rows;
     }).catch(() => {
         return [];
+    });
+}
+
+async function fetchGymBadgesFromDb(gym) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = '${gym}'`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function insertPlayerBadge(gym, username, badge) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Trainer_Badges (gym, username, badge) VALUES (:gym, :username, :badge)`,
+            [gym, username, badge],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
     });
 }
 
@@ -374,5 +402,7 @@ module.exports = {
     insertBattle,
     fetchTypeMatchupFromDb,
     fetchPokemonByNameFromDb,
-    fetchPokemonStatsFromDb
+    fetchPokemonStatsFromDb,
+    fetchGymBadgesFromDb,
+    insertPlayerBadge
 };

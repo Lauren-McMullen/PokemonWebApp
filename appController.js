@@ -69,8 +69,27 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// get player badges
 router.get('/player-badges', async (req, res) => {
     const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username']);
+    res.json({data: tableContent});
+});
+
+// add player badge
+router.post("/player-badges", async (req, res) => {
+    const { gym, username, badge } = req.body;
+    const insertResult = await appService.insertPlayerBadge(gym, username, badge);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// get player badges received from specific gym
+router.get('/player-badges/:gym', async (req, res) => {
+    const { gym } = req.params;
+    const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username'], gym);
     res.json({data: tableContent});
 });
 
@@ -79,10 +98,16 @@ router.get('/gym', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// get the names of badges a particular gym offers
+router.get('/badges/:gym', async (req, res) => {
+    const { gym } = req.params;
+    const tableContent = await appService.fetchGymBadgesFromDb(gym);
+    res.json({data: tableContent});
+});
+
 router.post("/insert-battle", async (req, res) => {
     const {date, winner } = req.body;
     const insertResult = await appService.insertBattle(date, winner);
-    console.log(insertResult);
     if (insertResult > 0) {
         res.json({ success: true , id: insertResult});
     } else {

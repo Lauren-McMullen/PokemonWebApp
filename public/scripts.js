@@ -15,6 +15,7 @@
 // TODO: update this, using for now in place of login
 
 let trainer = ""; //initial setup of global variable trainer
+const username = "Suicune7"
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -224,6 +225,7 @@ async function getEffectiveness() {
 
 // Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
 // badges won during challenge to player inventory
+// Sorry for how long and complex this function is ---- TODO: make more readable
 async function challengeGym(event) {
     event.preventDefault();
     let winner;
@@ -264,19 +266,64 @@ async function challengeGym(event) {
             battle: battleid
         })
     });
-    const challengeRsponseData = await challengeResponse.json();
+    const challengeResponseData = await challengeResponse.json();
     const messageElement = document.getElementById('gymResultMsg');
 
-    if (challengeRsponseData.success) {
-        messageElement.textContent = `Data inserted successfully! id: ${responseData.id} ${winner} `;
+    if (challengeResponseData.success) {
+        if (winner === 'player') {
+            messageElement.textContent = `Congratulations! You won the battle at ${gymNameClean}!!!`
+        } else {
+            messageElement.textContent = `You were defeated in battle at ${gymNameClean}...`
+        }
     } else {
         messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
     }
 
-    // get all badges (name) available for that gym
-    // get all badges (name) player currently has at that gym
-    // badge name in array, subtract
+    // if player won battle, player receives badge from gym if they haven't already collected them all
+    if (winner === 'player' && challengeResponseData.success) {
 
+        // get array of badges that particular gym offers
+        const gymBadgeResponse = await fetch(`/badges/${gymNameClean}`, {
+            method: 'GET', 
+        });
+        const gymBadgesJson = await gymBadgeResponse.json();
+        let gymBadgesOffered = [];
+        Object.values(gymBadgesJson.data).forEach(value => gymBadgesOffered.push(value[0])); 
+
+        // get array of badges player has already acquired from that gym 
+        const playerBadgesResponse = await fetch(`/player-badges/${gymNameClean}`, {
+            method: 'GET',
+            headers: {
+                'username': username
+            }
+        });
+        const playerBadgesJson = await playerBadgesResponse.json();
+        let playerBadges = [];
+        Object.values(playerBadgesJson.data).forEach(value => playerBadges.push(value[0])); 
+
+        const badgesNotAquired = gymBadgesOffered.filter((badge) => !playerBadges.includes(badge));
+        if (badgesNotAquired.length === 0) {
+            messageElement.textContent += ` You have already aquired all possible badges from ${gymNameClean}`;
+        } else {
+
+            const newBadge = badgesNotAquired[0];
+
+            const challengeResponse = await fetch('/player-badges', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    gym: gymNameClean,
+                    username: username,
+                    badge: newBadge
+                })
+            });
+
+            messageElement.textContent += ` You aquire the ${newBadge} badge from ${gymNameClean}`;
+        }
+
+    }
 }
 
 // Filter items by dropdown menue
