@@ -12,10 +12,6 @@
  *
  */
 
-// TODO: update this, using for now in place of login
-
-let trainer = ""; //initial setup of global variable trainer
-const username = "Suicune7"
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -230,6 +226,7 @@ async function challengeGym(event) {
     event.preventDefault();
     let winner;
     Math.random() > 0.5 ? winner = 'player' : winner = 'leader';   // determine battle victor
+    let username = sessionStorage.getItem("user");
 
     const gymName = document.getElementById('searchName').value;
     const gymNameClean = gymName.toLowerCase().split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
@@ -496,7 +493,7 @@ async function verifyLogin() {
     }
 
     // If username and password match, direct to index.html
-    trainer = username; // set the global variable trainer to username;
+    sessionStorage.setItem("user", username);
     window.location.href = 'index.html';
 }
 
@@ -593,8 +590,8 @@ function fetchTableData() {
     if (document.body.id == 'home') {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
-        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', username);
-        fetchAndDisplayUsers('team-badges', '/player-badges', username);
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+        fetchAndDisplayUsers('team-badges', '/player-badges', sessionStorage.getItem("user"));
     } else if (document.body.id == 'gym') {
         fetchAndDisplayUsers('gym-table', '/gym');
     } else if (document.body.id == 'pokedex') {
