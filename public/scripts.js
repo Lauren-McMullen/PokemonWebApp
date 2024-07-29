@@ -377,6 +377,63 @@ async function searchEnter(e) {
     }
 }
 
+// Allow user to catch a new Pokemon
+async function catchPokemon(event) {
+    event.preventDefault();
+    let username = sessionStorage.getItem("user");
+
+    // Retrieve random pokemon name
+    const Nameresponse = await fetch('/pokedex', {
+        method: 'GET',
+    });
+    const NameresponseData = await Nameresponse.json();
+    const pokemonList = NameresponseData.data;
+
+  
+
+    let num = Math.floor(Math.random() * pokemonList.length);
+    let pokemonName = pokemonList[num];
+
+    // GET and display data
+    populatePokemonStats(pokemonName);
+
+    // Pick Learned Moves
+    const learnedMoves = await pickLearnedMoves(pokemonName);
+    console.log(learnedMoves);
+   
+    
+}
+
+//Helper to create an array of randomly learned moves
+async function pickLearnedMoves(pokemonName) {
+    const movesResponse = await fetch(`/pokemon/stats/${pokemonName}`, {
+        method: 'GET', 
+    });
+
+    const movesResponseData = await movesResponse.json();
+    const allData = movesResponseData.data;
+
+    if (movesResponseData.data.length == 0) {
+        alert("Error: No stats found");
+        return;
+    }
+
+    const moveArray = new Array();
+    for(i = 0; i < allData.length; i++) {
+        if(!moveArray.includes(allData[i][6])) {
+            moveArray.push(allData[i][6]);
+        }
+    }
+
+    let moveNum = Math.floor(Math.random() * (moveArray.length - 1)) + 1;
+    let learnedMoves = new Array();
+    for(i = 0; i < moveNum; i++) {
+        learnedMoves.push(moveArray[i]);
+    }
+    
+    return learnedMoves;
+}
+
 // Handler for click event on pokedex pokemon table
 async function populatePokemonStats(pokemonName) {
 
@@ -446,12 +503,7 @@ async function populatePokemonStats(pokemonName) {
         
     }
 
-   
-
-
 }
-
-
 
 // Helpers to reset result block for pokedex
 async function resetStats() {
@@ -582,6 +634,8 @@ window.onload = function() {
         document.getElementById("login-btn").addEventListener("click", verifyLogin);
     } else if (document.body.id == 'signup') {
         document.getElementById("register-btn").addEventListener("click", insertUser);
+    } else if (document.body.id === 'catch') {
+        document.getElementById('catch-button').addEventListener('click', catchPokemon);
     }
 };
 
