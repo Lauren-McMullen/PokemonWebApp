@@ -108,6 +108,10 @@ h1 {
     width: 150px;
 }
 
+#team-pokemon-table {
+    width: 350px;
+}
+
 .gym-information {
     display: flex;
     margin-top: 50px;
