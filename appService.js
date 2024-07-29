@@ -160,10 +160,67 @@ async function fetchUserFromDb(username, password) {
     });
 }
 
+//function to fetch trainer by username
+async function fetchUserbyUsernameFromDb(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username = :username`, { username: username });
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+//function to fetch timezone table by zipcode and timezone
+async function fetchTimezoneFromDb(zipcode) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Timezone WHERE zip_postal_code = :zipcode`, { zipcode: zipcode });
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 //function to fetch trainer data and insert new user
 //do we want to write a function to check if the user already exists?
 async function insertUserToDb(username, name, password, startdate, zipcode) {
     return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
+            [username, name, password, startdate, zipcode],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+//Insert into timezone table
+async function insertTimezoneDb(zipcode, timezone) {
+    //insert function to check if the zipcode and timezone pair already exist
+    console.log(zipcode);
+    console.log(timezone);
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Timezone (zip_postal_code, timezone) VALUES (:zipcode, :timezone)`,
+            [zipcode, timezone],
+            { autoCommit: true }
+            //question: should I insert into Timezone table as well?
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+//do we want to write a function to check if the user already exists?
+async function insertUserToDb(username, name, password, startdate, zipcode) {
+    return await withOracleDB(async (connection) => {
+        console.log("insert into trainer table");
+        console.log(username);
+        console.log(name);
+        console.log(password);
+        console.log(startdate);
+        console.log(zipcode);
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
@@ -284,7 +341,6 @@ async function fetchTypeFiltersFromDb(type) {
         return -1;
     });
 }
-
 
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
@@ -442,6 +498,9 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
+    insertTimezoneDb,
+    fetchUserbyUsernameFromDb,
+    fetchTimezoneFromDb,
     insertBattle,
     fetchPlayerBadgesFromDb,
     insertGymChallenge,
