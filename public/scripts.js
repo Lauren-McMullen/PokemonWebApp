@@ -14,6 +14,7 @@
 
 // TODO: update this, using for now in place of login
 const username = 'Suicune7';
+var trainer = ""; //initial setup of global variable trainer
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
@@ -306,7 +307,6 @@ async function searchEnter(e) {
     }
 }
 
-// ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
@@ -330,6 +330,13 @@ window.onload = function() {
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
+    } else if (document.body.id == 'login') {
+        //sign up button direct to signup page
+        document.getElementById("signup-btn").addEventListener("click", function () {
+            window.location.href = 'signup.html';
+        });
+        //login button to login
+        document.getElementById("login-btn").addEventListener("click", verifyLogin);
     }
 };
 

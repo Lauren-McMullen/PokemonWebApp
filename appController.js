@@ -112,6 +112,16 @@ router.get('/store/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
+//get users by username and password from databse
+//Use username: Suicune7, password: cpsc304IsCool to test for now
+//Issues: the username and password is not case sensitive
+router.get('/login/:username/:password', async (req, res) => {
+    //parse the parameter from address
+    const { username, password } = req.params;
+    const tableContent = await appService.fetchUserFromDb(username, password);
+    res.json({data: tableContent});
+});
+
 
 //Get pokemon for display in the pokedex 
 router.get('/pokedex', async (req, res) => {
