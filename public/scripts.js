@@ -383,7 +383,7 @@ async function searchEnter(e) {
 // Handler for click event on pokedex pokemon table
 async function populatePokemonStats(pokemonName) {
 
-    
+    resetStats();
 
     // GET data
     const response = await fetch(`/pokemon/stats/${pokemonName}`, {
@@ -400,19 +400,19 @@ async function populatePokemonStats(pokemonName) {
 
     //NAME
     const nameAttribute = document.getElementById('pokemon-stats-name');
-    nameAttribute.textContent = pokemonName;
+    nameAttribute.innerHTML += pokemonName;
 
     //HP, ATTACK, DEFENCE, SPEED, GEN
     const hPAttribute = document.getElementById('pokemon-stats-hp');
-    hPAttribute.textContent = contentRows[0][0];
+    hPAttribute.innerHTML += contentRows[0][0];
     const attackAttribute = document.getElementById('pokemon-stats-attack');
-    attackAttribute.textContent = contentRows[0][1];
+    attackAttribute.innerHTML += contentRows[0][1];
     const defenceAttribute = document.getElementById('pokemon-stats-defence');
-    defenceAttribute.textContent = contentRows[0][2];
+    defenceAttribute.innerHTML += contentRows[0][2];
     const speedAttribute = document.getElementById('pokemon-stats-speed');
-    speedAttribute.textContent = contentRows[0][3];
+    speedAttribute.innerHTML += contentRows[0][3];
     const genAttribute = document.getElementById('pokemon-stats-gen');
-    genAttribute.textContent = contentRows[0][4];
+    genAttribute.innerHTML += contentRows[0][4];
 
     //TYPE
     const typeAttribute = document.getElementById('pokemon-stats-type');
@@ -422,23 +422,58 @@ async function populatePokemonStats(pokemonName) {
     const moveAttribute = document.getElementById('pokemon-stats-moves');
 }
 
+// Helper to reset result block for pokedex (may refactor)
 async function resetStats() {
+
     const nameAttribute = document.getElementById('pokemon-stats-name');
+    const strongName = document.createElement('strong');
+    strongName.textContent = 'NAME: '; 
     nameAttribute.textContent = '';
+    nameAttribute.appendChild(strongName);
+
     const hPAttribute = document.getElementById('pokemon-stats-hp');
-    hPAttribute.textContent = '';
+    const strongHP= document.createElement('strong');
+    strongHP.textContent = 'HP: ';
+    hPAttribute.textContent = ''; 
+    hPAttribute.appendChild(strongHP);
+
     const attackAttribute = document.getElementById('pokemon-stats-attack');
-    attackAttribute.textContent = "";
+    const strongAttack= document.createElement('strong');
+    strongAttack.textContent = 'ATTACK: ';
+    attackAttribute.textContent = ''; 
+    attackAttribute.appendChild(strongAttack);
+
     const defenceAttribute = document.getElementById('pokemon-stats-defence');
-    defenceAttribute.textContent = "";
+    const strongDefence= document.createElement('strong');
+    strongDefence.textContent = 'DEFENCE: ';
+    defenceAttribute.textContent = ''; 
+    defenceAttribute.appendChild(strongDefence);
+
     const speedAttribute = document.getElementById('pokemon-stats-speed');
-    speedAttribute.textContent = '';
+    const strongSpeed = document.createElement('strong');
+    strongSpeed.textContent = 'SPEED: ';
+    speedAttribute.textContent = ''; 
+    speedAttribute.appendChild(strongSpeed);
+
     const genAttribute = document.getElementById('pokemon-stats-gen');
-    genAttribute.textContent = '';
+    const strongGen = document.createElement('strong');
+    strongGen.textContent = 'GENERATION: ';
+    genAttribute.textContent = ''; 
+    genAttribute.appendChild(strongGen);
+
     const typeAttribute = document.getElementById('pokemon-stats-type');
-    typeAttribute.textContent = '';
+    const strongType = document.createElement('strong');
+    strongType.textContent = 'TYPE: ';
+    typeAttribute.textContent = ''; 
+    typeAttribute.appendChild(strongType);
+
+
     const movesAttribute = document.getElementById('pokemon-stats-moves');
-    movesAttribute.textContent = '';
+    const strongMoves = document.createElement('strong');
+    strongMoves.textContent = 'MOVES: ';
+    movesAttribute.textContent = ''; 
+    movesAttribute.appendChild(strongMoves);
+
 }
 
 // Verify login information
