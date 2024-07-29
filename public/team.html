@@ -21,9 +21,10 @@
     </nav>
     
     <div class=main>
-        <h1> User's Team </h1>
+        <h1 id="userTeamHeader"></h1>
 
         <h2>Pokemon</h2>
+        <div class="flex-container">
             <table id="team-pokemon-table">
                 <thead>
                 <tr>
@@ -32,24 +33,26 @@
                     <th>LEVEL</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="team-pokemon-table-body">
                 </tbody>
             </table>
     
-            <div class="result-component" id="pokemon-result">
+            <div class="result-component" id="pokemon-team-result">
                 <img src="img/pokeball.png" alt="picture of a pokeball" width="300" height="300">
-                <div class="attribute-list" id="caught-pokemon-attribute-list">
-                    <p class="attribute">NAME:</p>
-                    <p class="attribute">NICKNAME:</p>
-                    <p class="attribute">LEVEL:</p>
-                    <p class="attribute">HP:</p>
-                    <p class="attribute">ATTACK:</p>
-                    <p class="attribute">DEFENCE:</p>
-                    <p class="attribute">SPEED:</p>
-                    <p class="attribute">GENERATION:</p>
-                    <p class="attribute">MOVES:</p>
+                <div class="attribute-list" id="pokemon-team-attribute-list">
+                    <p class="attribute" id="pokemon-stats-nickname"><strong>NICKNAME: </strong></p>
+                    <p class="attribute" id="pokemon-stats-name"><strong>NAME: </strong></p>
+                    <p class="attribute" id="pokemon-stats-name"><strong>LEVEL: </strong></p>
+                    <p class="attribute" id="pokemon-stats-hp"><strong>HP: </strong></p>
+                    <p class="attribute" id="pokemon-stats-attack"><strong>ATTACK: </strong> </p>
+                    <p class="attribute" id="pokemon-stats-defence"><strong>DEFENCE: </strong> </p>
+                    <p class="attribute" id="pokemon-stats-speed"><strong>SPEED: </strong></p>
+                    <p class="attribute" id="pokemon-stats-gen"><strong>GENERATION: </strong> </p>
+                    <p class="attribute" id="pokemon-stats-type"><strong>TYPE: </strong></p>
+                    <p class="attribute" id="pokemon-stats-moves"><strong>MOVES: </strong></p>
                 </div>
             </div>
+        </div>
 
             <h2>Bag</h2>
             <table id="team-bag">

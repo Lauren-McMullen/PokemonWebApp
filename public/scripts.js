@@ -273,7 +273,11 @@ async function challengeGym(event) {
             messageElement.textContent = `You were defeated in battle at ${gymNameClean}...`
         }
     } else {
-        messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
+        if (username === null ) {
+            messageElement.textContent = `Error challenging gym: ${gymNameClean}. Log in before attempting gym challenge!`;
+        } else {
+            messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
+        }
     }
 
     // if player won battle, player receives badge from gym if they haven't already collected them all
@@ -796,6 +800,22 @@ window.onload = function() {
         });
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
+    } else if (document.body.id == 'team') {
+        let user = sessionStorage.getItem("user");
+        if (user === null) {
+            document.getElementById("userTeamHeader").innerHTML = ("Log in to view team!");
+        } else {
+            document.getElementById("userTeamHeader").innerHTML = (user + "'s Team");
+        }
+        document.getElementById("team-pokemon-table").addEventListener('click', (e) => {
+            if (e.target.tagName === 'TD') {
+                let row = e.target.parentElement
+                let rowElements = row.getElementsByTagName('TD');
+                let nickname = rowElements[1].textContent;
+                let pokemon = rowElements[1].textContent;
+                populatePokemonStats(pokemon);
+            }
+        });
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
