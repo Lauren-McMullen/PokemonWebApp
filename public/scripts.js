@@ -398,22 +398,90 @@ async function catchPokemon(event) {
 
     // Pick Learned Moves
     const learnedMoves = await pickLearnedMoves(pokemonName);
-    console.log(learnedMoves);
-    
+    const learnedMovesTemp = new Array().concat(learnedMoves);
+
     // display Learned Moves
     const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
 
-    while(learnedMoves.length > 0) {
-        const move = learnedMoves.pop();
-        if (learnedMoves.length != 0) {
+    while(learnedMovesTemp.length > 0) {
+        const move = learnedMovesTemp.pop();
+        if (learnedMovesTemp.length != 0) {
             learnedMovesAttribute.innerHTML += `${move}, `;
         } else {
             learnedMovesAttribute.innerHTML += `${move}`;
         }
         
     }
-   
+
+    // Keep and Release option listeners
+    document.getElementById("keep-button").addEventListener("click", async () => {
+
+        const nickname = getNickname();
     
+        //Player Pokemon POST
+        const response = await fetch('/player-pokemon/catch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: pokemonName.toString(),
+                nickname: nickname, 
+                tr_username: username, 
+                pp_level: 1
+            })
+        });
+        const responseData = await response.json();
+        if (!responseData.success) {
+            alert("Error catching pokemon!");
+        } 
+
+        // Learned Moves POST
+        for(i = 0; i < learnedMoves.length; i++) {
+            const response = await fetch('/player-pokemon/learned-move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    move: learnedMoves[i].toString(),
+                    name: pokemonName.toString(),
+                    nickname: nickname, 
+                    tr_username: username, 
+                })
+            });
+            const responseData = await response.json();
+            const battleid = responseData.id;
+            if (!responseData.success) {
+                alert("Error adding pokemon move!");
+            } else {
+                alert("Pokemon sucessfully added to your team!");
+            }
+        }
+
+        // Page clean up
+        resetStats();
+        resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+
+
+    });
+
+    document.getElementById("release-button").addEventListener("click", () => {
+        resetStats();
+        resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+    });
+
+
+    
+}
+
+function getNickname() {
+    var nickname;
+    nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    while(nickname === null || nickname === "nickname") {
+        nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    }
+    return nickname;
 }
 
 //Helper to create an array of randomly learned moves

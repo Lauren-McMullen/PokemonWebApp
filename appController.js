@@ -69,6 +69,29 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// add player pokemon after catching it
+router.post("/player-pokemon/catch", async (req, res) => {
+    const {name, nickname, tr_username, pp_level} = req.body;
+    const insertResult = await appService.insertPlayerPokemon(name, nickname, tr_username, pp_level);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+
+// add player pokemon move after catching it
+router.post("/player-pokemon/learned-move", async (req, res) => {
+    const {move, name, nickname, tr_username} = req.body;
+    const insertResult = await appService.insertPlayerPokemonMove(move, name, nickname, tr_username);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 // get player badges
 router.get('/player-badges', async (req, res) => {
     const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username']);

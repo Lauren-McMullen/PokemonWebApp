@@ -369,6 +369,37 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
+// Insert a new player pokemon after catching it
+async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(
+            `INSERT INTO Player_Pokemon (name, nickname, tr_username, pp_level) VALUES (:name, :nickname, :tr_username, :pp_level)`,
+            [name, nickname, tr_username, pp_level],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+// Insert a new player pokemon move after catching it
+async function insertPlayerPokemonMove(move, name, nickname, tr_username) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(
+            `INSERT INTO Learned_Moves (move, name, nickname, tr_username) VALUES (:move, :name, :nickname, :tr_username)`,
+            [move, name, nickname, tr_username],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 // Queries HP, ATTACK, DEFENCE, SPEED, GENERATION, TYPES, MOVES of a pokemon by NAME
 // Note: Return is an array of rows:
 // ex. name = 'butterfree'
@@ -421,5 +452,7 @@ module.exports = {
     fetchPokemonByNameFromDb,
     fetchPokemonStatsFromDb,
     fetchGymBadgesFromDb,
-    insertPlayerBadge
+    insertPlayerBadge,
+    insertPlayerPokemon, 
+    insertPlayerPokemonMove
 };
