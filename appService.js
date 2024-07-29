@@ -336,6 +336,18 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
+async function fetchPokemonStatsFromDb(pokemonName) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
+                                                FROM Pokemon p, Pokemon_Type t, Can_Learn l
+                                                WHERE p.name='${pokemonName}' and t.name='${pokemonName}' and l.pokemon='${pokemonName}'`);
+        console.log(result);
+        return result.rows; 
+    }).catch(()=> {
+        return [];
+    });
+}
+
 
 
 module.exports = {
@@ -361,5 +373,6 @@ module.exports = {
     insertUserToDb,
     insertBattle,
     fetchTypeMatchupFromDb,
-    fetchPokemonByNameFromDb
+    fetchPokemonByNameFromDb,
+    fetchPokemonStatsFromDb
 };

@@ -302,7 +302,6 @@ async function filterItems() {
 // Find and display the pokemon with the user-inputted name
 async function getPokemonByName() {
     const name = document.getElementById("nameInput").value.toLowerCase();
-    console.log(name);
     fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
 }
 
@@ -329,11 +328,70 @@ async function findItemByName() {
 
 // Simple helper to allow Pokemon search by name at "enter" press
 async function searchEnter(e) {
-    console.log('entered function');
     if(e.key =='Enter') {
-        console.log('enter detected');
         getPokemonByName();
     }
+}
+
+// Handler for click event on pokedex pokemon table
+async function populatePokemonStats(pokemonName) {
+
+    
+
+    // GET data
+    const response = await fetch(`/pokemon/stats/${pokemonName}`, {
+        method: 'GET', 
+    });
+
+    const responseData = await response.json();
+    const contentRows = responseData.data;
+
+    if (responseData.data.length == 0) {
+        alert("Error: No stats found");
+        return;
+    }
+
+    //NAME
+    const nameAttribute = document.getElementById('pokemon-stats-name');
+    nameAttribute.textContent = pokemonName;
+
+    //HP, ATTACK, DEFENCE, SPEED, GEN
+    const hPAttribute = document.getElementById('pokemon-stats-hp');
+    hPAttribute.textContent = contentRows[0][0];
+    const attackAttribute = document.getElementById('pokemon-stats-attack');
+    attackAttribute.textContent = contentRows[0][1];
+    const defenceAttribute = document.getElementById('pokemon-stats-defence');
+    defenceAttribute.textContent = contentRows[0][2];
+    const speedAttribute = document.getElementById('pokemon-stats-speed');
+    speedAttribute.textContent = contentRows[0][3];
+    const genAttribute = document.getElementById('pokemon-stats-gen');
+    genAttribute.textContent = contentRows[0][4];
+
+    //TYPE
+    const typeAttribute = document.getElementById('pokemon-stats-type');
+    
+
+    //MOVES
+    const moveAttribute = document.getElementById('pokemon-stats-moves');
+}
+
+async function resetStats() {
+    const nameAttribute = document.getElementById('pokemon-stats-name');
+    nameAttribute.textContent = '';
+    const hPAttribute = document.getElementById('pokemon-stats-hp');
+    hPAttribute.textContent = '';
+    const attackAttribute = document.getElementById('pokemon-stats-attack');
+    attackAttribute.textContent = "";
+    const defenceAttribute = document.getElementById('pokemon-stats-defence');
+    defenceAttribute.textContent = "";
+    const speedAttribute = document.getElementById('pokemon-stats-speed');
+    speedAttribute.textContent = '';
+    const genAttribute = document.getElementById('pokemon-stats-gen');
+    genAttribute.textContent = '';
+    const typeAttribute = document.getElementById('pokemon-stats-type');
+    typeAttribute.textContent = '';
+    const movesAttribute = document.getElementById('pokemon-stats-moves');
+    movesAttribute.textContent = '';
 }
 
 // Verify login information
@@ -422,8 +480,14 @@ window.onload = function() {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
         document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
-        document.getElementById("reset-button").addEventListener("click", fetchTableData);
+        document.getElementById("reset-button").addEventListener("click", () => {
+            fetchTableData();
+            resetStats();
+        });
         document.getElementById("nameInput").addEventListener('keypress', searchEnter);
+        document.getElementById("pokedex-pokemon-table").addEventListener('click', (e) => {
+            if (e.target.tagName === 'TD') {populatePokemonStats(e.target.textContent);}
+        });
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
     } else if (document.body.id == 'store') {
