@@ -15,40 +15,6 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchDemotableFromDb();
-    res.json({data: tableContent});
-});
-
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
-    if (updateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
 router.get('/count-demotable', async (req, res) => {
     const tableCount = await appService.countDemotable();
     if (tableCount >= 0) {
@@ -285,10 +251,6 @@ router.get('/pokemon/stats/:name', async (req, res) => {
     const content = await appService.fetchPokemonStatsFromDb(req.params.name);
     res.json({data: content});
 });
-
-
-
-
 
 
 
