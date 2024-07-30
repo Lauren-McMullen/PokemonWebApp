@@ -35,6 +35,11 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/player-items', async (req, res) => {
+    const tableContent = await appService.fetchPlayerItemsFromDb(req.headers['username']);
+    res.json({data: tableContent});
+});
+
 // add player pokemon after catching it
 router.post("/player-pokemon/catch", async (req, res) => {
     const {name, nickname, tr_username, pp_level} = req.body;

@@ -275,16 +275,16 @@ INSERT INTO Items(name, effect)
 VALUES('persim berry', 'When confused, cures confusion');
 
 INSERT INTO Items(name, effect)
-VALUES('razz berry', 'Makes wild Pokémon easier to catch');
+VALUES('razz berry', 'Makes wild Pokemon easier to catch');
 
 INSERT INTO Items(name, effect)
-VALUES('oran berry', 'When holder has less than ½ of their max HP, restores 10 HP ');
+VALUES('oran berry', 'When holder has less than 1/2 of their max HP, restores 10 HP ');
 
 INSERT INTO Items(name, effect)
 VALUES('lum berry', 'When holder has a status effect or confusion, cures the status effect');
 
 INSERT INTO Items(name, effect)
-VALUES('sitrus berry', 'When holder has less than ½ of their max HP, restores ¼ of max HP');
+VALUES('sitrus berry', 'When holder has less than 1/2 of their max HP, restores 1/4 of max HP');
 
 INSERT INTO Items(name, effect)
 VALUES('antidote', NULL);
@@ -296,7 +296,7 @@ INSERT INTO Items(name, effect)
 VALUES('super potion', 'Restores 60 HP');
 
 INSERT INTO Items(name, effect)
-VALUES('elixir', 'Restores 10 PP of all moves of a Pokémon');
+VALUES('elixir', 'Restores 10 PP of all moves of a Pokemon');
 
 INSERT INTO Items(name, effect)
 VALUES('lemonade', 'Restores 70 HP');

@@ -85,6 +85,16 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
+async function fetchPlayerItemsFromDb(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT Trainer_Items.name, Items.effect, Trainer_Items.quantity FROM Trainer_Items, Items 
+            WHERE Trainer_Items.name = Items.name AND username = '${username}'`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchPlayerBadgesFromDb(username, gym = null) {
     return await withOracleDB(async (connection) => {
         let result;
@@ -441,5 +451,6 @@ module.exports = {
     insertPlayerBadge,
     insertPlayerPokemon, 
     insertPlayerPokemonMove,
-    fetchLearnedMovesFromDb
+    fetchLearnedMovesFromDb,
+    fetchPlayerItemsFromDb
 };
