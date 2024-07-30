@@ -609,6 +609,34 @@ async function resetStatsHelper(elementID, text) {
     attribute.appendChild(strongName);
 }
 
+async function populatePlayerPokemonStats(nickname, name, level) {
+    resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
+    resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+    resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+    populatePokemonStats(name);
+    document.getElementById('pokemon-stats-nickname').innerHTML += nickname;
+    document.getElementById('pokemon-stats-level').innerHTML += level;
+
+    const response = await fetch(`learned-move/${sessionStorage.getItem("user")}/${name}/${nickname}`, {
+        method: 'GET', 
+    });
+    const responseData = await response.json();
+    
+    const learnedMovesTemp = responseData.data;
+    
+    // display Learned Moves
+    const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
+
+    while(learnedMovesTemp.length > 0) {
+        const move = learnedMovesTemp.pop();
+        if (learnedMovesTemp.length != 0) {
+            learnedMovesAttribute.innerHTML += `${move}, `;
+        } else {
+            learnedMovesAttribute.innerHTML += `${move}`;
+        } 
+    }
+}
+
 // Verify login information
 //Use username: Suicune7, password: cpsc304IsCool to test for now
 async function verifyLogin() {
@@ -810,9 +838,10 @@ window.onload = function() {
             if (e.target.tagName === 'TD') {
                 let row = e.target.parentElement
                 let rowElements = row.getElementsByTagName('TD');
-                let nickname = rowElements[1].textContent;
+                let nickname = rowElements[0].textContent;
                 let pokemon = rowElements[1].textContent;
-                populatePokemonStats(pokemon);
+                let level = rowElements[2].textContent;
+                populatePlayerPokemonStats(nickname, pokemon, level);
             }
         });
     } else if (document.body.id == 'store') {

@@ -322,6 +322,18 @@ async function fetchPokemonFromDb() {
     });
 }
 
+// fetches all the moves an player pokemon has learned
+async function fetchLearnedMovesFromDb(username, pokemon, nickname) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT move FROM Learned_Moves WHERE name=:pokemon AND nickname=:nickname AND tr_username=:username', 
+            [pokemon, nickname, username]
+        );
+        return result.rows;
+     }).catch(()=> {
+         return [];
+     });
+}
+
 // Fetches the evolutions chart from the database
 async function fetchEvolutionsFromDb() {
     return await withOracleDB(async (connection) => {
@@ -513,5 +525,6 @@ module.exports = {
     fetchGymBadgesFromDb,
     insertPlayerBadge,
     insertPlayerPokemon, 
-    insertPlayerPokemonMove
+    insertPlayerPokemonMove,
+    fetchLearnedMovesFromDb
 };

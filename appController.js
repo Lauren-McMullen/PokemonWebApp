@@ -92,6 +92,13 @@ router.post("/player-pokemon/learned-move", async (req, res) => {
     }
 });
 
+// get player pokemon learned moves
+router.get("/learned-move/:username/:pokemon/:nickname", async (req, res) => {
+    const {username, pokemon, nickname} = req.params;
+    const tableContent = await appService.fetchLearnedMovesFromDb(username, pokemon, nickname);
+    res.json({data: tableContent});
+});
+
 // get player badges
 router.get('/player-badges', async (req, res) => {
     const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username']);
