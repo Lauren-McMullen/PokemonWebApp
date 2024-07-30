@@ -920,8 +920,10 @@ async function insertUser(event) {
     }
 
 async function loadProfileInfo() {
-
+    
     const username = sessionStorage.getItem('user');
+
+    if(username == null) {return;}
 
     const response = await fetch('/user-info', {
         method: 'GET',
@@ -938,6 +940,42 @@ async function loadProfileInfo() {
 
 }
 
+async function changeName(event) {
+    
+    event.preventDefault();
+    const username = sessionStorage.getItem('user');
+
+    let newNameValue = prompt("Please enter your new name", "new name");
+    while(newNameValue === null || newNameValue === "new name") {
+        newNameValue = prompt("Please enter your new name", "new name");
+    }
+
+
+    const response = await fetch('/update-name', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            newName: newNameValue
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        resetStatsHelper('username-text', "USERNAME: ");
+        resetStatsHelper('name-text', "NAME: ");
+        resetStatsHelper('zip-text', "ZIP/POSTAL CODE: ");
+        loadProfileInfo();
+        alert("Name successfully updated!");
+    } else {
+        alert("Error updating name! Please try again.");
+    }
+
+}
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -951,6 +989,7 @@ window.onload = function() {
                 window.location.href = 'login.html';
             }
         });
+        document.getElementById("changeName-button").addEventListener('click', changeName);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
