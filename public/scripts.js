@@ -326,6 +326,91 @@ async function challengeGym(event) {
     }
 }
 
+// Find and display the pokemon with the user-inputted name
+async function getPokemonByName() {
+    const name = document.getElementById("nameInput").value.toLowerCase();
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+}
+
+// Reset the item attribute display panel
+function resetItemStats() {
+    console.log("resetItemStats function run");
+
+    resetStatsHelper('flavor', "Flavor: ");
+    resetStatsHelper('hp-restored', "HP Restored: ");
+    resetStatsHelper('pp-restored', "PP Restored: ");
+    resetStatsHelper('cures', "Cures: ");
+    resetStatsHelper('cost', "Cost: ");
+}
+
+// Buy item for the trainer on click buy button
+async function buyItem() {
+    //TODO
+}
+
+// Handler for click event on item table
+async function populateItemStats(itemName) {
+    console.log("populateItemStats function run");
+    console.log("item name is");
+    console.log(itemName);
+    resetItemStats();
+
+    console.log("item found!");
+
+    // check the item is berry or medicine
+    if (itemName.includes("berry")) {
+        const response = await fetch(`/berries/${itemName}`, {
+            method: 'GET', 
+        });
+
+        const responseData = await response.json();
+        const contentRows = responseData.data;
+
+        if (responseData.data.length == 0) {
+            alert("Error: No stats found");
+            return;
+        }
+
+        console.log("Berry found!");
+        console.log(contentRows[0][1]);
+
+        // fill the berry attribute
+        const flavor = document.getElementById('flavor');
+        flavor.innerHTML += contentRows[0][1];
+          
+    } else {
+        const response = await fetch(`/medicine/${itemName}`, {
+            method: 'GET', 
+        });
+
+        const responseData = await response.json();
+        const contentRows = responseData.data;
+
+        if (responseData.data.length == 0) {
+            alert("Error: No stats found");
+            return;
+        }
+
+        // fill the medicien attribute
+        const hp_restored = document.getElementById('hp-restored');
+        if (hp_restored) {
+            hp_restored.innerHTML += contentRows[0][1];
+        }
+        const pp_restored = document.getElementById('pp-restored');
+        if (pp_restored) {
+            pp_restored.innerHTML += contentRows[0][2];
+        }
+        const cures = document.getElementById('cures');
+        if (cures) {
+            cures.innerHTML += contentRows[0][3];
+        } 
+        const cost = document.getElementById('cost');
+        if (cost) {
+            cost.innerHTML += contentRows[0][4];
+        }
+    }
+}
+
 // Filter items by dropdown menue
 async function filterItems() {
     const itemElement = document.getElementById("items");
@@ -344,12 +429,6 @@ async function filterItems() {
         fetchAndDisplayUsers('item-table', '/store');
         return;
     }
-}
-
-// Find and display the pokemon with the user-inputted name
-async function getPokemonByName() {
-    const name = document.getElementById("nameInput").value.toLowerCase();
-    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
 }
 
 // Find items by enter name
@@ -848,6 +927,11 @@ window.onload = function() {
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
+        document.getElementById("reset-attribute-button").addEventListener("click", resetItemStats);
+        document.getElementById("item-table").addEventListener('click', (e) => {
+            //tagName = 'TD' check the tag tabledata cell
+            if (e.target.tagName === 'TD') {populateItemStats(e.target.textContent);}
+        });
     } else if (document.body.id == 'login') {
         //sign up button direct to signup page
         document.getElementById("signup-btn").addEventListener("click", function () {
