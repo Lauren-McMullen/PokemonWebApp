@@ -946,6 +946,11 @@ window.onload = function() {
     fetchTableData();
     if (document.body.id == 'home') {
         loadProfileInfo();
+        document.getElementById("logout-button").addEventListener('click', () => {
+            if (confirm(`Are you sure you want to logout?`)) {
+                window.location.href = 'login.html';
+            }
+        });
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
