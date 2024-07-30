@@ -882,6 +882,43 @@ async function insertUser(event) {
     window.location.href = 'login.html';
     }
 
+    // Delete selected player pokemon
+    async function deletePokemon() {
+        let pokemon = document.getElementById('pokemon-stats-name').textContent;
+        pokemon = pokemon.split(" ").splice(1).join(" ");
+    
+        let nickname = document.getElementById('pokemon-stats-nickname').textContent;
+        nickname = nickname.split(" ").splice(1).join(" ");
+    
+        if (pokemon === "" || nickname === "") {
+            alert("Select the pokemon you want to release");
+            return;
+        }
+        if (confirm(`Do you want to release your ${pokemon}, ${nickname}?`)) {
+            const response = await fetch(`/player-pokemon/${pokemon}/${nickname}`, {
+                method: 'DELETE',
+                headers: {
+                    'username': sessionStorage.getItem("user")
+                }
+            });
+            const responseData = await response.json();
+            if (responseData.success) {
+                fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+                resetStats();
+                resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
+                resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+                resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+            } else {
+                alert("Error releasing pokemon");
+            }
+        }
+    }
+    
+    async function trainPokemon() {
+        
+    
+    }
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.

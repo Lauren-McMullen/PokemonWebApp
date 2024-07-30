@@ -403,6 +403,21 @@ async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
     });
 }
 
+async function deletePlayerPokemonFromDb(username, pokemon, nickname) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(`DELETE FROM Player_Pokemon 
+            WHERE tr_username = :username AND name = :pokemon AND nickname = :nickname`,
+            [username, pokemon, nickname],
+            { autoCommit: true }
+        );
+        
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 // Insert a new player pokemon move after catching it
 async function insertPlayerPokemonMove(move, name, nickname, tr_username) {
     return await withOracleDB(async (connection) => {
@@ -474,5 +489,6 @@ module.exports = {
     insertPlayerPokemon, 
     insertPlayerPokemonMove,
     fetchLearnedMovesFromDb,
-    fetchPlayerItemsFromDb
+    fetchPlayerItemsFromDb,
+    deletePlayerPokemonFromDb
 };

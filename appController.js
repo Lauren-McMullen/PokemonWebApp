@@ -35,6 +35,17 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// delete player pokemon
+router.delete('/player-pokemon/:pokemon/:nickname', async (req, res) => {
+    const {pokemon, nickname} = req.params;
+    const deleteResult = await appService.deletePlayerPokemonFromDb(req.headers['username'], pokemon, nickname);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.get('/player-items', async (req, res) => {
     const tableContent = await appService.fetchPlayerItemsFromDb(req.headers['username']);
     res.json({data: tableContent});
