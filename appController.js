@@ -153,6 +153,22 @@ router.get('/store/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
+//get berry by name from databse
+router.get('/berries/:name', async (req, res) => {
+    //parse the parameter from address
+    const name = req.params.name;
+    const tableContent = await appService.fetchBerryByNameFromDb(name);
+    res.json({data: tableContent});
+});
+
+//get medicine by name from databse
+router.get('/medicine/:name', async (req, res) => {
+    //parse the parameter from address
+    const name = req.params.name;
+    const tableContent = await appService.fetchMedicineByNameFromDb(name);
+    res.json({data: tableContent});
+});
+
 router.post("/insert-timezone", async (req, res) => {
     const { zipcode, timezone } = req.body;
     const insertResult = await appService.insertTimezoneDb(zipcode, timezone);

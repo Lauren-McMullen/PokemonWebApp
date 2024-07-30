@@ -109,7 +109,7 @@ async function fetchPlayerBadgesFromDb(username, gym = null) {
     });
 }
 
-/*Renbo: fetch items table from database*/
+// Fetch items table from database*/
 async function fetchItemstableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Items');
@@ -119,7 +119,7 @@ async function fetchItemstableFromDb() {
     });
 }
 
-/*Renbo: fetch item berry table from database*/
+// Fetch item berry table from database*/
 async function fetchItemsberryFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute("SELECT * FROM Items WHERE NAME LIKE '%berry%' ");
@@ -129,10 +129,30 @@ async function fetchItemsberryFromDb() {
     });
 }
 
-//fetch item medicine table from database*/
+// Fetch item medicine table from database*/
 async function fetchItemsmedicineFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute("SELECT * FROM Items WHERE NAME NOT LIKE '%berry%' ");
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+// Fetch berry from berry table from database*/
+async function fetchBerryByNameFromDb(name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Berries WHERE name = :name`, [name]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+// Fetch medicine from medicine table from database*/
+async function fetchMedicineByNameFromDb(name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Medicine WHERE name = :name`, [name]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -435,6 +455,8 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
+    fetchBerryByNameFromDb,
+    fetchMedicineByNameFromDb,
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
     fetchTimezoneFromDb,
