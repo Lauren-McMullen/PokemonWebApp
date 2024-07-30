@@ -237,11 +237,11 @@ async function insertTimezoneDb(zipcode, timezone) {
 async function insertUserToDb(username, name, password, startdate, zipcode) {
     return await withOracleDB(async (connection) => {
         console.log("insert into trainer table");
-        console.log(username);
-        console.log(name);
-        console.log(password);
-        console.log(startdate);
-        console.log(zipcode);
+        // console.log(username);
+        // console.log(name);
+        // console.log(password);
+        // console.log(startdate);
+        // console.log(zipcode);
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
@@ -399,6 +399,19 @@ async function fetchLeaderboardFromDb() {
 
 }
 
+//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+// Fetches the pokemon mathcing a given name in the database
+async function fetchUserInfoFromDb(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username = '${username}'`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+
+
 
 // Insert a new player pokemon after catching it
 async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
@@ -504,5 +517,6 @@ module.exports = {
     fetchLearnedMovesFromDb,
     fetchPlayerItemsFromDb,
     deletePlayerPokemonFromDb, 
-    fetchLeaderboardFromDb
+    fetchLeaderboardFromDb,
+    fetchUserInfoFromDb
 };

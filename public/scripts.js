@@ -919,13 +919,33 @@ async function insertUser(event) {
     
     }
 
+async function loadProfileInfo() {
+
+    const username = sessionStorage.getItem('user');
+
+    const response = await fetch('/user-info', {
+        method: 'GET',
+        headers: {
+            'username': username
+        }
+    });
+
+    const responseData = await response.json();
+
+    document.getElementById('username-text').innerHTML += username;
+    document.getElementById('name-text').innerHTML += responseData.name;
+    document.getElementById('zip-text').innerHTML += responseData.zip;
+
+}
+
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     fetchTableData();
     if (document.body.id == 'home') {
-        
+        loadProfileInfo();
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);

@@ -57,6 +57,17 @@ router.get('/leaderboard', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// fetch and return the leaderboard of all players that have caught all pokemon
+router.get('/user-info', async (req, res) => {
+    const info = await appService.fetchUserInfoFromDb(req.headers['username']);
+    res.json({  username: info[0][0],
+                name: info[0][1],
+                password: info[0][2],
+                start_date: info[0][3],
+                zip: info[0][4]
+    });
+});
+
 // add player pokemon after catching it
 router.post("/player-pokemon/catch", async (req, res) => {
     const {name, nickname, tr_username, pp_level} = req.body;
