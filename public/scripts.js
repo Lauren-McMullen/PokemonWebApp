@@ -571,20 +571,22 @@ async function populatePokemonStats(pokemonName) {
     //MOVES
     const moveAttribute = document.getElementById('pokemon-stats-moves');
 
-    const moveArray = new Array();
-    for(i = 0; i < contentRows.length; i++) {
-        if(!moveArray.includes(contentRows[i][6])) {
-            moveArray.push(contentRows[i][6]);
+    if (moveAttribute) {
+        const moveArray = new Array();
+        for(i = 0; i < contentRows.length; i++) {
+            if(!moveArray.includes(contentRows[i][6])) {
+                moveArray.push(contentRows[i][6]);
+            }
         }
-    }
-    while(moveArray.length > 0) {
-        const move = moveArray.pop();
-        if (moveArray.length != 0) {
-            moveAttribute.innerHTML += `${move}, `;
-        } else {
-            moveAttribute.innerHTML += `${move}`;
-        }
+        while(moveArray.length > 0) {
+            const move = moveArray.pop();
+            if (moveArray.length != 0) {
+                moveAttribute.innerHTML += `${move}, `;
+            } else {
+                moveAttribute.innerHTML += `${move}`;
+            }
         
+        }
     }
 
 }
@@ -599,7 +601,7 @@ async function resetStats() {
     resetStatsHelper('pokemon-stats-speed', "SPEED: ");
     resetStatsHelper('pokemon-stats-gen', "GENERATION: ");
     resetStatsHelper('pokemon-stats-type', "TYPE: ");
-    resetStatsHelper('pokemon-stats-moves', "MOVES: ");
+    if (document.body.id != 'team') resetStatsHelper('pokemon-stats-moves', "MOVES: ");
 }
 
 async function resetStatsHelper(elementID, text) {
@@ -845,6 +847,8 @@ window.onload = function() {
                 populatePlayerPokemonStats(nickname, pokemon, level);
             }
         });
+        document.getElementById("train-button").addEventListener("click", trainPokemon);
+        document.getElementById("delete-button").addEventListener("click", deletePokemon);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
