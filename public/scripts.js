@@ -37,7 +37,7 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-// Modified this so that it updates any table with data fetched from 'endpoint'
+// Updates any table with data fetched from 'endpoint'
 async function fetchAndDisplayUsers(elementID, endpoint, user = null) {
     const tableElement = document.getElementById(elementID);
     const tableBody = tableElement.querySelector('tbody');
@@ -925,13 +925,7 @@ async function insertUser(event) {
 window.onload = function() {
     fetchTableData();
     if (document.body.id == 'home') {
-        // I've commented this out because for some unknown reason it causes multiple error messages to display otherwise
-        // but everything seems to be working fine - might want to investigate more later
-        // checkDbConnection();
-        document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-        document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-        document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-        document.getElementById("countDemotable").addEventListener("click", countDemotable);
+        
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
@@ -1007,7 +1001,7 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     if (document.body.id == 'home') {
-        fetchAndDisplayUsers('demotable', '/demotable');
+        fetchAndDisplayUsers('leader-board', '/leaderboard');
     } else if (document.body.id == 'team') {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));

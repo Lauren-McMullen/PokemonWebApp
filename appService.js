@@ -387,6 +387,19 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
+//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+// Fetches the pokemon mathcing a given name in the database
+async function fetchLeaderboardFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, start_date FROM Trainer`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+
+}
+
+
 // Insert a new player pokemon after catching it
 async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
     return await withOracleDB(async (connection) => {
@@ -490,5 +503,6 @@ module.exports = {
     insertPlayerPokemonMove,
     fetchLearnedMovesFromDb,
     fetchPlayerItemsFromDb,
-    deletePlayerPokemonFromDb
+    deletePlayerPokemonFromDb, 
+    fetchLeaderboardFromDb
 };
