@@ -426,6 +426,7 @@ async function releaseCaughtPokemon(caughtPokeInfo) {
     
 }
 
+// Callback for keeping a pokemon on the catch page
 async function keepCaughtPokemon(caughtPokeInfo) {
         const username = sessionStorage.getItem("user");
         const nickname = getNickname();

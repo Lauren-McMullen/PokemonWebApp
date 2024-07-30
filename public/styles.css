@@ -64,6 +64,12 @@ button {
     outline: none;
 }
 
+.profile-button {
+    margin: 8px;
+    margin-left: 0px;
+}
+
+
 button:hover {
     background-color: #CC0000;
 }
@@ -71,6 +77,7 @@ button:hover {
 button:active {
     background-color: rgb(12, 67, 187);
 }
+
 
 #catch {
     background-color: #99cc00;
@@ -102,6 +109,10 @@ h1 {
     display: flex;
     margin-top: 50px;
 
+}
+
+#pokemon-silhouette{
+    margin: 30px;
 }
 
 #pokedex-pokemon-table {
