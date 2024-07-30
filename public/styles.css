@@ -104,6 +104,10 @@ h1 {
 
 }
 
+#pokemon-silhouette{
+    margin: 30px;
+}
+
 #pokedex-pokemon-table {
     width: 150px;
 }
