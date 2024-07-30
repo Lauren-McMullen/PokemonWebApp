@@ -430,8 +430,7 @@ async function updateName(currentuser, newNameValue) {
 // Update the user's name in the database
 async function updatePassword(currentuser, newPasswordValue) {
     return await withOracleDB(async (connection) => {
-        console.log(newPasswordValue);
-        console.log(currentuser);
+
         const result = await connection.execute(
             `UPDATE Trainer 
              SET password=:newPasswordValue 
