@@ -1040,11 +1040,15 @@ async function changePassword(event) {
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     fetchTableData();
+    if (sessionStorage.getItem('user') == null && (document.body.id != 'login') && (document.body.id != 'signup')) {
+        window.location.href = 'login.html';
+        return;
+    }
     if (document.body.id == 'home') {
-        if(sessionStorage.getItem('user') == null) {return;}
         loadProfileInfo();
         document.getElementById("logout-button").addEventListener('click', () => {
             if (confirm(`Are you sure you want to logout?`)) {
+                sessionStorage.clear();
                 window.location.href = 'login.html';
             }
         });
