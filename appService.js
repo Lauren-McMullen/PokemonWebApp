@@ -427,6 +427,25 @@ async function updateName(currentuser, newNameValue) {
     });
 }
 
+// Update the user's name in the database
+async function updatePassword(currentuser, newPasswordValue) {
+    return await withOracleDB(async (connection) => {
+        console.log(newPasswordValue);
+        console.log(currentuser);
+        const result = await connection.execute(
+            `UPDATE Trainer 
+             SET password=:newPasswordValue 
+             WHERE username=:currentuser`,
+            [newPasswordValue, currentuser],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 
 
 
@@ -536,5 +555,6 @@ module.exports = {
     deletePlayerPokemonFromDb, 
     fetchLeaderboardFromDb,
     fetchUserInfoFromDb,
-    updateName
+    updateName,
+    updatePassword
 };

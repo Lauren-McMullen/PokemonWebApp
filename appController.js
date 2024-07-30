@@ -71,9 +71,19 @@ router.get('/user-info', async (req, res) => {
 // update user's name in database
 router.post("/update-name", async (req, res) => {
     const { username, newName } = req.body;
-    console.log(username);
-    console.log(newName);
     const updateResult = await appService.updateName(username, newName);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// update user's password in database
+router.post("/update-password", async (req, res) => {
+    const { username, newPassword } = req.body;
+    
+    const updateResult = await appService.updatePassword(username, newPassword);
     if (updateResult) {
         res.json({ success: true });
     } else {

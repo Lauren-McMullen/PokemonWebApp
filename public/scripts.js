@@ -940,6 +940,7 @@ async function loadProfileInfo() {
 
 }
 
+// Change user's name
 async function changeName(event) {
     
     event.preventDefault();
@@ -976,6 +977,63 @@ async function changeName(event) {
 
 }
 
+// Change user's password
+async function changePassword(event) {
+    
+    event.preventDefault();
+    const username = sessionStorage.getItem('user');
+
+    const infoResponse = await fetch('/user-info', {
+        method: 'GET',
+        headers: {
+            'username': username
+        }
+    });
+
+    const infoResponseData = await infoResponse.json();
+
+    let oldPasswordValue = prompt("Please enter your old password", "old password");
+    while(oldPasswordValue === null || oldPasswordValue === "new password") {
+        oldPasswordValue = prompt("Please enter your old password", "old password");
+    }
+
+
+    if(oldPasswordValue != infoResponseData.password) {
+        alert("Incorrect password! Please try again.");
+        return;
+    }
+
+    let newPasswordValue = prompt("Please enter your new password", "new password");
+    while(newPasswordValue === null || newPasswordValue === "new password") {
+        newPasswordValue = prompt("Please enter your new password", "new password");
+    }
+
+    const response = await fetch('/update-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            newPassword: newPasswordValue
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        resetStatsHelper('username-text', "USERNAME: ");
+        resetStatsHelper('name-text', "NAME: ");
+        resetStatsHelper('zip-text', "ZIP/POSTAL CODE: ");
+        loadProfileInfo();
+        alert("Password successfully updated!");
+    } else {
+        alert("Error updating Password! Please try again.");
+    }
+
+}
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -983,6 +1041,7 @@ async function changeName(event) {
 window.onload = function() {
     fetchTableData();
     if (document.body.id == 'home') {
+        if(sessionStorage.getItem('user') == null) {return;}
         loadProfileInfo();
         document.getElementById("logout-button").addEventListener('click', () => {
             if (confirm(`Are you sure you want to logout?`)) {
@@ -990,6 +1049,7 @@ window.onload = function() {
             }
         });
         document.getElementById("changeName-button").addEventListener('click', changeName);
+        document.getElementById("password-button").addEventListener('click', changePassword);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
