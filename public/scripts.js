@@ -969,6 +969,7 @@ function fetchTableData() {
         fetchAndDisplayUsers('demotable', '/demotable');
     } else if (document.body.id == 'team') {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+        fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-badges', '/player-badges', sessionStorage.getItem("user"));
     } else if (document.body.id == 'gym') {
         fetchAndDisplayUsers('gym-table', '/gym');

@@ -25,17 +25,21 @@
 
         <h2>Pokemon</h2>
         <div class="flex-container">
-            <table id="team-pokemon-table">
-                <thead>
-                <tr>
-                    <th>NICKNAME</th>
-                    <th>NAME</th>
-                    <th>LEVEL</th>
-                </tr>
-                </thead>
-                <tbody id="team-pokemon-table-body">
-                </tbody>
-            </table>
+            <div>
+                <table id="team-pokemon-table">
+                    <thead>
+                    <tr>
+                        <th>NICKNAME</th>
+                        <th>NAME</th>
+                        <th>LEVEL</th>
+                    </tr>
+                    </thead>
+                    <tbody id="team-pokemon-table-body">
+                    </tbody>
+                </table> <br>
+                <button class="button" id="train-button" type="button" > Train Pokemon </button>
+                <button class="button" id="delete-button" type="button"> Release Pokemon </button>
+            </div>
     
             <div class="result-component" id="pokemon-team-result">
                 <img src="img/pokeball.png" alt="picture of a pokeball" width="300" height="300">
@@ -60,6 +64,7 @@
                 <tr>
                     <th>NAME</th>
                     <th>EFFECT</th>
+                    <th>QUANTITY</th>
                 </tr>
                 </thead>
                 <tbody>
