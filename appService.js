@@ -191,17 +191,7 @@ async function fetchUserAndItemFromDb(username, itemname) {
     });
 }
 
-// fetch quantity from trainer_items with specified item and username
-// async function fetchQtyFromDb(name, username) {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute(`SELECT quantity FROM Trainer_Items WHERE name = :name AND username= :username`, { name: name, username: username });
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
-
-// Option: function to insert itemname, username, quantity to trainer_item table
+// Insert new item to Trainer_Item
 async function insertTrainerAndItem(name, username, quantity) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -216,7 +206,7 @@ async function insertTrainerAndItem(name, username, quantity) {
     });
 }
 
-// function to insert quantity to trainer_item table
+// update the quantity of old item to trainer_item table
 async function updateQuantity(name, username, quantity) {
     return await withOracleDB(async (connection) => {
         console.log(quantity);
@@ -517,8 +507,6 @@ async function updatePassword(currentuser, newPasswordValue) {
 }
 
 
-
-
 // Insert a new player pokemon after catching it
 async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
     return await withOracleDB(async (connection) => {
@@ -605,8 +593,8 @@ module.exports = {
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
     fetchUserAndItemFromDb,
-    updateQuantity,
-    insertTrainerAndItem,
+    updateQuantity, // Update the quantity
+    insertTrainerAndItem,// Insert new item to Trainer_Item
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
     fetchTimezoneFromDb, 

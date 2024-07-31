@@ -349,9 +349,8 @@ async function buyItem(){
     console.log("buyItem funtion run");
     const username = sessionStorage.getItem("user");
     const name = document.getElementById('item-to-buy-input').value;
-  
-    console.log(username);
-    console.log(name);
+    console.log("the username is", username);
+    console.log("the username is", username);
 
     // Check quantity of the item
     const response_qty = await fetch(`/trainer_items/${username}/${name}`, {
@@ -362,15 +361,13 @@ async function buyItem(){
     const contentRows_qty = responseData_qty.data;
 
     // If no items are found
-    if (responseData_qty.data.length == 0) {
-        console.log("No item found");
-    } else {
-        console.log("item found. quantity as follows:");
-        console.log(contentRows_qty[0][2]);
-    }
+    // if (responseData_qty.data.length == 0) {
+    //     console.log("No item found");
+    // } else {
+    //     console.log("item found. quantity as follows:");
+    //     console.log(contentRows_qty[0][2]);
+    // }
     
-
-
     //update the Trainer_Items table
     if (responseData_qty.data.length == 0) {
         console.log("No item found");
@@ -396,6 +393,7 @@ async function buyItem(){
 
     } else {
         console.log("Item found");
+        console.log("original quantity is:", contentRows_qty[0][2]);
         const newqty = contentRows_qty[0][2] + 1;
         console.log(`newQuantity in scripts ${newqty}`);
 
@@ -408,7 +406,6 @@ async function buyItem(){
             body: JSON.stringify({
                 name: name,
                 username: username,
-                // quantity: contentRows_qty[0][2],
                 quantity: newqty
             })
         });
