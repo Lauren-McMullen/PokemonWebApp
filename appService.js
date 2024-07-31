@@ -608,6 +608,16 @@ async function fetchPokemonStatsFromDb(pokemonName) {
     });
 }
 
+// Count number of player pokemon
+async function countPlayerPokemon(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT Count(*) FROM Player_Pokemon WHERE tr_username = '${username}'`);
+        return result.rows[0][0];
+    }).catch(() => {
+        return -1;
+    });
+}
+
 
 
 module.exports = {
@@ -649,5 +659,6 @@ module.exports = {
     fetchUserInfoFromDb,
     updateName,
     updatePassword,
-    countPlayerPokemonByType
+    countPlayerPokemonByType,
+    countPlayerPokemon
 };

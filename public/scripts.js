@@ -1018,6 +1018,8 @@ async function insertUser(event) {
                 resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
                 resetStatsHelper('pokemon-stats-level', "LEVEL: ");
                 resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+                document.getElementById("pokemon-type").style.display = 'none';
+                getPokemonCount();
             } else {
                 alert("Error releasing pokemon");
             }
@@ -1150,6 +1152,22 @@ async function changePassword(event) {
 
 }
 
+// count number of player pokemon
+async function getPokemonCount() {
+    const response = await fetch(`/count-pokemon/${sessionStorage.getItem("user")}`, {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const count = responseData.count;
+        document.getElementById("pokemonCaught").innerHTML = ('Pokemon Caught: ' + count);
+    } else {
+        alert("Error in count pokemon");
+    }
+}
+
 
 
 // ---------------------------------------------------------------
@@ -1252,6 +1270,7 @@ function fetchTableData() {
     if (document.body.id == 'home') {
         fillLeaderBoard();
     } else if (document.body.id == 'team') {
+        getPokemonCount();
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-badges', '/player-badges', sessionStorage.getItem("user"));

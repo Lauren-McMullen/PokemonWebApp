@@ -15,8 +15,10 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
+// Counts number of pokemon a player has
+router.get('/count-pokemon/:username', async (req, res) => {
+    const {username} = req.params;
+    const tableCount = await appService.countPlayerPokemon(username);
     if (tableCount >= 0) {
         res.json({
             success: true,
