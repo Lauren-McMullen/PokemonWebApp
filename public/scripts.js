@@ -1024,10 +1024,15 @@ async function insertUser(event) {
         }
     }
     
-    async function trainPokemon() {
+async function trainPokemon() {
         
     
-    }
+}
+
+async function countPokemonByType() {
+    document.getElementById("pokemon-type").style.display = 'table-row';
+    fetchAndDisplayUsers("pokemon-type", "/count-player-pokemon-type", sessionStorage.getItem("user"));
+}
 
 async function loadProfileInfo() {
     
@@ -1197,6 +1202,7 @@ window.onload = function() {
         });
         document.getElementById("train-button").addEventListener("click", trainPokemon);
         document.getElementById("delete-button").addEventListener("click", deletePokemon);
+        document.getElementById("count-type-button").addEventListener("click", countPokemonByType);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);

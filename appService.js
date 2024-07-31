@@ -85,6 +85,17 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
+async function countPlayerPokemonByType(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT type, COUNT(*) FROM Player_Pokemon, Pokemon_Type 
+            WHERE Player_Pokemon.name = Pokemon_Type.name AND tr_username = '${username}'
+            GROUP BY type`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchPlayerItemsFromDb(username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT Trainer_Items.name, Items.effect, Trainer_Items.quantity FROM Trainer_Items, Items 
@@ -637,5 +648,6 @@ module.exports = {
     fetchLeaderboardFromDb,
     fetchUserInfoFromDb,
     updateName,
-    updatePassword
+    updatePassword,
+    countPlayerPokemonByType
 };

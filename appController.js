@@ -30,6 +30,13 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+// counts number of pokemon of each type that a player has
+router.get('/count-player-pokemon-type', async (req, res) => {
+    const tableContent = await appService.countPlayerPokemonByType(req.headers['username']);
+    res.json({data: tableContent});
+});
+
+// get player pokemon info
 router.get('/player-pokemon', async (req, res) => {
     const tableContent = await appService.fetchPlayerPokemonFromDb(req.headers['username']);
     res.json({data: tableContent});
