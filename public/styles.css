@@ -91,6 +91,13 @@ button:active {
     background-color: #f9e2ef;
 }
 
+#filter-options {
+    border-left: 8px solid purple;
+    background-color: #e8c5f9;
+    border-radius: 8px;
+    padding: 5px 10px; 
+}
+
 #gym {
     background-color: #a0bbe7;
 }
@@ -117,6 +124,11 @@ h1 {
 
 #pokedex-pokemon-table {
     width: 150px;
+}
+
+#pokemonType {
+    margin: 10px;
+
 }
 
 #team-pokemon-table {
@@ -153,6 +165,16 @@ h1 {
 
 #effectiveness-options {
     padding: 20px;
+}
+
+#effectiveness-button{
+    margin-bottom: 20px;
+}
+
+#type-option, #attack-option, #defence-option, #speed-option {
+    margin-right: 30px;
+    margin-bottom: 0px;
+    width:30px;
 }
 
 
