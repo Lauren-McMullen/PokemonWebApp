@@ -617,10 +617,12 @@ async function keepCaughtPokemon(caughtPokeInfo) {
             const responseData = await response.json();
             if (!responseData.success) {
                 alert("Error adding pokemon move!");
-            } 
+            } else {
+                alert("Pokemon sucessfully added to your team!");
+            }
         }
 
-        alert("Pokemon sucessfully added to your team!");
+        
 
         //Page clean up
         caughtPokeInfo.name = '';
