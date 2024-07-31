@@ -219,7 +219,24 @@ router.get('/medicine/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
-//Helper function to fetch data to /trainer_items
+
+//Add item information to trainer_items table
+router.post("/trainer_items", async (req, res) => {
+    const { name, username, quantity } = req.body;
+    console.log("request body");
+    console.log(req.body);
+    const insertResult = await appService.insertTrainerAndItem(name, username, quantity);
+    console.log(insertResult);
+    if (insertResult) {
+        res.json({ success: true , id: insertResult});
+        console.log("post work!");
+    } else {
+        res.status(500).json({ success: false , id: -1});
+        console.log("post NOT work");
+    }
+});
+
+//Fetch data to trainer_items
 // router.get('/trainer_items', async (req, res) => {
 //     const tableContent = await appService.fetchTrainerItemsFromDb();
 //     res.json({data: tableContent});
@@ -233,57 +250,39 @@ router.get('/trainer_items/:username/:itemname', async (req, res) => {
     res.json({data: tableContent});
 });
 
-//update the trainer and item information to trainer_items table
-router.post("/trainer_items", async (req, res) => {
-    const { name, username, quantity } = req.body;
-    console.log("request body");
-    console.log(req.body);
-    const insertResult = await appService.updateQuantity(name, username, quantity);
-    console.log(insertResult);
-    if (insertResult) {
-        res.json({ success: true , id: insertResult});
-        console.log("post work!");
-    } else {
-        res.status(500).json({ success: false , id: -1});
-        console.log("post NOT work");
-    }
-});
+
 
 //update the quantity of trainer item
-router.post('/trainer_items/:username/:itemname', async (req, res) => {
-    //parse the parameter from address
-    const { username, itemname } = req.params;
-    const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
-    res.json({data: tableContent});
-});
+// router.post('/trainer_items/:username/:itemname', async (req, res) => {
+//     //parse the parameter from address
+//     const { username, itemname } = req.params;
+//     const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
+//     res.json({data: tableContent});
+// });
 
 
 
 //update the quantity of trainer item
 router.post("/trainer_items/:name/:username/:quantity", async (req, res) => {
     const { name, username, quantity } = req.body;
-    console.log("request body");
-    console.log(req.body);
     const insertResult = await appService.updateQuantity(name, username, quantity);
     if (insertResult > 0) {
         res.json({ success: true , id: insertResult});
-        console.log("update work!");
     } else {
         res.status(500).json({ success: false , id: -1});
-        console.log("update NOT work");
     }
 });
 
 // Update the quantity of trainer_items with specified name and username
-router.post("/trainer_items", async (req, res) => {
- //parse the parameter from address
-   const { name, username, quantity } = req.body;
-//    const { quantity } = req.body; 
+// router.post("/trainer_items", async (req, res) => {
+//  //parse the parameter from address
+//    const { name, username, quantity } = req.body;
+// //    const { quantity } = req.body; 
    
-   const tableContent = await appService.updateQuantity(name, username, quantity);
-   res.json({data: tableContent});
+//    const tableContent = await appService.insertTrainerAndItem(name, username, quantity);
+//    res.json({data: tableContent});
    
-});
+// });
 
 router.post("/insert-timezone", async (req, res) => {
     const { zipcode, timezone } = req.body;

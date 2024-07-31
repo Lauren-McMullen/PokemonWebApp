@@ -363,13 +363,11 @@ async function buyItem(){
 
     // If no items are found
     if (responseData_qty.data.length == 0) {
-        console.log("No item found");
+        //console.log("No item found");
     } else {
         console.log("item found. quantity as follows:");
         console.log(contentRows_qty[0][2]);
     }
-    
-
 
     //update the Trainer_Items table
     if (responseData_qty.data.length == 0) {
@@ -400,7 +398,7 @@ async function buyItem(){
         console.log(`newQuantity in scripts ${newqty}`);
 
         //This is the BUG!!!
-        const response_addold = await fetch(`/trainer_items`, {
+        const response_addold = await fetch(`/trainer_items/:name/:username/:quantity`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

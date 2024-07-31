@@ -211,7 +211,6 @@ async function insertTrainerAndItem(name, username, quantity) {
         );
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
-        console.log("Insert Fail");
         return false;
     });
 }
@@ -222,7 +221,7 @@ async function updateQuantity(name, username, quantity) {
         console.log(quantity);
         const result = await connection.execute(
             `UPDATE Trainer_Items SET quantity=:quantity WHERE name=:name AND username=:username`,
-            [quantity, name, username],// 
+            [quantity, name, username],
             { autoCommit: true }
         );
         console.log("Update SUCCESS!");
