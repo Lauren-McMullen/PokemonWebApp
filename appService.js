@@ -60,7 +60,7 @@ async function withOracleDB(action) {
             } catch (err) {
                 console.error(err);
             }
-        }
+        }          
     }
 }
 
@@ -167,6 +167,86 @@ async function fetchItembyNameFromDb(name) {
         return result.rows;
     }).catch(() => {
         return [];
+    });
+}
+
+//Helper function to fetch data to /trainer_items
+// async function fetchTrainerItemsFromDb() {
+//     return await withOracleDB(async (connection) => {
+//         const result = await connection.execute('SELECT * FROM Trainer_Items');
+//         return result.rows;
+//     }).catch(() => {
+//         return [];
+//     });
+// }
+
+//function to fetch trainer_items by username and item
+//Use username: Suicune7 for testing
+async function fetchUserAndItemFromDb(username, itemname) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer_Items WHERE name = :itemname AND username= :username`, { itemname: itemname, username: username });
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+// fetch quantity from trainer_items with specified item and username
+// async function fetchQtyFromDb(name, username) {
+//     return await withOracleDB(async (connection) => {
+//         const result = await connection.execute(`SELECT quantity FROM Trainer_Items WHERE name = :name AND username= :username`, { name: name, username: username });
+//         return result.rows;
+//     }).catch(() => {
+//         return [];
+//     });
+// }
+
+// Option: function to insert itemname, username, quantity to trainer_item table
+async function insertTrainerAndItem(name, username, quantity) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Trainer_Items(name, username, quantity) VALUES (:name, :username, :quantity)`,
+            [name, username, quantity],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        console.log("Insert Fail");
+        return false;
+    });
+}
+
+// function to insert quantity to trainer_item table
+async function updateQuantity(name, username, quantity) {
+    return await withOracleDB(async (connection) => {
+        console.log(quantity);
+        const result = await connection.execute(
+            `UPDATE Trainer_Items SET quantity=:quantity WHERE name=:name AND username=:username`,
+            [quantity, name, username],// 
+            { autoCommit: true }
+        );
+        console.log("Update SUCCESS!");
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        console.log("Update Fail");
+        return false;
+    });
+}
+
+async function insertTimezoneDb(zipcode, timezone) {
+    //insert function to check if the zipcode and timezone pair already exist
+    console.log(zipcode);
+    console.log(timezone);
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO Timezone (zip_postal_code, timezone) VALUES (:zipcode, :timezone)`,
+            [zipcode, timezone],
+            { autoCommit: true }
+            //question: should I insert into Timezone table as well?
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
     });
 }
 
@@ -457,9 +537,13 @@ module.exports = {
     fetchItembyNameFromDb,
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
+    fetchUserAndItemFromDb,
+    updateQuantity,
+    // fetchQtyFromDb,
+    insertTrainerAndItem,
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
-    fetchTimezoneFromDb,
+    fetchTimezoneFromDb, 
     insertBattle,
     fetchPlayerBadgesFromDb,
     insertGymChallenge,

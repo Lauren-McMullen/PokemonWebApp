@@ -344,18 +344,91 @@ function resetItemStats() {
 }
 
 // Buy item for the trainer on click buy button
-async function buyItem() {
-    //TODO
+async function buyItem(){
+
+    console.log("buyItem funtion run");
+    const username = 'TheVeryBest';
+    const name = document.getElementById('item-to-buy-input').value;
+  
+    console.log(username);
+    console.log(name);
+
+    // Check quantity of the item
+    const response_qty = await fetch(`/trainer_items/${username}/${name}`, {
+        method: 'GET',
+    });
+
+    const responseData_qty = await response_qty.json();
+    const contentRows_qty = responseData_qty.data;
+
+    // If no items are found
+    if (responseData_qty.data.length == 0) {
+        console.log("No item found");
+    } else {
+        console.log("item found. quantity as follows:");
+        console.log(contentRows_qty[0][2]);
+    }
+    
+
+
+    //update the Trainer_Items table
+    if (responseData_qty.data.length == 0) {
+        console.log("No item found");
+        const response_addnew = await fetch('/trainer_items', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                username: username,
+                quantity: 1
+            })
+        });
+    
+        const responseData_addnew = await response_addnew.json();
+    
+        if (responseData_addnew.success) {
+            console.log("new item added!");
+        } else {
+            console.log("Fail to add new item");
+        }
+
+    } else {
+        console.log("Item found");
+        const newqty = contentRows_qty[0][2] + 1;
+        console.log(`newQuantity in scripts ${newqty}`);
+
+        //This is the BUG!!!
+        const response_addold = await fetch(`/trainer_items`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                username: username,
+                // quantity: contentRows_qty[0][2],
+                quantity: newqty
+            })
+        });
+    
+        const responseData_addold = await response_addold.json();
+    
+        if (responseData_addold.success) {
+            console.log("new item added!");
+        } else {
+            console.log("Fail to add new item");
+        }
+    }
+
 }
 
 // Handler for click event on item table
 async function populateItemStats(itemName) {
-    console.log("populateItemStats function run");
-    console.log("item name is");
-    console.log(itemName);
     resetItemStats();
 
-    console.log("item found!");
+    // console.log("item found!");
 
     // check the item is berry or medicine
     if (itemName.includes("berry")) {
@@ -371,8 +444,8 @@ async function populateItemStats(itemName) {
             return;
         }
 
-        console.log("Berry found!");
-        console.log(contentRows[0][1]);
+        // console.log("Berry found!");
+        // console.log(contentRows[0][1]);
 
         // fill the berry attribute
         const flavor = document.getElementById('flavor');
@@ -931,7 +1004,10 @@ window.onload = function() {
         document.getElementById("item-table").addEventListener('click', (e) => {
             //tagName = 'TD' check the tag tabledata cell
             if (e.target.tagName === 'TD') {populateItemStats(e.target.textContent);}
+            //set the item to buy input box as the clicked item
+            document.getElementById('item-to-buy-input').value = e.target.textContent;
         });
+        document.getElementById('buy-button').addEventListener("click", buyItem);
     } else if (document.body.id == 'login') {
         //sign up button direct to signup page
         document.getElementById("signup-btn").addEventListener("click", function () {
