@@ -237,16 +237,10 @@ async function insertTimezoneDb(zipcode, timezone) {
 async function insertUserToDb(username, name, password, startdate, zipcode) {
     return await withOracleDB(async (connection) => {
         console.log("insert into trainer table");
-        // console.log(username);
-        // console.log(name);
-        // console.log(password);
-        // console.log(startdate);
-        // console.log(zipcode);
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
             { autoCommit: true }
-            //question: should I insert into Timezone table as well?
         );
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
