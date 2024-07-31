@@ -82,7 +82,6 @@ router.post("/update-name", async (req, res) => {
 // update user's password in database
 router.post("/update-password", async (req, res) => {
     const { username, newPassword } = req.body;
-    
     const updateResult = await appService.updatePassword(username, newPassword);
     if (updateResult) {
         res.json({ success: true });
