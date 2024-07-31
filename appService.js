@@ -618,6 +618,21 @@ async function countPlayerPokemon(username) {
     });
 }
 
+async function updatePokemonLevel(name, nickname, username, pplevel) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE Player_Pokemon 
+             SET pp_level=:pplevel 
+             WHERE name=:name AND nickname=:nickname AND tr_username=:username`,
+            [pplevel, name, nickname, username],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
 
 
 module.exports = {
@@ -660,5 +675,6 @@ module.exports = {
     updateName,
     updatePassword,
     countPlayerPokemonByType,
-    countPlayerPokemon
+    countPlayerPokemon,
+    updatePokemonLevel
 };

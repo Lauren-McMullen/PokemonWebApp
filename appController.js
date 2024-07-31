@@ -44,6 +44,17 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// update player pokemon level
+router.put('/player-pokemon', async (req, res) => {
+    const { name, nickname, username, level } = req.body;
+    const updateResult = await appService.updatePokemonLevel(name, nickname, username, level);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 // delete player pokemon
 router.delete('/player-pokemon/:pokemon/:nickname', async (req, res) => {
     const {pokemon, nickname} = req.params;

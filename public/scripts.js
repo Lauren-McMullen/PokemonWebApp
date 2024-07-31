@@ -1026,9 +1026,43 @@ async function insertUser(event) {
         }
     }
     
+// increase pokemon level by 1    
 async function trainPokemon() {
-        
-    
+    let pokemon = document.getElementById('pokemon-stats-name').textContent;
+    pokemon = pokemon.split(" ").splice(1).join(" ");
+    let nickname = document.getElementById('pokemon-stats-nickname').textContent;
+    nickname = nickname.split(" ").splice(1).join(" ");
+    let level = document.getElementById('pokemon-stats-level').textContent;
+    level = level.split(" ").splice(1).join(" ");
+
+    const newLevel = parseInt(level) + 1;
+
+    if (pokemon === "" || nickname === "" || level === "") {
+        alert("Select the pokemon you want to train");
+        return;
+    }
+    const response = await fetch('/player-pokemon', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: pokemon,
+            nickname: nickname,
+            username: sessionStorage.getItem("user"),
+            level: newLevel
+        })
+    });
+
+    const responseData = await response.json();
+    if (responseData.success) {
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+        resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+        document.getElementById('pokemon-stats-level').innerHTML += newLevel;
+        alert(`${nickname}'s level increased from ${level} to ${newLevel}!`);
+    } else {
+        alert("Error training pokemon! Please try again.");
+    }
 }
 
 async function countPokemonByType() {
