@@ -50,6 +50,8 @@
         </div>
     </div>
 
+    <button class="search-input" type="submit" id="reset-button"> Reset Pokemon </button> 
+
     <div class="type-input">
         
             SEARCH BY NAME: <input type="text" id="nameInput" placeholder="Enter NAME" required> <br>
@@ -76,7 +78,7 @@
         </form>
 
         <div class="type-input" id="pokemon-type-search">
-            TYPE: <select name="pokemon-type" id="pokemonType" >
+            TYPE:<select name="pokemon-type" id="pokemonType" >
                                 <option value="all">ALL</option>
                                 <option value="normal">NORMAL</option>
                                 <option value="water">WATER</option>
@@ -98,14 +100,20 @@
                                 <option value="fairy">FAIRY</option>
 
                             </select>
-
             <br>
-            <button type="submit" id="type-search-button"> Search </button> <br>
+            <label for="attack-input">ATTACK: </label><input type="number" id="attack-input" name="attack-input" min="0" value="0">
+            <label for="defence-input">DEFENCE: </label><input type="number" id="defence-input" name="defence-input" min="0" value="0">
+            <label for="speed-input">SPEED: </label><input type="number" id="speed-input" name="speed-input" min="0" value="0">
+            
+
+            
         </div>
+
+        <button type="submit" id="type-search-button"> Search </button> <br>
     
     </div>
 
-        <button class="search-input" type="submit" id="reset-button"> Reset Pokemon </button> 
+        
 
 
         
