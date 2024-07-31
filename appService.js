@@ -581,7 +581,7 @@ async function fetchPokemonStatsFromDb(pokemonName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
                                                 FROM Pokemon p, Pokemon_Type t, Can_Learn l
-                                                WHERE p.name='${pokemonName}' and t.name='${pokemonName}' and l.pokemon='${pokemonName}'`);
+                                                WHERE p.name=t.name and t.name=l.pokemon and p.name='${pokemonName}'`);
         return result.rows; 
     }).catch(()=> {
         return [];
