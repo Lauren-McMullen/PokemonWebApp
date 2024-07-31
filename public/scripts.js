@@ -347,7 +347,7 @@ function resetItemStats() {
 async function buyItem(){
 
     console.log("buyItem funtion run");
-    const username = 'TheVeryBest';
+    const username = sessionStorage.getItem("user");
     const name = document.getElementById('item-to-buy-input').value;
   
     console.log(username);

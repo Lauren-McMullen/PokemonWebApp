@@ -612,7 +612,6 @@ module.exports = {
     fetchMedicineByNameFromDb,
     fetchUserAndItemFromDb,
     updateQuantity,
-    // fetchQtyFromDb,
     insertTrainerAndItem,
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
