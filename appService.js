@@ -457,11 +457,20 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
-//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+
 // Fetches the pokemon mathcing a given name in the database
 async function fetchLeaderboardFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT username, start_date FROM Trainer`);
+        const result = await connection.execute(`SELECT username, start_date
+                                                 FROM Trainer t
+                                                 WHERE t.username IN 
+                                                    (SELECT DISTINCT tr_username
+                                                    FROM Player_Pokemon pp1
+                                                    WHERE NOT EXISTS ((SELECT name FROM Pokemon)
+                                                                        MINUS
+                                                                        (SELECT name
+                                                                         FROM Player_Pokemon pp2
+                                                                         WHERE pp2.tr_username=pp1.tr_username)))`);
         return result.rows;
     }).catch(()=> {
         return [];
