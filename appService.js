@@ -432,22 +432,37 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
-async function fetchPokedexFiltersFromDb(pokeType, attack_input, defence_input, speed_input) {
+async function fetchPokedexFiltersFromDb(pokeBinds) {
 
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT DISTINCT p.name 
-                                                FROM Pokemon p, Pokemon_type pt 
-                                                WHERE p.name=pt.name and pt.type like :pokeType and p.attack>=:attack_input 
-                                                and defence>=:defence_input and speed>=:speed_input`, 
-        [pokeType, attack_input, defence_input, speed_input]);
-        // console.log(pokeType);
+        let filter_sql = "SELECT DISTINCT p.name FROM Pokemon p, Pokemon_Type pt WHERE p.name=pt.name";
+        let sql_map = {
+            "pokeattack":` and p.attack >= `,
+            "pokedefence": ` and p.defence >= `,
+            "pokespeed": ` and p.speed >= `,
+            "poketype": ` and pt.type = `
+        }
+
+        
+
+        for(const [key, value] of pokeBinds) {
+            if(key === 'type') {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `':${key}'`;
+            } else {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `:${key}`;
+            }
+        }
+        const bindValues = Array.from(pokeBinds.values());
+        console.log(bindValues);
+        console.log(filter_sql);
+        const result = await connection.execute(filter_sql, bindValues);
         console.log(result.rows);
         return result.rows;
     }).catch(() => {
         return -1;
     });
-
-
 }
 
 // Fetches the effectiveness multiplier for the given attack and defense type

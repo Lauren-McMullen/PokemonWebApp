@@ -379,11 +379,13 @@ router.get('/pokedex/find-by-name/:name', async (req, res) => {
 
 //Get all pokemon that match the requested filters
 router.get('/pokedex/filter', async (req, res) => {
-    console.log(req.headers);
-    const {poketype, attack_input, defence_input, speed_input} = req.headers;
-    console.log(poketype);
-
-    const tableContent = await appService.fetchPokedexFiltersFromDb(poketype, attack_input, defence_input, speed_input);
+    const bindsObject = JSON.parse(req.headers.binds);
+    const bindsMap = new Map();
+    for(let property in bindsObject) {
+        bindsMap.set(property, bindsObject[property]);
+    }
+    //console.log(bindsMap);
+    const tableContent = await appService.fetchPokedexFiltersFromDb(bindsMap);
     res.json({data: tableContent});
 });
 

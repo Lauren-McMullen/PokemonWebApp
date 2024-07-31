@@ -164,44 +164,30 @@ async function filterPokedex() {
     const tableElement = document.getElementById("pokedex-pokemon-table");
     const tableBody = tableElement.querySelector('tbody');
 
-    let pokeType = "%";
-    let attack_input = '0';
-    let defence_input = '0';
-    let speed_input = '0';
+    const pokeBinds = {};
 
     if(document.getElementById("type-option").checked && document.getElementById("pokemonType").value != 'all') {
-        console.log(pokeType);
-        pokeType = document.getElementById("pokemonType").value.toString();
+        pokeBinds.poketype = document.getElementById("pokemonType").value.toString();
     }
 
     if(document.getElementById("attack-option").checked) {
-        console.log(attack_input);
-        attack_input = document.getElementById("attack-input").value.toString();
+        pokeBinds.pokeattack = document.getElementById("attack-input").value.toString();
     }
 
     if(document.getElementById("defence-option").checked) {
-        console.log(defence_input);
-        defence_input = document.getElementById("defence-input").value.toString();
+        pokeBinds.pokedefence = document.getElementById("defence-input").value.toString();
     }
 
     if(document.getElementById("speed-option").checked) {
-        console.log(speed_input);
-        speed_input = document.getElementById("speed-input").value.toString();
+        pokeBinds.pokespeed = document.getElementById("speed-input").value.toString();
     }
-
-    console.log(pokeType);
-    console.log(attack_input);
-    console.log(defence_input);
-    console.log(speed_input);
 
     const response = await fetch('/pokedex/filter', {
         method: 'GET',
         headers: {
-            //'Content-Type': 'application/json',
-             'pokeType': pokeType,
-             'attack_input': attack_input,
-             'defence_input': defence_input,
-             'speed_input': speed_input,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'binds': JSON.stringify(pokeBinds)
         }
     });
 
