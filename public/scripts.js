@@ -37,7 +37,7 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-// Modified this so that it updates any table with data fetched from 'endpoint'
+// Updates any table with data fetched from 'endpoint'
 async function fetchAndDisplayUsers(elementID, endpoint, user = null) {
     const tableElement = document.getElementById(elementID);
     const tableBody = tableElement.querySelector('tbody');
@@ -723,20 +723,22 @@ async function populatePokemonStats(pokemonName) {
     //MOVES
     const moveAttribute = document.getElementById('pokemon-stats-moves');
 
-    const moveArray = new Array();
-    for(i = 0; i < contentRows.length; i++) {
-        if(!moveArray.includes(contentRows[i][6])) {
-            moveArray.push(contentRows[i][6]);
+    if (moveAttribute) {
+        const moveArray = new Array();
+        for(i = 0; i < contentRows.length; i++) {
+            if(!moveArray.includes(contentRows[i][6])) {
+                moveArray.push(contentRows[i][6]);
+            }
         }
-    }
-    while(moveArray.length > 0) {
-        const move = moveArray.pop();
-        if (moveArray.length != 0) {
-            moveAttribute.innerHTML += `${move}, `;
-        } else {
-            moveAttribute.innerHTML += `${move}`;
-        }
+        while(moveArray.length > 0) {
+            const move = moveArray.pop();
+            if (moveArray.length != 0) {
+                moveAttribute.innerHTML += `${move}, `;
+            } else {
+                moveAttribute.innerHTML += `${move}`;
+            }
         
+        }
     }
 
 }
@@ -751,7 +753,7 @@ async function resetStats() {
     resetStatsHelper('pokemon-stats-speed', "SPEED: ");
     resetStatsHelper('pokemon-stats-gen', "GENERATION: ");
     resetStatsHelper('pokemon-stats-type', "TYPE: ");
-    resetStatsHelper('pokemon-stats-moves', "MOVES: ");
+    if (document.body.id != 'team') resetStatsHelper('pokemon-stats-moves', "MOVES: ");
 }
 
 async function resetStatsHelper(elementID, text) {
@@ -953,19 +955,178 @@ async function insertUser(event) {
     window.location.href = 'login.html';
     }
 
+    // Delete selected player pokemon
+    async function deletePokemon() {
+        let pokemon = document.getElementById('pokemon-stats-name').textContent;
+        pokemon = pokemon.split(" ").splice(1).join(" ");
+    
+        let nickname = document.getElementById('pokemon-stats-nickname').textContent;
+        nickname = nickname.split(" ").splice(1).join(" ");
+    
+        if (pokemon === "" || nickname === "") {
+            alert("Select the pokemon you want to release");
+            return;
+        }
+        if (confirm(`Do you want to release your ${pokemon}, ${nickname}?`)) {
+            const response = await fetch(`/player-pokemon/${pokemon}/${nickname}`, {
+                method: 'DELETE',
+                headers: {
+                    'username': sessionStorage.getItem("user")
+                }
+            });
+            const responseData = await response.json();
+            if (responseData.success) {
+                fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+                resetStats();
+                resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
+                resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+                resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+            } else {
+                alert("Error releasing pokemon");
+            }
+        }
+    }
+    
+    async function trainPokemon() {
+        
+    
+    }
+
+async function loadProfileInfo() {
+    
+    const username = sessionStorage.getItem('user');
+
+    if(username == null) {return;}
+
+    const response = await fetch('/user-info', {
+        method: 'GET',
+        headers: {
+            'username': username
+        }
+    });
+
+    const responseData = await response.json();
+
+    document.getElementById('username-text').innerHTML += username;
+    document.getElementById('name-text').innerHTML += responseData.name;
+    document.getElementById('zip-text').innerHTML += responseData.zip;
+
+}
+
+// Change user's name
+async function changeName(event) {
+    
+    event.preventDefault();
+    const username = sessionStorage.getItem('user');
+
+    let newNameValue = prompt("Please enter your new name", "new name");
+    while(newNameValue === null || newNameValue === "new name") {
+        newNameValue = prompt("Please enter your new name", "new name");
+    }
+
+
+    const response = await fetch('/update-name', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            newName: newNameValue
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        resetStatsHelper('username-text', "USERNAME: ");
+        resetStatsHelper('name-text', "NAME: ");
+        resetStatsHelper('zip-text', "ZIP/POSTAL CODE: ");
+        loadProfileInfo();
+        alert("Name successfully updated!");
+    } else {
+        alert("Error updating name! Please try again.");
+    }
+
+}
+
+// Change user's password
+async function changePassword(event) {
+    
+    event.preventDefault();
+    const username = sessionStorage.getItem('user');
+
+    const infoResponse = await fetch('/user-info', {
+        method: 'GET',
+        headers: {
+            'username': username
+        }
+    });
+
+    const infoResponseData = await infoResponse.json();
+
+    let oldPasswordValue = prompt("Please enter your old password", "old password");
+    while(oldPasswordValue === null || oldPasswordValue === "new password") {
+        oldPasswordValue = prompt("Please enter your old password", "old password");
+    }
+
+
+    if(oldPasswordValue != infoResponseData.password) {
+        alert("Incorrect password! Please try again.");
+        return;
+    }
+
+    let newPasswordValue = prompt("Please enter your new password", "new password");
+    while(newPasswordValue === null || newPasswordValue === "new password") {
+        newPasswordValue = prompt("Please enter your new password", "new password");
+    }
+
+    const response = await fetch('/update-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            newPassword: newPasswordValue
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        resetStatsHelper('username-text', "USERNAME: ");
+        resetStatsHelper('name-text', "NAME: ");
+        resetStatsHelper('zip-text', "ZIP/POSTAL CODE: ");
+        loadProfileInfo();
+        alert("Password successfully updated!");
+    } else {
+        alert("Error updating Password! Please try again.");
+    }
+
+}
+
+
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     fetchTableData();
+    if (sessionStorage.getItem('user') == null && (document.body.id != 'login') && (document.body.id != 'signup')) {
+        window.location.href = 'login.html';
+        return;
+    }
     if (document.body.id == 'home') {
-        // I've commented this out because for some unknown reason it causes multiple error messages to display otherwise
-        // but everything seems to be working fine - might want to investigate more later
-        // checkDbConnection();
-        document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
-        document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-        document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
-        document.getElementById("countDemotable").addEventListener("click", countDemotable);
+        loadProfileInfo();
+        document.getElementById("logout-button").addEventListener('click', () => {
+            if (confirm(`Are you sure you want to logout?`)) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        });
+        document.getElementById("changeName-button").addEventListener('click', changeName);
+        document.getElementById("password-button").addEventListener('click', changePassword);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
@@ -997,6 +1158,8 @@ window.onload = function() {
                 populatePlayerPokemonStats(nickname, pokemon, level);
             }
         });
+        document.getElementById("train-button").addEventListener("click", trainPokemon);
+        document.getElementById("delete-button").addEventListener("click", deletePokemon);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
@@ -1042,7 +1205,7 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     if (document.body.id == 'home') {
-        fetchAndDisplayUsers('demotable', '/demotable');
+        fetchAndDisplayUsers('leader-board', '/leaderboard');
     } else if (document.body.id == 'team') {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));

@@ -1999,6 +1999,109 @@ VALUES('squirtle', 'Squirrel', 'Suicune7', 14);
 INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
 VALUES('ivysaur', 'Thorn', 'Suicune7', 1);
 
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charmander', 'Helios', 'Suicune7', 11);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('bulbasaur', 'Pog Champ', 'Suicune7', 20);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('venusaur', 'Leafy', 'Suicune7', 23);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charmeleon', 'Melon', 'Suicune7', 26);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charizard', 'Dragon Overlord', 'Suicune7', 99);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('wartortle', 'Tuttie', 'Suicune7', 16);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('blastoise', 'blastoise', 'Suicune7', 30);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('caterpie', 'Leggy', 'Suicune7', 3);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('metapod', 'zukerburg', 'Suicune7', 13);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('butterfree', 'Free Bird', 'Suicune7', 10);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('weedle', 'Sting', 'Suicune7', 9);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('kakuna', 'Kat', 'Suicune7', 6);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('beedrill', 'Queeny', 'Suicune7', 18);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgey', 'Wings', 'Suicune7', 9);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgeotto', 'Wings2', 'Suicune7', 19);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgeot', 'Wings3', 'Suicune7', 27);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('squirtle', 'Mario', 'DatabasePro', 4);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('ivysaur', 'Flora', 'DatabasePro', 10);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charmander', 'Sparky', 'DatabasePro', 15);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('bulbasaur', 'Belly', 'DatabasePro', 2);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('venusaur', 'Dino', 'DatabasePro', 3);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charmeleon', 'Melly', 'DatabasePro', 16);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('charizard', 'Hot Wings', 'DatabasePro', 85);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('wartortle', 'Hank', 'DatabasePro', 56);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('blastoise', 'Fraser River', 'DatabasePro', 33);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('caterpie', 'Pumpkin', 'DatabasePro', 31);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('metapod', 'Facebook', 'DatabasePro', 83);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('butterfree', 'King', 'DatabasePro', 1);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('weedle', 'weedle', 'DatabasePro', 19);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('kakuna', 'Dr. Bacon', 'DatabasePro', 26);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('beedrill', 'Epipen', 'DatabasePro', 8);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgey', 'Floor Worker', 'DatabasePro', 9);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgeotto', 'Lower Management', 'DatabasePro', 19);
+
+INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)
+VALUES('pidgeot', 'CEO', 'DatabasePro', 26);
+
+
 -- TRAINER_ITEMS
 INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('potion', 'TheVeryBest', 5);

@@ -10,7 +10,7 @@
     
         <title>Home</title>
     </head>
-<body>
+<body id='home'>
 
     <nav class="navBar">
         <ul>
@@ -44,12 +44,12 @@
         <br>
 
         <h2 id="leader-board-title">'Gotta Catch Them All' Leaderboard</h2>
-        <p>Congratulations to all the trainer's that have caught all the available pokemon!</p>
+        <p>Congratulations to all the trainers that have caught all the available pokemon!</p>
         <table id="leader-board">
             <thead>
             <tr>
                 <th>TRAINER</th>
-                <th>NUMBER OF POKEMON</th>
+                <th>TRAINER SINCE</th>
             </tr>
             </thead>
             <tbody id=>
@@ -59,16 +59,17 @@
 
         <h2 id="profile-info">Profile Information</h2>
         <div id="username"><p id="username-text"><strong>USERNAME: </strong></p></div>
-        <div id="name"><p id="name-text"><strong>NAME: </strong> </p><button class="profile-button">CHANGE NAME</button></div>
+        <div id="name"><p id="name-text"><strong>NAME: </strong> </p><button class="profile-button" id="changeName-button">CHANGE NAME</button></div>
         <div id="zip"><p id="zip-text"><strong>ZIP/POSTAL CODE: </strong></p><button class="profile-button">CHANGE ZIP/POSTAL CODE</button></div>
         <br>
-        <div id="password"><button class="profile-button">CHANGE PASSWORD</button><button class="profile-button">LOGOUT</button></div>
+        <div id="password"><button class="profile-button" id="password-button">CHANGE PASSWORD</button><button class="profile-button" id="logout-button">LOGOUT</button></div>
 
 
 
 
 
     </div>
+    <script src="scripts.js"></script>
     
 </body>
 </html>

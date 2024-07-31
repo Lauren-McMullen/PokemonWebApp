@@ -317,11 +317,11 @@ async function insertTimezoneDb(zipcode, timezone) {
 async function insertUserToDb(username, name, password, startdate, zipcode) {
     return await withOracleDB(async (connection) => {
         console.log("insert into trainer table");
-        console.log(username);
-        console.log(name);
-        console.log(password);
-        console.log(startdate);
-        console.log(zipcode);
+        // console.log(username);
+        // console.log(name);
+        // console.log(password);
+        // console.log(startdate);
+        // console.log(zipcode);
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
@@ -369,15 +369,12 @@ async function insertPlayerBadge(gym, username, badge) {
 // inserts battle and returns auto generated battle id
 async function insertBattle(date, winner) {
     return await withOracleDB(async (connection) => {
-        console.log(date);
-        console.log(winner);
         let battle_date = date;
         const result = await connection.execute(
             `INSERT INTO Battle (battle_date, winner) VALUES (TO_DATE(:battle_date, 'dd/mm/yyyy'), :winner)`,
             [battle_date, winner],
             { autoCommit: true }
         );
-        console.log(result.lastRowid);
         const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = '${result.lastRowid}'`);
         return battleid.rows[0][0];
     }).catch(() => {
@@ -467,6 +464,67 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
+//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+// Fetches the pokemon mathcing a given name in the database
+async function fetchLeaderboardFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, start_date FROM Trainer`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+
+}
+
+//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+// Fetches the pokemon mathcing a given name in the database
+async function fetchUserInfoFromDb(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username='${username}'`);
+        return result.rows[0];
+    }).catch(()=> {
+        return [];
+    });
+}
+
+// Update the user's name in the database
+async function updateName(currentuser, newNameValue) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE Trainer 
+             SET name=:newNameValue 
+             WHERE username=:currentuser`,
+            [newNameValue, currentuser],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+// Update the user's name in the database
+async function updatePassword(currentuser, newPasswordValue) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(
+            `UPDATE Trainer 
+             SET password=:newPasswordValue 
+             WHERE username=:currentuser`,
+            [newPasswordValue, currentuser],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+
+
+
 // Insert a new player pokemon after catching it
 async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
     return await withOracleDB(async (connection) => {
@@ -477,6 +535,21 @@ async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
             { autoCommit: true }
         );
 
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function deletePlayerPokemonFromDb(username, pokemon, nickname) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(`DELETE FROM Player_Pokemon 
+            WHERE tr_username = :username AND name = :pokemon AND nickname = :nickname`,
+            [username, pokemon, nickname],
+            { autoCommit: true }
+        );
+        
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
         return false;
@@ -558,5 +631,10 @@ module.exports = {
     insertPlayerPokemon, 
     insertPlayerPokemonMove,
     fetchLearnedMovesFromDb,
-    fetchPlayerItemsFromDb
+    fetchPlayerItemsFromDb,
+    deletePlayerPokemonFromDb, 
+    fetchLeaderboardFromDb,
+    fetchUserInfoFromDb,
+    updateName,
+    updatePassword
 };

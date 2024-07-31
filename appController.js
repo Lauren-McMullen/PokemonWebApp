@@ -35,9 +35,60 @@ router.get('/player-pokemon', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// delete player pokemon
+router.delete('/player-pokemon/:pokemon/:nickname', async (req, res) => {
+    const {pokemon, nickname} = req.params;
+    const deleteResult = await appService.deletePlayerPokemonFromDb(req.headers['username'], pokemon, nickname);
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.get('/player-items', async (req, res) => {
     const tableContent = await appService.fetchPlayerItemsFromDb(req.headers['username']);
     res.json({data: tableContent});
+});
+
+// fetch and return the leaderboard of all players that have caught all pokemon
+router.get('/leaderboard', async (req, res) => {
+    const tableContent = await appService.fetchLeaderboardFromDb();
+    res.json({data: tableContent});
+});
+
+// fetch and return the leaderboard of all players that have caught all pokemon
+router.get('/user-info', async (req, res) => {
+    const info = await appService.fetchUserInfoFromDb(req.headers['username']);
+    res.json({  username: info[0],
+                name: info[1],
+                password: info[2],
+                start_date: info[3],
+                zip: info[4]
+    });
+});
+
+// update user's name in database
+router.post("/update-name", async (req, res) => {
+    const { username, newName } = req.body;
+    const updateResult = await appService.updateName(username, newName);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+// update user's password in database
+router.post("/update-password", async (req, res) => {
+    const { username, newPassword } = req.body;
+    
+    const updateResult = await appService.updatePassword(username, newPassword);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
 });
 
 // add player pokemon after catching it
