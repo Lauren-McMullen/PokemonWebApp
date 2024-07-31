@@ -326,6 +326,40 @@ async function challengeGym(event) {
     }
 }
 
+// Fill the Leaderboard
+async function fillLeaderBoard() {
+
+    const tableElement = document.getElementById("leader-board");
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/leaderboard', {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            if (index != 1) {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            } else {
+                const cell = row.insertCell(index);
+                cell.textContent = field.slice(0, 10);
+            }
+            
+        });
+    });
+
+}
+
 // Find and display the pokemon with the user-inputted name
 async function getPokemonByName() {
     const name = document.getElementById("nameInput").value.toLowerCase();
@@ -1205,7 +1239,7 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     if (document.body.id == 'home') {
-        fetchAndDisplayUsers('leader-board', '/leaderboard');
+        fillLeaderBoard();
     } else if (document.body.id == 'team') {
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));
