@@ -159,20 +159,50 @@ async function countDemotable() {
 }
 
 // Filters visable pokemon in the pokedex according to user-selected type.
-async function filterPokemonType() {
-    const typeElement = document.getElementById('pokemonType');
-    const type = typeElement.value;
+async function filterPokedex() {
 
     const tableElement = document.getElementById("pokedex-pokemon-table");
     const tableBody = tableElement.querySelector('tbody');
 
-    if(type == "all") {
-        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
-        return;
+    let pokeType = "%";
+    let attack_input = '0';
+    let defence_input = '0';
+    let speed_input = '0';
+
+    if(document.getElementById("type-option").checked && document.getElementById("pokemonType").value != 'all') {
+        console.log(pokeType);
+        pokeType = document.getElementById("pokemonType").value.toString();
     }
 
-    const response = await fetch(`/pokedex/type-filter/${type}`, {
-        method: 'GET', 
+    if(document.getElementById("attack-option").checked) {
+        console.log(attack_input);
+        attack_input = document.getElementById("attack-input").value.toString();
+    }
+
+    if(document.getElementById("defence-option").checked) {
+        console.log(defence_input);
+        defence_input = document.getElementById("defence-input").value.toString();
+    }
+
+    if(document.getElementById("speed-option").checked) {
+        console.log(speed_input);
+        speed_input = document.getElementById("speed-input").value.toString();
+    }
+
+    console.log(pokeType);
+    console.log(attack_input);
+    console.log(defence_input);
+    console.log(speed_input);
+
+    const response = await fetch('/pokedex/filter', {
+        method: 'GET',
+        headers: {
+            //'Content-Type': 'application/json',
+             'pokeType': pokeType,
+             'attack_input': attack_input,
+             'defence_input': defence_input,
+             'speed_input': speed_input,
+        }
     });
 
     const responseData = await response.json();
@@ -190,6 +220,7 @@ async function filterPokemonType() {
             cell.textContent = field;
         });
     });
+
 }
 
 async function getEffectiveness() {
@@ -1224,7 +1255,7 @@ window.onload = function() {
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
     } else if (document.body.id == 'pokedex') {
-        document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+        document.getElementById("filter-search-button").addEventListener("click", filterPokedex);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
         document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
         document.getElementById("reset-button").addEventListener("click", () => {

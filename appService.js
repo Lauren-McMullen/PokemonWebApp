@@ -432,14 +432,22 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
-// Fetches pokemon with the given type. MUlti-typed pokemon will still show up in the result
-async function fetchTypeFiltersFromDb(type) {
+async function fetchPokedexFiltersFromDb(pokeType, attack_input, defence_input, speed_input) {
+
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
+        const result = await connection.execute(`SELECT DISTINCT p.name 
+                                                FROM Pokemon p, Pokemon_type pt 
+                                                WHERE p.name=pt.name and pt.type like :pokeType and p.attack>=:attack_input 
+                                                and defence>=:defence_input and speed>=:speed_input`, 
+        [pokeType, attack_input, defence_input, speed_input]);
+        // console.log(pokeType);
+        console.log(result.rows);
         return result.rows;
     }).catch(() => {
         return -1;
     });
+
+
 }
 
 // Fetches the effectiveness multiplier for the given attack and defense type
@@ -641,7 +649,7 @@ module.exports = {
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
-    fetchTypeFiltersFromDb,
+    //fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
@@ -676,5 +684,6 @@ module.exports = {
     updatePassword,
     countPlayerPokemonByType,
     countPlayerPokemon,
-    updatePokemonLevel
+    updatePokemonLevel,
+    fetchPokedexFiltersFromDb
 };
