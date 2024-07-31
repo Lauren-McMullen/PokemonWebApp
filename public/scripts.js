@@ -614,6 +614,11 @@ async function releaseCaughtPokemon(caughtPokeInfo) {
 async function keepCaughtPokemon(caughtPokeInfo) {
         const username = sessionStorage.getItem("user");
         const nickname = getNickname();
+
+        if(nickname == null || nickname == 'nickname') {
+            alert("Error: Pokemon must have a nickname to be added to your team.");
+            return;
+        }
     
         //Player Pokemon POST
         const response = await fetch('/player-pokemon/catch', {
@@ -631,6 +636,7 @@ async function keepCaughtPokemon(caughtPokeInfo) {
         const responseData = await response.json();
         if (!responseData.success) {
             alert("Error catching pokemon!");
+            return;
         } 
 
         // Learned Moves POST
@@ -651,12 +657,12 @@ async function keepCaughtPokemon(caughtPokeInfo) {
             const responseData = await response.json();
             if (!responseData.success) {
                 alert("Error adding pokemon move!");
-            } else {
-                alert("Pokemon sucessfully added to your team!");
-            }
+                return;
+            } 
         }
 
         
+        alert("Pokemon sucessfully added to your team!");
 
         //Page clean up
         caughtPokeInfo.name = '';
@@ -668,9 +674,6 @@ async function keepCaughtPokemon(caughtPokeInfo) {
 function getNickname() {
     var nickname;
     nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
-    while(nickname === null || nickname === "nickname") {
-        nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
-    }
     return nickname;
 }
 
