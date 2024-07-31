@@ -1057,8 +1057,10 @@ async function changeName(event) {
     const username = sessionStorage.getItem('user');
 
     let newNameValue = prompt("Please enter your new name", "new name");
-    while(newNameValue === null || newNameValue === "new name") {
-        newNameValue = prompt("Please enter your new name", "new name");
+    
+    if(newNameValue == null) {
+        alert('Please enter a name and try again');
+        return;
     }
 
 
