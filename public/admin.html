@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <link rel="stylesheet" href="styles.css">  
+
+    <title>Admin</title>
+</head>
+
+<body id="admin">
+    <nav class="navBar">
+        <ul>
+            <li><a href = "/"> Home </a></li>
+            <li><a href = "/team.html"> Team </a></li>
+            <li><a href = "/catch.html"> Catch </a></li>
+            <li><a href = "/gym.html"> Gym </a></li>
+            <li><a href = "/pokedex.html"> Pokedex </a></li>
+            <li><a href = "/store.html"> Store </a></li>
+        </ul>
+    </nav>
+
+    <div class=main>
+        <h1> Admin </h1>
+
+        <div>
+            <select id="relation-search" >
+            </select>
+            <br>
+        </div>
+
+        <form id = "projection-search" class = "type-input">
+
+            <input type="checkbox" id="replace1" name="column" value="replace1" />
+            <label for="replace1">replace1</label> <br>
+            <input type="checkbox" id="replace2" name="column" value="replace2" />
+            <label for="replace2">replace2</label> <br>
+        </form> 
+        <button type="submit" id="submit-button"> Search </button> <br>
+
+        <br><table id="admin-table">
+            <thead>
+            <tr>
+
+            </tr>
+        </thead>
+        <tbody id=>
+        </tbody>
+    </table>
+
+
+
+        <script src="adminScript.js"></script>  
+    </main>
+</body>
+</html>

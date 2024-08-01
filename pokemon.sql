@@ -1982,6 +1982,9 @@ VALUES('Bob', 'Bob', '123456Abc', '10-JUL-24',  'C1C 7T6');
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
 VALUES('Suicune7', 'Jamie', 'cpsc304IsCool', '10-JUL-24',  'X1A 5P3');
 
+INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
+VALUES('admin', 'admin', '1234', '31-JUL-24',  'V5Y 1C8');
+
 
 -- PLAYER POKEMON
 INSERT INTO Player_Pokemon(name, nickname, tr_username, pp_level)

@@ -91,6 +91,13 @@ button:active {
     background-color: #f9e2ef;
 }
 
+#filter-options {
+    border-left: 8px solid purple;
+    background-color: #e8c5f9;
+    border-radius: 8px;
+    padding: 5px 10px; 
+}
+
 #gym {
     background-color: #a0bbe7;
 }
@@ -119,8 +126,16 @@ h1 {
     width: 150px;
 }
 
+#pokemonType {
+    margin: 20px;
+}
+
 #team-pokemon-table {
     width: 400px;
+}
+
+#filter-search-button {
+    margin-bottom: 20px;
 }
 
 .gym-information {
@@ -139,20 +154,35 @@ h1 {
     align-items: center;
 }
 
-.search-input {
-    margin: 20px;
+#reset-button {
+    margin-left: 0px;
 }
+
 .type-input {
-    margin: 20px;
+    margin-left: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    padding-left: 0px;
 }
 
+#attack-input, #defence-input, #speed-input {
+    width: 50px;
+}
 
-/* .fight-gym {
-    margin: 30px 0px;
-} */
 
 #effectiveness-options {
     padding: 20px;
+}
+
+#effectiveness-button{
+    margin-bottom: 20px;
+}
+
+#type-option, #attack-option, #defence-option, #speed-option {
+    margin-right: 30px;
+    margin-bottom: 0px;
+    width:30px;
 }
 
 
@@ -195,7 +225,7 @@ h1 {
 
 /* INPUT STYLES */
 input, textarea {
-    width: 100%;
+    /* width: 100%; */
     padding: 10px 15px;
     font-size: 16px;
     border: 1px solid #ccc;
