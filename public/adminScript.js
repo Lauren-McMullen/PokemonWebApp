@@ -97,6 +97,9 @@ async function populateTable(table, columns) {
 
 
 window.onload = function() {
+    if (!(sessionStorage.getItem("user") === 'admin')) {
+        window.location.href = 'index.html'
+    }
     fetchTableNames();
     const dropdown = document.getElementById('relation-search');
     dropdown.addEventListener('change', ()=> {
