@@ -253,12 +253,12 @@ async function challengeGym(event) {
 }
 
 // Fill the Leaderboard with Trainers who have all available pokemon in their current collection
-async function fillLeaderBoard() {
+async function fillPokemonLeaderBoard() {
 
     const tableElement = document.getElementById("leader-board");
     const tableBody = tableElement.querySelector('tbody');
 
-    const response = await fetch('/leaderboard', {
+    const response = await fetch('/leaderboard/pokemon', {
         method: 'GET',
     });
 
@@ -1228,7 +1228,8 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     if (document.body.id == 'home') {
-        fillLeaderBoard();
+        fillPokemonLeaderBoard();
+        fetchAndDisplayUsers('gym-board', '/leaderboard/gym');
     } else if (document.body.id == 'team') {
         getPokemonCount();
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));

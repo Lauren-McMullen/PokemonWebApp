@@ -491,7 +491,7 @@ async function fetchPokemonByNameFromDb(name) {
 
 
 // Fetches the pokemon mathcing a given name in the database
-async function fetchLeaderboardFromDb() {
+async function fetchPokemonLeaderboardFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT username, start_date
                                                  FROM Trainer t
@@ -508,6 +508,20 @@ async function fetchLeaderboardFromDb() {
         return [];
     });
 
+}
+
+// Fetches the pokemon mathcing a given name in the database
+async function fetchGymLeaderboardFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, COUNT(badge)
+                                                FROM Trainer_Badges
+                                                GROUP BY username
+                                                HAVING COUNT(badge) >= 1
+                                                ORDER BY COUNT(badge) DESC`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
 }
 
 // Fetches the pokemon mathcing a given name in the database
@@ -718,7 +732,8 @@ module.exports = {
     fetchLearnedMovesFromDb,
     fetchPlayerItemsFromDb,
     deletePlayerPokemonFromDb, 
-    fetchLeaderboardFromDb,
+    fetchPokemonLeaderboardFromDb,
+    fetchGymLeaderboardFromDb,
     fetchUserInfoFromDb,
     updateName,
     updatePassword,
