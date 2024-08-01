@@ -379,7 +379,7 @@ async function insertBattle(date, winner) {
             [battle_date, winner],
             { autoCommit: true }
         );
-        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = '${result.lastRowid}'`);
+        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = :lastRow`, {lastRow: `${result.lastRowid}`});
         return battleid.rows[0][0];
     }).catch(() => {
         return -1;
@@ -481,7 +481,7 @@ async function fetchTypeMatchupFromDb(attack, defence) {
 async function fetchPokemonByNameFromDb(name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT name FROM Pokemon 
-                                                WHERE name LIKE '%${name}%'`);
+                                                WHERE name LIKE :name`, {name: `%${name}%`});
         return result.rows;
     }).catch(()=> {
         return [];
@@ -672,9 +672,11 @@ async function fetchColumnNames(tableName) {
     });
 }
 
-async function fetchSpecifiedColumnsFromDB(table, columns) {
+async function fetchSpecifiedColumnsFromDB(tableName, columnsList) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT ${columns} FROM ${table}`);
+        console.log(tableName);
+        console.log(columnsList);
+        const result = await connection.execute(`SELECT ${columnsList} FROM ${tableName}`);
         return result.rows;
     }).catch(()=> {
         return [];
