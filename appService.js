@@ -525,6 +525,27 @@ async function fetchGymLeaderboardFromDb() {
 }
 
 // Fetches the pokemon mathcing a given name in the database
+async function fetchFrequentBuyersFromDb(){
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, SUM(quantity) 
+                                                FROM Trainer_Items 
+                                                GROUP BY username
+                                                HAVING SUM(quantity) >= (
+                                                                        SELECT AVG(item_quantity)
+                                                                        FROM (
+                                                                                SELECT SUM(quantity) AS item_quantity
+                                                                                FROM Trainer_items
+                                                                                GROUP BY username
+                                                                              )
+                                                                         )`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+
+// Fetches the pokemon mathcing a given name in the database
 async function fetchUserInfoFromDb(username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT * FROM Trainer WHERE username=:username`, [username]);
@@ -743,5 +764,6 @@ module.exports = {
     fetchTableNames,
     fetchColumnNames,
     fetchSpecifiedColumnsFromDB,
-    fetchPokedexFiltersFromDb
+    fetchPokedexFiltersFromDb,
+    fetchFrequentBuyersFromDb
 };

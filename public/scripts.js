@@ -1242,6 +1242,7 @@ function fetchTableData() {
         fetchAndDisplayUsers('pokedex-evolution-table', '/pokedex/evolutions');
     } else if (document.body.id == 'store') {
         fetchAndDisplayUsers('item-table', '/store');
+        fetchAndDisplayUsers('frequent-buyers-table', '/frequentbuyers');
     }
 }
 
