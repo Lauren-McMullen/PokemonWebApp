@@ -537,7 +537,8 @@ async function fetchFrequentBuyersFromDb(){
                                                                                 FROM Trainer_items
                                                                                 GROUP BY username
                                                                               )
-                                                                         )`);
+                                                                         )
+                                                ORDER BY SUM(quantity) DESC `);
         return result.rows;
     }).catch(()=> {
         return [];
