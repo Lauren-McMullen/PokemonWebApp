@@ -776,7 +776,11 @@ async function verifyLogin() {
 
     // If username and password match, direct to index.html
     sessionStorage.setItem("user", username);
-    window.location.href = 'index.html';
+    if (sessionStorage.getItem("user") === 'admin') {
+        window.location.href = 'admin.html'
+    } else {
+        window.location.href = 'index.html';
+    }
 }
 
 // Everify if the username already taken when sign up

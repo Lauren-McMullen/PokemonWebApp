@@ -415,6 +415,22 @@ router.get('/pokemon/stats/:name', async (req, res) => {
     res.json({data: content});
 });
 
+// Get names of all tables in database
+router.get('/table-names', async (req, res) => {
+    const content = await appService.fetchTableNames();
+    res.json({data: content});
+});
+
+// Get names of all columns in 'table' in database
+router.get('/column-names/:table', async (req, res) => {
+    const content = await appService.fetchColumnNames(req.params.table);
+    res.json({data: content});
+});
+
+router.get('/selected-columns/:table', async (req, res) => {
+    const content = await appService.fetchSpecifiedColumnsFromDB(req.params.table, req.headers['columns']);
+    res.json({data: content});
+});
 
 
 module.exports = router;
