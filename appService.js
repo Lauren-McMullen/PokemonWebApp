@@ -432,10 +432,31 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
-// Fetches pokemon with the given type. MUlti-typed pokemon will still show up in the result
-async function fetchTypeFiltersFromDb(type) {
+// Dynamically filter pokemon form database based on user inputted filters and parameters.
+// A map is used to ensure parameter order and construct the base sql string based on given 
+// filter paramters. Bind variables are used to securely pass user input to the query.
+async function fetchPokedexFiltersFromDb(pokeBinds) {
+
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
+        let filter_sql = "SELECT DISTINCT p.name FROM Pokemon p, Pokemon_Type pt WHERE p.name=pt.name";
+        let sql_map = {
+            "pokeattack":` and p.attack >= `,
+            "pokedefence": ` and p.defence >= `,
+            "pokespeed": ` and p.speed >= `,
+            "poketype": ` and pt.type = `
+        }
+
+        for(const [key, value] of pokeBinds) {
+            if(key === 'type') {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `':${key}'`;
+            } else {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `:${key}`;
+            }
+        }
+        const bindValues = Array.from(pokeBinds.values());
+        const result = await connection.execute(filter_sql, bindValues);
         return result.rows;
     }).catch(() => {
         return -1;
@@ -668,7 +689,7 @@ module.exports = {
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
-    fetchTypeFiltersFromDb,
+    //fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
@@ -706,5 +727,6 @@ module.exports = {
     updatePokemonLevel,
     fetchTableNames,
     fetchColumnNames,
-    fetchSpecifiedColumnsFromDB
+    fetchSpecifiedColumnsFromDB,
+    fetchPokedexFiltersFromDb
 };
