@@ -118,6 +118,7 @@ async function filterPokedex() {
 
 }
 
+// Retrieve effectiveness multiplier based on attack type and defence type
 async function getEffectiveness() {
     const attackTypeElement = document.getElementById('pokemonAttackType');
     const defenceTypeElement = document.getElementById('pokemonDefenceType');
@@ -143,7 +144,6 @@ async function getEffectiveness() {
     }
 
 }
-
 
 // Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
 // badges won during challenge to player inventory
@@ -772,7 +772,7 @@ async function verifyLogin() {
 
     // If username and password does not match, pop up alert window.
     if (responseData.data.length == 0) {
-        alert("username and password combination is wrong. pleaese try again or do you want to sign up (๑❛ᴗ❛๑) ?");
+        alert("Username and password combination is wrong. Please try again or sign up (๑❛ᴗ❛๑) ?");
         return;
     }
 
@@ -924,39 +924,39 @@ async function insertUser(event) {
     window.location.href = 'login.html';
     }
 
-    // Delete selected player pokemon
-    async function deletePokemon() {
-        let pokemon = document.getElementById('pokemon-stats-name').textContent;
-        pokemon = pokemon.split(" ").splice(1).join(" ");
-    
-        let nickname = document.getElementById('pokemon-stats-nickname').textContent;
-        nickname = nickname.split(" ").splice(1).join(" ");
-    
-        if (pokemon === "" || nickname === "") {
-            alert("Select the pokemon you want to release");
-            return;
-        }
-        if (confirm(`Do you want to release your ${pokemon}, ${nickname}?`)) {
-            const response = await fetch(`/player-pokemon/${pokemon}/${nickname}`, {
-                method: 'DELETE',
-                headers: {
-                    'username': sessionStorage.getItem("user")
-                }
-            });
-            const responseData = await response.json();
-            if (responseData.success) {
-                fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
-                resetStats();
-                resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
-                resetStatsHelper('pokemon-stats-level', "LEVEL: ");
-                resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
-                document.getElementById("pokemon-type").style.display = 'none';
-                getPokemonCount();
-            } else {
-                alert("Error releasing pokemon");
+// Delete selected player pokemon
+async function deletePokemon() {
+    let pokemon = document.getElementById('pokemon-stats-name').textContent;
+    pokemon = pokemon.split(" ").splice(1).join(" ");
+
+    let nickname = document.getElementById('pokemon-stats-nickname').textContent;
+    nickname = nickname.split(" ").splice(1).join(" ");
+
+    if (pokemon === "" || nickname === "") {
+        alert("Select the pokemon you want to release");
+        return;
+    }
+    if (confirm(`Do you want to release your ${pokemon}, ${nickname}?`)) {
+        const response = await fetch(`/player-pokemon/${pokemon}/${nickname}`, {
+            method: 'DELETE',
+            headers: {
+                'username': sessionStorage.getItem("user")
             }
+        });
+        const responseData = await response.json();
+        if (responseData.success) {
+            fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+            resetStats();
+            resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
+            resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+            resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+            document.getElementById("pokemon-type").style.display = 'none';
+            getPokemonCount();
+        } else {
+            alert("Error releasing pokemon");
         }
     }
+}
     
 // increase pokemon level by 1    
 async function trainPokemon() {

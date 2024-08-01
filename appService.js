@@ -78,7 +78,7 @@ async function testOracleConnection() {
 
 async function fetchPlayerPokemonFromDb(username) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT nickname, name, pp_level FROM Player_Pokemon WHERE tr_username = '${username}'`);
+        const result = await connection.execute(`SELECT nickname, name, pp_level FROM Player_Pokemon WHERE tr_username = :username`, [username]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -88,8 +88,8 @@ async function fetchPlayerPokemonFromDb(username) {
 async function countPlayerPokemonByType(username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT type, COUNT(*) FROM Player_Pokemon, Pokemon_Type 
-            WHERE Player_Pokemon.name = Pokemon_Type.name AND tr_username = '${username}'
-            GROUP BY type`);
+            WHERE Player_Pokemon.name = Pokemon_Type.name AND tr_username = :username
+            GROUP BY type`, [username]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -99,7 +99,7 @@ async function countPlayerPokemonByType(username) {
 async function fetchPlayerItemsFromDb(username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT Trainer_Items.name, Items.effect, Trainer_Items.quantity FROM Trainer_Items, Items 
-            WHERE Trainer_Items.name = Items.name AND username = '${username}'`);
+            WHERE Trainer_Items.name = Items.name AND username = :username`, [username]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -110,9 +110,9 @@ async function fetchPlayerBadgesFromDb(username, gym = null) {
     return await withOracleDB(async (connection) => {
         let result;
         if (gym == null) {
-            result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = '${username}'`);
+            result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = :username`, [username]);
         } else {
-            result = await connection.execute(`SELECT badge FROM Trainer_Badges WHERE username = '${username}' AND gym = '${gym}'`);
+            result = await connection.execute(`SELECT badge FROM Trainer_Badges WHERE username = :username AND gym = :gym`, [username, gym]);
         }
         return result.rows;
     }).catch(() => {
@@ -349,7 +349,7 @@ async function fetchGymsFromDb() {
 
 async function fetchGymBadgesFromDb(gym) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = '${gym}'`);
+        const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = :gym`, [gym]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -510,11 +510,10 @@ async function fetchLeaderboardFromDb() {
 
 }
 
-//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
 // Fetches the pokemon mathcing a given name in the database
 async function fetchUserInfoFromDb(username) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT * FROM Trainer WHERE username='${username}'`);
+        const result = await connection.execute(`SELECT * FROM Trainer WHERE username=:username`, [username]);
         return result.rows[0];
     }).catch(()=> {
         return [];
@@ -622,7 +621,7 @@ async function fetchPokemonStatsFromDb(pokemonName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
                                                 FROM Pokemon p, Pokemon_Type t, Can_Learn l
-                                                WHERE p.name=t.name and t.name=l.pokemon and p.name='${pokemonName}'`);
+                                                WHERE p.name=t.name and t.name=l.pokemon and p.name=:pokemonName`, [pokemonName]);
         return result.rows; 
     }).catch(()=> {
         return [];
@@ -632,7 +631,7 @@ async function fetchPokemonStatsFromDb(pokemonName) {
 // Count number of player pokemon
 async function countPlayerPokemon(username) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT Count(*) FROM Player_Pokemon WHERE tr_username = '${username}'`);
+        const result = await connection.execute(`SELECT Count(*) FROM Player_Pokemon WHERE tr_username =:username`, [username]);
         return result.rows[0][0];
     }).catch(() => {
         return -1;
@@ -664,9 +663,9 @@ async function fetchTableNames() {
     });
 }
 
-async function fetchColumnNames(table) {
+async function fetchColumnNames(tableName) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = '${table}'`);
+        const result = await connection.execute(`SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = :tableName`, [tableName]);
         return result.rows;
     }).catch(()=> {
         return [];
@@ -689,7 +688,6 @@ module.exports = {
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
-    //fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
