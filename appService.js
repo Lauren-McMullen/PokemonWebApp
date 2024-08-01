@@ -634,6 +634,33 @@ async function updatePokemonLevel(name, nickname, username, pplevel) {
     });
 }
 
+async function fetchTableNames() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT TABLE_NAME FROM USER_TABLES`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+async function fetchColumnNames(table) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = '${table}'`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+async function fetchSpecifiedColumnsFromDB(table, columns) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT ${columns} FROM ${table}`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
 
 module.exports = {
     testOracleConnection,
@@ -676,5 +703,8 @@ module.exports = {
     updatePassword,
     countPlayerPokemonByType,
     countPlayerPokemon,
-    updatePokemonLevel
+    updatePokemonLevel,
+    fetchTableNames,
+    fetchColumnNames,
+    fetchSpecifiedColumnsFromDB
 };

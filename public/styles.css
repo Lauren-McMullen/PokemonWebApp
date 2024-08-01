@@ -170,9 +170,6 @@ h1 {
     width: 50px;
 }
 
-/* .fight-gym {
-    margin: 30px 0px;
-} */
 
 #effectiveness-options {
     padding: 20px;
@@ -228,7 +225,7 @@ h1 {
 
 /* INPUT STYLES */
 input, textarea {
-    width: 100%;
+    /* width: 100%; */
     padding: 10px 15px;
     font-size: 16px;
     border: 1px solid #ccc;
