@@ -66,113 +66,38 @@ async function fetchAndDisplayUsers(elementID, endpoint, user = null) {
     });
 }
 
-// This function resets or initializes the demotable.
-async function resetDemotable() {
-    const response = await fetch("/initiate-demotable", {
-        method: 'POST'
-    });
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        const messageElement = document.getElementById('resetResultMsg');
-        messageElement.textContent = "demotable initiated successfully!";
-        fetchTableData();
-    } else {
-        alert("Error initiating table!");
-    }
-}
-
-// Inserts new records into the demotable.
-async function insertDemotable(event) {
-    event.preventDefault();
-
-    const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
-
-    const response = await fetch('/insert-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: idValue,
-            name: nameValue
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Data inserted successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error inserting data!";
-    }
-}
-
-// Updates names in the demotable.
-async function updateNameDemotable(event) {
-    event.preventDefault();
-
-    const oldNameValue = document.getElementById('updateOldName').value;
-    const newNameValue = document.getElementById('updateNewName').value;
-
-    const response = await fetch('/update-name-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            oldName: oldNameValue,
-            newName: newNameValue
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('updateNameResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Name updated successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error updating name!";
-    }
-}
-
-// Counts rows in the demotable.
-// Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-    const response = await fetch("/count-demotable", {
-        method: 'GET'
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('countResultMsg');
-
-    if (responseData.success) {
-        const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in demotable: ${tupleCount}`;
-    } else {
-        alert("Error in count demotable!");
-    }
-}
-
 // Filters visable pokemon in the pokedex according to user-selected type.
-async function filterPokemonType() {
-    const typeElement = document.getElementById('pokemonType');
-    const type = typeElement.value;
+async function filterPokedex() {
 
     const tableElement = document.getElementById("pokedex-pokemon-table");
     const tableBody = tableElement.querySelector('tbody');
 
-    if(type == "all") {
-        fetchAndDisplayUsers('pokedex-pokemon-table', '/pokedex');
-        return;
+    //Construct object to dynamically add given filter types
+    const pokeBinds = {};
+
+    if(document.getElementById("type-option").checked && document.getElementById("pokemonType").value != 'all') {
+        pokeBinds.poketype = document.getElementById("pokemonType").value.toString();
     }
 
-    const response = await fetch(`/pokedex/type-filter/${type}`, {
-        method: 'GET', 
+    if(document.getElementById("attack-option").checked) {
+        pokeBinds.pokeattack = document.getElementById("attack-input").value.toString();
+    }
+
+    if(document.getElementById("defence-option").checked) {
+        pokeBinds.pokedefence = document.getElementById("defence-input").value.toString();
+    }
+
+    if(document.getElementById("speed-option").checked) {
+        pokeBinds.pokespeed = document.getElementById("speed-input").value.toString();
+    }
+
+    const response = await fetch('/pokedex/filter', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'binds': JSON.stringify(pokeBinds) //convert object to JSON string so it can be passed to GET
+        }
     });
 
     const responseData = await response.json();
@@ -190,6 +115,7 @@ async function filterPokemonType() {
             cell.textContent = field;
         });
     });
+
 }
 
 async function getEffectiveness() {
@@ -326,7 +252,41 @@ async function challengeGym(event) {
     }
 }
 
-// Find and display the pokemon with the user-inputted name
+// Fill the Leaderboard with Trainers who have all available pokemon in their current collection
+async function fillLeaderBoard() {
+
+    const tableElement = document.getElementById("leader-board");
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/leaderboard', {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            if (index != 1) {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            } else {
+                const cell = row.insertCell(index);
+                cell.textContent = field.slice(0, 10);
+            }
+            
+        });
+    });
+
+}
+
+// Find and display the pokemon with the user-inputted name segment
 async function getPokemonByName() {
     const name = document.getElementById("nameInput").value.toLowerCase();
     fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
@@ -349,8 +309,9 @@ async function buyItem(){
     console.log("buyItem funtion run");
     const username = sessionStorage.getItem("user");
     const name = document.getElementById('item-to-buy-input').value;
-    console.log("the username is", username);
-    console.log("the username is", username);
+  
+    console.log(username);
+    console.log(name);
 
     // Check quantity of the item
     const response_qty = await fetch(`/trainer_items/${username}/${name}`, {
@@ -361,13 +322,13 @@ async function buyItem(){
     const contentRows_qty = responseData_qty.data;
 
     // If no items are found
-    // if (responseData_qty.data.length == 0) {
-    //     console.log("No item found");
-    // } else {
-    //     console.log("item found. quantity as follows:");
-    //     console.log(contentRows_qty[0][2]);
-    // }
-    
+    if (responseData_qty.data.length == 0) {
+        //console.log("No item found");
+    } else {
+        console.log("item found. quantity as follows:");
+        console.log(contentRows_qty[0][2]);
+    }
+
     //update the Trainer_Items table
     if (responseData_qty.data.length == 0) {
         console.log("No item found");
@@ -393,12 +354,11 @@ async function buyItem(){
 
     } else {
         console.log("Item found");
-        console.log("original quantity is:", contentRows_qty[0][2]);
         const newqty = contentRows_qty[0][2] + 1;
         console.log(`newQuantity in scripts ${newqty}`);
 
         //This is the BUG!!!
-        const response_addold = await fetch(`/trainer_items`, {
+        const response_addold = await fetch(`/trainer_items/:name/:username/:quantity`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -406,6 +366,7 @@ async function buyItem(){
             body: JSON.stringify({
                 name: name,
                 username: username,
+                // quantity: contentRows_qty[0][2],
                 quantity: newqty
             })
         });
@@ -481,7 +442,7 @@ async function populateItemStats(itemName) {
     }
 }
 
-// Filter items by dropdown menue
+// Filter items by dropdown menu
 async function filterItems() {
     const itemElement = document.getElementById("items");
     const item = itemElement.value;
@@ -501,7 +462,7 @@ async function filterItems() {
     }
 }
 
-// Find items by enter name
+// Find items by entering name
 async function findItemByName() {
     const item = document.getElementById("findbyname").value;
     const tableElement = document.getElementById("item-table");
@@ -522,16 +483,15 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
-// Simple helper to allow Pokemon search by name at "enter" press
+// Helper to allow Pokemon search action by name at "enter" key press
 async function searchEnter(e) {
     if(e.key =='Enter') {
         getPokemonByName();
     }
 }
 
-// Allow user to catch a new Pokemon
-async function catchPokemon(caughtPokeInfo) {
-    //event.preventDefault();
+// Allow user to 'encounter' a random wild Pokemon
+async function encounterWildPokemon(caughtPokeInfo) {
 
     resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
 
@@ -544,7 +504,7 @@ async function catchPokemon(caughtPokeInfo) {
     let num = Math.floor(Math.random() * pokemonList.length);
     caughtPokeInfo.name = pokemonList[num];
 
-    // GET and display base stats
+    // GET and display base stats for pokemon
     populatePokemonStats(caughtPokeInfo.name);
 
     // Pick Learned Moves
@@ -565,7 +525,7 @@ async function catchPokemon(caughtPokeInfo) {
     }
 }
 
-// Callback for realeasing a pokemon on the catch page
+// Realease an 'encountered' pokemon on the catch page
 async function releaseCaughtPokemon(caughtPokeInfo) {
     
     caughtPokeInfo.name = '';
@@ -575,10 +535,15 @@ async function releaseCaughtPokemon(caughtPokeInfo) {
     
 }
 
-// Callback for keeping a pokemon on the catch page
+// Keep an 'encountered' pokemon on the catch page
 async function keepCaughtPokemon(caughtPokeInfo) {
         const username = sessionStorage.getItem("user");
         const nickname = getNickname();
+
+        if(nickname == null || nickname == 'nickname') {
+            alert("Error: Pokemon must have a nickname to be added to your team.");
+            return;
+        }
     
         //Player Pokemon POST
         const response = await fetch('/player-pokemon/catch', {
@@ -596,6 +561,7 @@ async function keepCaughtPokemon(caughtPokeInfo) {
         const responseData = await response.json();
         if (!responseData.success) {
             alert("Error catching pokemon!");
+            return;
         } 
 
         // Learned Moves POST
@@ -616,9 +582,11 @@ async function keepCaughtPokemon(caughtPokeInfo) {
             const responseData = await response.json();
             if (!responseData.success) {
                 alert("Error adding pokemon move!");
+                return;
             } 
         }
 
+        
         alert("Pokemon sucessfully added to your team!");
 
         //Page clean up
@@ -631,13 +599,10 @@ async function keepCaughtPokemon(caughtPokeInfo) {
 function getNickname() {
     var nickname;
     nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
-    while(nickname === null || nickname === "nickname") {
-        nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
-    }
     return nickname;
 }
 
-//Helper to create an array of randomly learned moves
+//Create an array of randomly learned moves from a pokemon's can_learn moves
 async function pickLearnedMoves(pokemonName) {
     const movesResponse = await fetch(`/pokemon/stats/${pokemonName}`, {
         method: 'GET', 
@@ -667,7 +632,7 @@ async function pickLearnedMoves(pokemonName) {
     return learnedMoves;
 }
 
-// Handler for click event on pokedex pokemon table
+// Retrieve pokemon stats and display them on page
 async function populatePokemonStats(pokemonName) {
 
     resetStats();
@@ -740,7 +705,7 @@ async function populatePokemonStats(pokemonName) {
 
 }
 
-// Helpers to reset result block for pokedex
+// Reset result blocks on pages
 async function resetStats() {
 
     resetStatsHelper('pokemon-stats-name', "NAME: ");
@@ -753,6 +718,7 @@ async function resetStats() {
     if (document.body.id != 'team') resetStatsHelper('pokemon-stats-moves', "MOVES: ");
 }
 
+// Helper to Reset result blocks on pages
 async function resetStatsHelper(elementID, text) {
     const attribute = document.getElementById(elementID);
     const strongName = document.createElement('strong');
@@ -810,7 +776,11 @@ async function verifyLogin() {
 
     // If username and password match, direct to index.html
     sessionStorage.setItem("user", username);
-    window.location.href = 'index.html';
+    if (sessionStorage.getItem("user") === 'admin') {
+        window.location.href = 'admin.html'
+    } else {
+        window.location.href = 'index.html';
+    }
 }
 
 // Everify if the username already taken when sign up
@@ -978,16 +948,57 @@ async function insertUser(event) {
                 resetStatsHelper('pokemon-stats-nickname', "NICKNAME: ");
                 resetStatsHelper('pokemon-stats-level', "LEVEL: ");
                 resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+                document.getElementById("pokemon-type").style.display = 'none';
+                getPokemonCount();
             } else {
                 alert("Error releasing pokemon");
             }
         }
     }
     
-    async function trainPokemon() {
-        
-    
+// increase pokemon level by 1    
+async function trainPokemon() {
+    let pokemon = document.getElementById('pokemon-stats-name').textContent;
+    pokemon = pokemon.split(" ").splice(1).join(" ");
+    let nickname = document.getElementById('pokemon-stats-nickname').textContent;
+    nickname = nickname.split(" ").splice(1).join(" ");
+    let level = document.getElementById('pokemon-stats-level').textContent;
+    level = level.split(" ").splice(1).join(" ");
+
+    const newLevel = parseInt(level) + 1;
+
+    if (pokemon === "" || nickname === "" || level === "") {
+        alert("Select the pokemon you want to train");
+        return;
     }
+    const response = await fetch('/player-pokemon', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: pokemon,
+            nickname: nickname,
+            username: sessionStorage.getItem("user"),
+            level: newLevel
+        })
+    });
+
+    const responseData = await response.json();
+    if (responseData.success) {
+        fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
+        resetStatsHelper('pokemon-stats-level', "LEVEL: ");
+        document.getElementById('pokemon-stats-level').innerHTML += newLevel;
+        alert(`${nickname}'s level increased from ${level} to ${newLevel}!`);
+    } else {
+        alert("Error training pokemon! Please try again.");
+    }
+}
+
+async function countPokemonByType() {
+    document.getElementById("pokemon-type").style.display = 'table-row';
+    fetchAndDisplayUsers("pokemon-type", "/count-player-pokemon-type", sessionStorage.getItem("user"));
+}
 
 async function loadProfileInfo() {
     
@@ -1017,8 +1028,10 @@ async function changeName(event) {
     const username = sessionStorage.getItem('user');
 
     let newNameValue = prompt("Please enter your new name", "new name");
-    while(newNameValue === null || newNameValue === "new name") {
-        newNameValue = prompt("Please enter your new name", "new name");
+    
+    if(newNameValue == null) {
+        alert('Please enter a name and try again');
+        return;
     }
 
 
@@ -1063,19 +1076,15 @@ async function changePassword(event) {
     const infoResponseData = await infoResponse.json();
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
-    while(oldPasswordValue === null || oldPasswordValue === "new password") {
-        oldPasswordValue = prompt("Please enter your old password", "old password");
-    }
-
-
+    
     if(oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
         return;
     }
 
     let newPasswordValue = prompt("Please enter your new password", "new password");
-    while(newPasswordValue === null || newPasswordValue === "new password") {
-        newPasswordValue = prompt("Please enter your new password", "new password");
+    if(newPasswordValue === null || newPasswordValue === "new password") {
+        return;
     }
 
     const response = await fetch('/update-password', {
@@ -1103,7 +1112,21 @@ async function changePassword(event) {
 
 }
 
+// count number of player pokemon
+async function getPokemonCount() {
+    const response = await fetch(`/count-pokemon/${sessionStorage.getItem("user")}`, {
+        method: 'GET'
+    });
 
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const count = responseData.count;
+        document.getElementById("pokemonCaught").innerHTML = ('Pokemon Caught: ' + count);
+    } else {
+        alert("Error in count pokemon");
+    }
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -1125,7 +1148,7 @@ window.onload = function() {
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
     } else if (document.body.id == 'pokedex') {
-        document.getElementById("type-search-button").addEventListener("click", filterPokemonType);
+        document.getElementById("filter-search-button").addEventListener("click", filterPokedex);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
         document.getElementById("name-search-button").addEventListener("click", getPokemonByName);
         document.getElementById("reset-button").addEventListener("click", () => {
@@ -1157,6 +1180,7 @@ window.onload = function() {
         });
         document.getElementById("train-button").addEventListener("click", trainPokemon);
         document.getElementById("delete-button").addEventListener("click", deletePokemon);
+        document.getElementById("count-type-button").addEventListener("click", countPokemonByType);
     } else if (document.body.id == 'store') {
         document.getElementById("findbytype-button").addEventListener("click", filterItems);
         document.getElementById("findbyname-button").addEventListener("click", findItemByName);
@@ -1185,7 +1209,7 @@ window.onload = function() {
         }
 
         document.getElementById('catch-button').addEventListener('click', () => {
-            catchPokemon(caughtPokeInfo);
+            encounterWildPokemon(caughtPokeInfo);
         });
         document.getElementById('keep-button').addEventListener('click', () => {
             keepCaughtPokemon(caughtPokeInfo);
@@ -1202,8 +1226,9 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     if (document.body.id == 'home') {
-        fetchAndDisplayUsers('leader-board', '/leaderboard');
+        fillLeaderBoard();
     } else if (document.body.id == 'team') {
+        getPokemonCount();
         fetchAndDisplayUsers('team-pokemon-table', '/player-pokemon', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-bag', '/player-items', sessionStorage.getItem("user"));
         fetchAndDisplayUsers('team-badges', '/player-badges', sessionStorage.getItem("user"));

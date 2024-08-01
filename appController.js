@@ -15,8 +15,10 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
+// Counts number of pokemon a player has
+router.get('/count-pokemon/:username', async (req, res) => {
+    const {username} = req.params;
+    const tableCount = await appService.countPlayerPokemon(username);
     if (tableCount >= 0) {
         res.json({
             success: true,
@@ -30,9 +32,27 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+// counts number of pokemon of each type that a player has
+router.get('/count-player-pokemon-type', async (req, res) => {
+    const tableContent = await appService.countPlayerPokemonByType(req.headers['username']);
+    res.json({data: tableContent});
+});
+
+// get player pokemon info
 router.get('/player-pokemon', async (req, res) => {
     const tableContent = await appService.fetchPlayerPokemonFromDb(req.headers['username']);
     res.json({data: tableContent});
+});
+
+// update player pokemon level
+router.put('/player-pokemon', async (req, res) => {
+    const { name, nickname, username, level } = req.body;
+    const updateResult = await appService.updatePokemonLevel(name, nickname, username, level);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
 });
 
 // delete player pokemon
@@ -219,27 +239,12 @@ router.get('/medicine/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
-//Helper function to fetch data to /trainer_items
-// router.get('/trainer_items', async (req, res) => {
-//     const tableContent = await appService.fetchTrainerItemsFromDb();
-//     res.json({data: tableContent});
-// });
 
-//get username and item from trainer_items databse
-//To verify if the trainer already have 
-router.get('/trainer_items/:username/:itemname', async (req, res) => {
-    //parse the parameter from address
-    const { username, itemname } = req.params;
-    const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
-    res.json({data: tableContent});
-});
-
-//Update the trainer and item information to trainer_items table
+//Add item information to trainer_items table
 router.post("/trainer_items", async (req, res) => {
     const { name, username, quantity } = req.body;
     console.log("request body");
     console.log(req.body);
-    // const insertResult = await appService.updateQuantity(name, username, quantity);
     const insertResult = await appService.insertTrainerAndItem(name, username, quantity);
     console.log(insertResult);
     if (insertResult) {
@@ -251,6 +256,22 @@ router.post("/trainer_items", async (req, res) => {
     }
 });
 
+//Fetch data to trainer_items
+// router.get('/trainer_items', async (req, res) => {
+//     const tableContent = await appService.fetchTrainerItemsFromDb();
+//     res.json({data: tableContent});
+// });
+
+//get username and item from trainer_items databse
+router.get('/trainer_items/:username/:itemname', async (req, res) => {
+    //parse the parameter from address
+    const { username, itemname } = req.params;
+    const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
+    res.json({data: tableContent});
+});
+
+
+
 //update the quantity of trainer item
 // router.post('/trainer_items/:username/:itemname', async (req, res) => {
 //     //parse the parameter from address
@@ -261,19 +282,14 @@ router.post("/trainer_items", async (req, res) => {
 
 
 
-// Add new item to the item
+//update the quantity of trainer item
 router.post("/trainer_items/:name/:username/:quantity", async (req, res) => {
     const { name, username, quantity } = req.body;
-    console.log("request body");
-    console.log(req.body);
-    // const insertResult = await appService.insertTrainerAndItem(name, username, quantity);
     const insertResult = await appService.updateQuantity(name, username, quantity);
     if (insertResult > 0) {
         res.json({ success: true , id: insertResult});
-        console.log("update work!");
     } else {
         res.status(500).json({ success: false , id: -1});
-        console.log("update NOT work");
     }
 });
 
@@ -361,9 +377,16 @@ router.get('/pokedex/find-by-name/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
-// Get all pokemon that match the requested type
-router.get('/pokedex/type-filter/:type', async (req, res) => {
-    const tableContent = await appService.fetchTypeFiltersFromDb(req.params.type);
+//Get all pokemon that match the requested filters
+// Binds object tranformed to map to preserve key order when iterated for query construction
+router.get('/pokedex/filter', async (req, res) => {
+    //parse incoming object
+    const bindsObject = JSON.parse(req.headers.binds);
+    const bindsMap = new Map();
+    for(let property in bindsObject) {
+        bindsMap.set(property, bindsObject[property]);
+    }
+    const tableContent = await appService.fetchPokedexFiltersFromDb(bindsMap);
     res.json({data: tableContent});
 });
 
@@ -392,6 +415,22 @@ router.get('/pokemon/stats/:name', async (req, res) => {
     res.json({data: content});
 });
 
+// Get names of all tables in database
+router.get('/table-names', async (req, res) => {
+    const content = await appService.fetchTableNames();
+    res.json({data: content});
+});
+
+// Get names of all columns in 'table' in database
+router.get('/column-names/:table', async (req, res) => {
+    const content = await appService.fetchColumnNames(req.params.table);
+    res.json({data: content});
+});
+
+router.get('/selected-columns/:table', async (req, res) => {
+    const content = await appService.fetchSpecifiedColumnsFromDB(req.params.table, req.headers['columns']);
+    res.json({data: content});
+});
 
 
 module.exports = router;
