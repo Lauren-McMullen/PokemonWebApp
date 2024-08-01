@@ -432,6 +432,9 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
+// Dynamically filter pokemon form database based on user inputted filters and parameters.
+// A map is used to ensure parameter order and construct the base sql string based on given 
+// filter paramters. Bind variables are used to securely pass user input to the query.
 async function fetchPokedexFiltersFromDb(pokeBinds) {
 
     return await withOracleDB(async (connection) => {
@@ -443,8 +446,6 @@ async function fetchPokedexFiltersFromDb(pokeBinds) {
             "poketype": ` and pt.type = `
         }
 
-        
-
         for(const [key, value] of pokeBinds) {
             if(key === 'type') {
                 filter_sql += `${sql_map[key]}`;
@@ -455,10 +456,7 @@ async function fetchPokedexFiltersFromDb(pokeBinds) {
             }
         }
         const bindValues = Array.from(pokeBinds.values());
-        console.log(bindValues);
-        console.log(filter_sql);
         const result = await connection.execute(filter_sql, bindValues);
-        console.log(result.rows);
         return result.rows;
     }).catch(() => {
         return -1;
