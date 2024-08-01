@@ -308,7 +308,8 @@ async function buyItem(){
 
     console.log("buyItem funtion run");
     const username = sessionStorage.getItem("user");
-    const name = document.getElementById('item-to-buy-input').value;
+    const name_raw = document.getElementById('item-to-buy-input').value;
+    const name = sanitize_tolowercase(name_raw, regex_lowercase_withspace); // sanitize the input string
   
     console.log(username);
     console.log(name);
@@ -324,9 +325,9 @@ async function buyItem(){
     // If no items are found
     if (responseData_qty.data.length == 0) {
         //console.log("No item found");
+        alert("Item not found. Please try again");
     } else {
-        console.log("item found. quantity as follows:");
-        console.log(contentRows_qty[0][2]);
+        alert("Item is added to your bags successfully! (˶ᵔ ᵕ ᵔ˶) ");
     }
 
     //update the Trainer_Items table
@@ -464,7 +465,8 @@ async function filterItems() {
 
 // Find items by entering name
 async function findItemByName() {
-    const item = document.getElementById("findbyname").value;
+    let item_raw = document.getElementById("findbyname").value;
+    const item  = sanitize_tolowercase(item_raw, regex_lowercase_withspace); //sanitize string
     const tableElement = document.getElementById("item-table");
     const tableBody = tableElement.querySelector('tbody');
 
@@ -476,7 +478,7 @@ async function findItemByName() {
 
     // If no items are found
     if (responseData.data.length == 0) {
-        console.log("No item found");
+        alert("No item found. Please try again");
         return;
     }
 
@@ -803,7 +805,7 @@ async function verifyUsername(username) {
         return false;
     }    
 };
-//TODO
+
 // Verify if the zipcode already exist in timezone table
 async function verifyZipcode(zipcode) {
     const zip = zipcode;
@@ -1187,7 +1189,7 @@ window.onload = function() {
         document.getElementById("reset-attribute-button").addEventListener("click", resetItemStats);
         document.getElementById("item-table").addEventListener('click', (e) => {
             //tagName = 'TD' check the tag tabledata cell
-            if (e.target.tagName === 'TD') {populateItemStats(e.target.textContent);}
+            if (e.target.tagName == 'TD') {populateItemStats(e.target.textContent);}
             //set the item to buy input box as the clicked item
             document.getElementById('item-to-buy-input').value = e.target.textContent;
         });
@@ -1241,3 +1243,59 @@ function fetchTableData() {
         fetchAndDisplayUsers('item-table', '/store');
     }
 }
+
+//Helper function for data sanitize
+
+const regex_lowercase_withspace = /^[a-z\s]+$/ //regex identify lowercase letter with whitesapce inbetween
+const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter without whitesapce inbetween
+const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
+const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
+
+// sanitize to lowercase string
+// used for searching by name (pokemon, item)
+function sanitize_tolowercase(str, regex) {
+  //trim the leading the tailing white space, and convert to lowercase
+  let trim_str = str.trim().toLowerCase();
+  let sanitized_str = '';
+
+  for (let char of trim_str) {
+    if (regex.test(char)) {
+      sanitized_str += char;
+    }
+  }
+
+  result = sanitized_str.trim();
+
+  if (result !== '') {
+    console.log("sanitized string is", result);
+    return result;
+  } else {
+    console.log('Input is invalid. Please try again');
+    return;
+  }
+};
+
+// sanitize to letter sensitive string
+// used for renaming (pokemon, nickname)
+function sanitize(str, regex) {
+  // trim the leading the tailing white space, and convert to lowercase
+  let trim_str = str.trim();
+  let sanitized_str = '';
+
+  //create a regex for matching the string
+  for (let char of trim_str) {
+    if (regex.test(char)) {
+      sanitized_str += char;
+    }
+  }
+
+  result = sanitized_str.trim();
+
+  if (result !== '') {
+    console.log("sanitized string is", result);
+    return result;
+  } else {
+    console.log('Input is invalid. Please try again');
+    return;
+  }
+};
