@@ -85,6 +85,17 @@ async function fetchPlayerPokemonFromDb(username) {
     });
 }
 
+async function countPlayerPokemonByType(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT type, COUNT(*) FROM Player_Pokemon, Pokemon_Type 
+            WHERE Player_Pokemon.name = Pokemon_Type.name AND tr_username = '${username}'
+            GROUP BY type`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchPlayerItemsFromDb(username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT Trainer_Items.name, Items.effect, Trainer_Items.quantity FROM Trainer_Items, Items 
@@ -191,7 +202,17 @@ async function fetchUserAndItemFromDb(username, itemname) {
     });
 }
 
-// Insert new item to Trainer_Item
+// fetch quantity from trainer_items with specified item and username
+// async function fetchQtyFromDb(name, username) {
+//     return await withOracleDB(async (connection) => {
+//         const result = await connection.execute(`SELECT quantity FROM Trainer_Items WHERE name = :name AND username= :username`, { name: name, username: username });
+//         return result.rows;
+//     }).catch(() => {
+//         return [];
+//     });
+// }
+
+// Option: function to insert itemname, username, quantity to trainer_item table
 async function insertTrainerAndItem(name, username, quantity) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -205,7 +226,7 @@ async function insertTrainerAndItem(name, username, quantity) {
     });
 }
 
-// update the quantity of old item to trainer_item table
+// function to insert quantity to trainer_item table
 async function updateQuantity(name, username, quantity) {
     return await withOracleDB(async (connection) => {
         console.log(quantity);
@@ -411,10 +432,31 @@ async function fetchEvolutionsFromDb() {
     });
 }
 
-// Fetches pokemon with the given type. MUlti-typed pokemon will still show up in the result
-async function fetchTypeFiltersFromDb(type) {
+// Dynamically filter pokemon form database based on user inputted filters and parameters.
+// A map is used to ensure parameter order and construct the base sql string based on given 
+// filter paramters. Bind variables are used to securely pass user input to the query.
+async function fetchPokedexFiltersFromDb(pokeBinds) {
+
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT DISTINCT name FROM Pokemon_type WHERE type = '${type}'`);
+        let filter_sql = "SELECT DISTINCT p.name FROM Pokemon p, Pokemon_Type pt WHERE p.name=pt.name";
+        let sql_map = {
+            "pokeattack":` and p.attack >= `,
+            "pokedefence": ` and p.defence >= `,
+            "pokespeed": ` and p.speed >= `,
+            "poketype": ` and pt.type = `
+        }
+
+        for(const [key, value] of pokeBinds) {
+            if(key === 'type') {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `':${key}'`;
+            } else {
+                filter_sql += `${sql_map[key]}`;
+                filter_sql += `:${key}`;
+            }
+        }
+        const bindValues = Array.from(pokeBinds.values());
+        const result = await connection.execute(filter_sql, bindValues);
         return result.rows;
     }).catch(() => {
         return -1;
@@ -447,11 +489,20 @@ async function fetchPokemonByNameFromDb(name) {
 
 }
 
-//`SELECT (tr_username, pp.name) / (p.name), FROM Player_Pokemon pp, Pokemon p`
+
 // Fetches the pokemon mathcing a given name in the database
 async function fetchLeaderboardFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT username, start_date FROM Trainer`);
+        const result = await connection.execute(`SELECT username, start_date
+                                                 FROM Trainer t
+                                                 WHERE t.username IN 
+                                                    (SELECT DISTINCT tr_username
+                                                    FROM Player_Pokemon pp1
+                                                    WHERE NOT EXISTS ((SELECT name FROM Pokemon)
+                                                                        MINUS
+                                                                        (SELECT name
+                                                                         FROM Player_Pokemon pp2
+                                                                         WHERE pp2.tr_username=pp1.tr_username)))`);
         return result.rows;
     }).catch(()=> {
         return [];
@@ -504,6 +555,8 @@ async function updatePassword(currentuser, newPasswordValue) {
         return false;
     });
 }
+
+
 
 
 // Insert a new player pokemon after catching it
@@ -569,13 +622,65 @@ async function fetchPokemonStatsFromDb(pokemonName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
                                                 FROM Pokemon p, Pokemon_Type t, Can_Learn l
-                                                WHERE p.name='${pokemonName}' and t.name='${pokemonName}' and l.pokemon='${pokemonName}'`);
+                                                WHERE p.name=t.name and t.name=l.pokemon and p.name='${pokemonName}'`);
         return result.rows; 
     }).catch(()=> {
         return [];
     });
 }
 
+// Count number of player pokemon
+async function countPlayerPokemon(username) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT Count(*) FROM Player_Pokemon WHERE tr_username = '${username}'`);
+        return result.rows[0][0];
+    }).catch(() => {
+        return -1;
+    });
+}
+
+async function updatePokemonLevel(name, nickname, username, pplevel) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE Player_Pokemon 
+             SET pp_level=:pplevel 
+             WHERE name=:name AND nickname=:nickname AND tr_username=:username`,
+            [pplevel, name, nickname, username],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function fetchTableNames() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT TABLE_NAME FROM USER_TABLES`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+async function fetchColumnNames(table) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = '${table}'`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+async function fetchSpecifiedColumnsFromDB(table, columns) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT ${columns} FROM ${table}`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
 
 
 module.exports = {
@@ -584,7 +689,7 @@ module.exports = {
     fetchGymsFromDb,
     fetchPokemonFromDb,
     fetchEvolutionsFromDb, 
-    fetchTypeFiltersFromDb,
+    //fetchTypeFiltersFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
@@ -592,8 +697,8 @@ module.exports = {
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
     fetchUserAndItemFromDb,
-    updateQuantity, // Update the quantity
-    insertTrainerAndItem,// Insert new item to Trainer_Item
+    updateQuantity,
+    insertTrainerAndItem,
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
     fetchTimezoneFromDb, 
@@ -616,5 +721,12 @@ module.exports = {
     fetchLeaderboardFromDb,
     fetchUserInfoFromDb,
     updateName,
-    updatePassword
+    updatePassword,
+    countPlayerPokemonByType,
+    countPlayerPokemon,
+    updatePokemonLevel,
+    fetchTableNames,
+    fetchColumnNames,
+    fetchSpecifiedColumnsFromDB,
+    fetchPokedexFiltersFromDb
 };
