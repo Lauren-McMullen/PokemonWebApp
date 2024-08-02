@@ -705,8 +705,6 @@ async function fetchColumnNames(tableName) {
 
 async function fetchSpecifiedColumnsFromDB(tableName, columnsList) {
     return await withOracleDB(async (connection) => {
-        console.log(tableName);
-        console.log(columnsList);
         const result = await connection.execute(`SELECT ${columnsList} FROM ${tableName}`);
         return result.rows;
     }).catch(()=> {

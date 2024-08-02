@@ -64,12 +64,6 @@ button {
     outline: none;
 }
 
-.profile-button {
-    margin: 8px;
-    margin-left: 0px;
-}
-
-
 button:hover {
     background-color: #CC0000;
 }
@@ -78,74 +72,10 @@ button:active {
     background-color: rgb(12, 67, 187);
 }
 
-
-#catch {
-    background-color: #99cc00;
-}
-
-#pokedex {
-    background-color: #e6b3ff;
-}
-
-#team {
-    background-color: #f9e2ef;
-}
-
-#filter-options {
-    border-left: 8px solid purple;
-    background-color: #e8c5f9;
-    border-radius: 8px;
-    padding: 5px 10px; 
-}
-
-#gym {
-    background-color: #a0bbe7;
-}
-
-#store {
-    background-color: #ffc905;
-}
-
 h1 {
     margin: 0;
     font-size: 60px;
     font-family: Roboto, sans-serif;
-}
-
-.result-component {
-    display: flex;
-    margin-top: 50px;
-
-}
-
-#pokemon-silhouette{
-    margin: 30px;
-}
-
-#pokedex-pokemon-table {
-    width: 150px;
-}
-
-#pokemonType {
-    margin: 20px;
-}
-
-#team-pokemon-table {
-    width: 400px;
-}
-
-#filter-search-button {
-    margin-bottom: 20px;
-}
-
-.gym-information {
-    display: flex;
-    margin-top: 50px;
-
-}
-
-.nicknameForm {
-    display: none;
 }
 
 .flex-container {
@@ -154,37 +84,13 @@ h1 {
     align-items: center;
 }
 
-#reset-button {
-    margin-left: 0px;
-}
-
-.type-input {
+.coloumn-input {
     margin-left: 0px;
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
     padding-left: 0px;
 }
-
-#attack-input, #defence-input, #speed-input {
-    width: 50px;
-}
-
-
-#effectiveness-options {
-    padding: 20px;
-}
-
-#effectiveness-button{
-    margin-bottom: 20px;
-}
-
-#type-option, #attack-option, #defence-option, #speed-option {
-    margin-right: 30px;
-    margin-bottom: 0px;
-    width:30px;
-}
-
 
 .navBar ul {
     margin: 0;
@@ -225,7 +131,6 @@ h1 {
 
 /* INPUT STYLES */
 input, textarea {
-    width: 100%;
     padding: 10px 15px;
     font-size: 16px;
     border: 1px solid #ccc;
