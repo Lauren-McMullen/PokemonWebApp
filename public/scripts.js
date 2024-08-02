@@ -1221,6 +1221,13 @@ window.onload = function () {
         window.location.href = 'login.html';
         return;
     }
+    if ((sessionStorage.getItem("user") === 'admin')) {
+        console.log('In admin block');
+        document.getElementById("admin-button").style.display = "inline-block";
+        document.getElementById("admin-button").addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+    }
     if (document.body.id == 'home') {
         loadProfileInfo();
         document.getElementById("logout-button").addEventListener('click', () => {
