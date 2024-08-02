@@ -1130,13 +1130,8 @@ async function changePassword(event) {
 }
 
 // Change user's zipcode and timezone
-async function changeZipcode(event) {
+async function launchChangeZipcode(event) {
     event.preventDefault();
-
-    //Get the username
-    const username = sessionStorage.getItem('user');
-
-    console.log("to run the prompt")
 
     // get the new zipcode from the window dialog box
     let newZipcode = prompt("Please enter your new zipcode", "new zipcode");
@@ -1144,17 +1139,16 @@ async function changeZipcode(event) {
         alert('Please enter a zipcode and try again');
         return;
     }
-    console.log("user input new zipcode is", newZipcode);
 
     let responseSearchZip = await fetch(`/timezone/${newZipcode}`, {
         method: 'GET',
     });
 
     const responseZipcode = await responseSearchZip.json();
-    console.log(newZipcode);
 
     if (responseZipcode.data.length == 0) {
         const zipModal = document.getElementById('timezone-change-modal');
+
         document.getElementById("new-zip-confirm-btn").addEventListener('click', async () => {
             let newTimezone = document.getElementById("timezone").value;
             await insertZipcode(newZipcode, newTimezone);
@@ -1171,6 +1165,7 @@ async function changeZipcode(event) {
 
 }
 
+// Function to update the zipcode in the Trainer table
 async function updateZipCode(zipCode) {
 
     let username = sessionStorage.getItem("user");
@@ -1202,7 +1197,6 @@ async function updateZipCode(zipCode) {
 }
 
 // count number of player pokemon
-
 async function getPokemonCount() {
     const response = await fetch(`/count-pokemon/${sessionStorage.getItem("user")}`, {
         method: 'GET'
@@ -1237,7 +1231,7 @@ window.onload = function () {
         });
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
-        document.getElementById("changeZipcode").addEventListener('click', changeZipcode);
+        document.getElementById("launchChangeZipcode").addEventListener('click', launchChangeZipcode);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("filter-search-button").addEventListener("click", filterPokedex);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
