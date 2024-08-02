@@ -35,7 +35,7 @@
             <img src="img/pokeball.png" alt="picture of a pokeball" width="100" height="100">
         </div>
 
-        <p id="intro-text">This application was deesigned to let users explore the world of pokemon using a relational databse.
+        <p id="intro-text">This application was designed to let users explore the world of pokemon using a relational databse.
             Add pokemon to your team, catch wild pokemon, battle gyms, and buy items from the store! We hope
             you have fun exploring this application.
             <br><br>- Lauren, Renbo, and Dana (Devs)
@@ -70,7 +70,6 @@
         </table>
 
 
-
         <h2 id="profile-info">Profile Information</h2>
         <div id="username"><p id="username-text"><strong>USERNAME: </strong></p></div>
         <div id="name"><p id="name-text"><strong>NAME: </strong> </p><button class="profile-button" id="changeName-button">CHANGE NAME</button></div>
@@ -78,9 +77,27 @@
         <br>
         <div id="password"><button class="profile-button" id="password-button">CHANGE PASSWORD</button><button class="profile-button" id="logout-button">LOGOUT</button></div>
 
-
-
-
+        <dialog id="timezone-change-modal"> 
+            <p>Zipcode does not exist in our system yet. Please select the correct timezone for your new zip/postal code:</p>
+            <select name="timezone" id="timezone">
+                <option value="PDT">PDT</option>
+                <option value="MST">MST</option>
+                <option value="MDT">MDT</option>
+                <option value="CST">CST</option>
+                <option value="CDT">CDT</option>
+                <option value="EST">EST</option>
+                <option value="EDT">EDT</option>
+                <option value="AST">AST</option>
+                <option value="ADT">ADT</option>
+                <option value="NDT">NDT</option>
+                <option value="PST">PST</option>
+                <option value="NST">NST</option>
+            </select>
+            <br>
+            <br>
+            <button id="new-zip-confirm-btn">Confirm</button>
+        </dialog>
+   
 
     </div>
     <script src="scripts.js"></script>

@@ -857,6 +857,7 @@ async function insertZipcode(zipcode, timezone) {
     const responseData_timezone = await response_timezone.json();
     if (responseData_timezone.success) {
         console.log("Timezone inserted successfully!");
+        console.log(timezone);
         return true;
     } else {
         console.log("Timezone inserted NOT WORK");
@@ -1131,26 +1132,34 @@ async function changeZipcode(event) {
     }
     console.log("user input new zipcode is", newZipcode);
 
-    // get the new timezone from the window dialog box
-    let newTimezone = prompt("Please enter your new timezone", "new timezone");
-    if (newTimezone == null) {
-        alert('Please enter a new Timezone and try again');
-        return;
-    }
-    console.log("user input new timezone is", newTimezone);
-
     let responseSearchZip = await fetch(`/timezone/${newZipcode}`, {
         method: 'GET',
     });
 
     const responseZipcode = await responseSearchZip.json();
+    console.log(newZipcode);
 
     if (responseZipcode.data.length == 0) {
-        alert("Zipcode does not exist. Need to insert into timezone table");
-        await insertZipcode(newZipcode, newTimezone);
+        const zipModal = document.getElementById('timezone-change-modal');
+        document.getElementById("new-zip-confirm-btn").addEventListener('click', async () => {
+            let newTimezone = document.getElementById("timezone").value;
+            await insertZipcode(newZipcode, newTimezone);
+            await updateZipCode(newZipcode); 
+            zipModal.close();
+        });
+
+        zipModal.showModal();
+        
     } else {
-        alert("Zipcode already exist! No need to update timezone table");
+        alert("Zipcode already exist! No need to update our timezone records.");
+        await updateZipCode(newZipcode);
     };
+
+}
+
+async function updateZipCode(zipCode) {
+
+    let username = sessionStorage.getItem("user");
 
     //Update the zipcode of trainer
     const responseUpdateZipcode = await fetch(`/update_zipcode`, {
@@ -1160,7 +1169,7 @@ async function changeZipcode(event) {
         },
         body: JSON.stringify({
             username: username,
-            zipcode: newZipcode
+            zipcode: zipCode
         })
     })
 
@@ -1179,6 +1188,7 @@ async function changeZipcode(event) {
 }
 
 // count number of player pokemon
+
 async function getPokemonCount() {
     const response = await fetch(`/count-pokemon/${sessionStorage.getItem("user")}`, {
         method: 'GET'
