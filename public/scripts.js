@@ -80,15 +80,30 @@ async function filterPokedex() {
     }
 
     if (document.getElementById("attack-option").checked) {
-        pokeBinds.pokeattack = document.getElementById("attack-input").value.toString();
+        let attack = document.getElementById("attack-input").value.toString();
+        pokeBinds.pokeattack = sanitize(attack, regex_digit);
+        if(pokeBinds.pokeattack == null) {
+            alert('Invalid attack input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     if (document.getElementById("defence-option").checked) {
-        pokeBinds.pokedefence = document.getElementById("defence-input").value.toString();
+        let defence = document.getElementById("defence-input").value.toString();
+        pokeBinds.pokedefence = sanitize(defence, regex_digit);
+        if(pokeBinds.pokedefence == null) {
+            alert('Invalid defence input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     if (document.getElementById("speed-option").checked) {
-        pokeBinds.pokespeed = document.getElementById("speed-input").value.toString();
+        let speed = document.getElementById("speed-input").value.toString();
+        pokeBinds.pokespeed = sanitize(speed, regex_digit);
+        if(pokeBinds.pokespeed == null) {
+            alert('Invalid speed input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     const response = await fetch('/pokedex/filter', {
@@ -304,7 +319,8 @@ async function fillPokemonLeaderBoard() {
 // Find and display the pokemon with the user-inputted name segment
 async function getPokemonByName() {
     const name = document.getElementById("nameInput").value.toLowerCase();
-    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+    const sanitizedName = sanitize_tolowercase(name, regex_lowercase_withspace);
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${sanitizedName}`);
 }
 
 // Reset the item attribute display panel
@@ -603,8 +619,8 @@ async function keepCaughtPokemon(caughtPokeInfo) {
 }
 
 function getNickname() {
-    var nickname;
-    nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    let nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    nickname = sanitize(nickname, regex_withspace);
     return nickname;
 }
 
@@ -872,15 +888,15 @@ async function insertUser(event) {
     const zipcode = document.getElementById('zipcode').value;
     const startdate = getCurrentFormattedDate();
     const timezone = document.getElementById('timezone').value;
-    console.log("load parameters");
-    console.log(username);
-    console.log(name);
-    console.log(password);
-    console.log(startdate);
-    console.log(zipcode);
+    // console.log("load parameters");
+    // console.log(username);
+    // console.log(name);
+    // console.log(password);
+    // console.log(startdate);
+    // console.log(zipcode);
 
     // verify if the username already taken
-    const verify_user_result = await verifyUsername(username); //important to add, otherwise all the other function will run at the same time
+    const verify_user_result = await verifyUsername(username);
     if (!verify_user_result) {
         alert("username already exist. please use another one");
         return;
@@ -1026,6 +1042,7 @@ async function changeName(event) {
     const username = sessionStorage.getItem('user');
 
     let newNameValue = prompt("Please enter your new name", "new name");
+    newNameValue = sanitize(newNameValue, regex_withspace);
 
     if (newNameValue == null) {
         alert('Please enter a name and try again');
@@ -1074,6 +1091,7 @@ async function changePassword(event) {
     const infoResponseData = await infoResponse.json();
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
+    oldPasswordValue = sanitize(oldPasswordValue, regex_withspace);
 
     if (oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
@@ -1081,6 +1099,7 @@ async function changePassword(event) {
     }
 
     let newPasswordValue = prompt("Please enter your new password", "new password");
+    newPasswordValue = sanitize(newPasswordValue, regex_withspace);
     if (newPasswordValue === null || newPasswordValue === "new password") {
         return;
     }
@@ -1129,7 +1148,7 @@ async function changeZipcode(event) {
     // get the new timezone from the window dialog box
     let newTimezone = prompt("Please enter your new timezone", "new timezone");
     if (newTimezone == null) {
-        alert('Please enter a newTimezone and try again');
+        alert('Please enter a new Timezone and try again');
         return;
     }
     console.log("user input new timezone is", newTimezone);
@@ -1319,6 +1338,7 @@ const regex_lowercase_withspace = /^[a-z\s]+$/ //regex identify lowercase letter
 const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter without whitesapce inbetween
 const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
+const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
 
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)
