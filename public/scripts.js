@@ -304,7 +304,8 @@ async function fillPokemonLeaderBoard() {
 // Find and display the pokemon with the user-inputted name segment
 async function getPokemonByName() {
     const name = document.getElementById("nameInput").value.toLowerCase();
-    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${name}`);
+    const sanitizedName = sanitize_tolowercase(name, regex_lowercase_withspace);
+    fetchAndDisplayUsers('pokedex-pokemon-table', `/pokedex/find-by-name/${sanitizedName}`);
 }
 
 // Reset the item attribute display panel
