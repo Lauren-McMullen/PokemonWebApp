@@ -80,15 +80,30 @@ async function filterPokedex() {
     }
 
     if (document.getElementById("attack-option").checked) {
-        pokeBinds.pokeattack = document.getElementById("attack-input").value.toString();
+        let attack = document.getElementById("attack-input").value.toString();
+        pokeBinds.pokeattack = sanitize(attack, regex_digit);
+        if(pokeBinds.pokeattack == null) {
+            alert('Invalid attack input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     if (document.getElementById("defence-option").checked) {
-        pokeBinds.pokedefence = document.getElementById("defence-input").value.toString();
+        let defence = document.getElementById("defence-input").value.toString();
+        pokeBinds.pokedefence = sanitize(defence, regex_digit);
+        if(pokeBinds.pokedefence == null) {
+            alert('Invalid defence input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     if (document.getElementById("speed-option").checked) {
-        pokeBinds.pokespeed = document.getElementById("speed-input").value.toString();
+        let speed = document.getElementById("speed-input").value.toString();
+        pokeBinds.pokespeed = sanitize(speed, regex_digit);
+        if(pokeBinds.pokespeed == null) {
+            alert('Invalid speed input! Only numbers are accepted. Please try again.');
+            return;
+        }
     }
 
     const response = await fetch('/pokedex/filter', {
@@ -1114,7 +1129,7 @@ async function changeZipcode(event) {
     // get the new timezone from the window dialog box
     let newTimezone = prompt("Please enter your new timezone", "new timezone");
     if (newTimezone == null) {
-        alert('Please enter a newTimezone and try again');
+        alert('Please enter a new Timezone and try again');
         return;
     }
     console.log("user input new timezone is", newTimezone);
@@ -1296,6 +1311,7 @@ const regex_lowercase_withspace = /^[a-z\s]+$/ //regex identify lowercase letter
 const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter without whitesapce inbetween
 const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
+const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
 
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)
