@@ -374,7 +374,7 @@ async function insertBattle(date, winner) {
             [battle_date, winner],
             { autoCommit: true }
         );
-        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = '${result.lastRowid}'`);
+        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = :lastRow`, {lastRow: `${result.lastRowid}`});
         return battleid.rows[0][0];
     }).catch(() => {
         return -1;
@@ -476,7 +476,7 @@ async function fetchTypeMatchupFromDb(attack, defence) {
 async function fetchPokemonByNameFromDb(name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT name FROM Pokemon 
-                                                WHERE name LIKE '%${name}%'`);
+                                                WHERE name LIKE :name`, {name: `%${name}%`});
         return result.rows;
     }).catch(()=> {
         return [];
@@ -486,7 +486,7 @@ async function fetchPokemonByNameFromDb(name) {
 
 
 // Fetches the pokemon mathcing a given name in the database
-async function fetchLeaderboardFromDb() {
+async function fetchPokemonLeaderboardFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT username, start_date
                                                  FROM Trainer t
@@ -504,6 +504,42 @@ async function fetchLeaderboardFromDb() {
     });
 
 }
+
+// Fetches the pokemon mathcing a given name in the database
+async function fetchGymLeaderboardFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, COUNT(badge)
+                                                FROM Trainer_Badges
+                                                GROUP BY username
+                                                HAVING COUNT(badge) >= 1
+                                                ORDER BY COUNT(badge) DESC`);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
+// Fetches the pokemon mathcing a given name in the database
+async function fetchFrequentBuyersFromDb(){
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT username, SUM(quantity) 
+                                                FROM Trainer_Items 
+                                                GROUP BY username
+                                                HAVING SUM(quantity) >= (
+                                                                        SELECT AVG(item_quantity)
+                                                                        FROM (
+                                                                                SELECT SUM(quantity) AS item_quantity
+                                                                                FROM Trainer_items
+                                                                                GROUP BY username
+                                                                              )
+                                                                         )
+                                                ORDER BY SUM(quantity) DESC `);
+        return result.rows;
+    }).catch(()=> {
+        return [];
+    });
+}
+
 
 // Fetches the pokemon mathcing a given name in the database
 async function fetchUserInfoFromDb(username) {
@@ -667,9 +703,11 @@ async function fetchColumnNames(tableName) {
     });
 }
 
-async function fetchSpecifiedColumnsFromDB(table, columns) {
+async function fetchSpecifiedColumnsFromDB(tableName, columnsList) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT ${columns} FROM ${table}`);
+        console.log(tableName);
+        console.log(columnsList);
+        const result = await connection.execute(`SELECT ${columnsList} FROM ${tableName}`);
         return result.rows;
     }).catch(()=> {
         return [];
@@ -711,7 +749,8 @@ module.exports = {
     fetchLearnedMovesFromDb,
     fetchPlayerItemsFromDb,
     deletePlayerPokemonFromDb, 
-    fetchLeaderboardFromDb,
+    fetchPokemonLeaderboardFromDb,
+    fetchGymLeaderboardFromDb,
     fetchUserInfoFromDb,
     updateName,
     updatePassword,
@@ -722,5 +761,6 @@ module.exports = {
     fetchTableNames,
     fetchColumnNames,
     fetchSpecifiedColumnsFromDB,
-    fetchPokedexFiltersFromDb
+    fetchPokedexFiltersFromDb,
+    fetchFrequentBuyersFromDb
 };
