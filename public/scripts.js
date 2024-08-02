@@ -1231,7 +1231,7 @@ window.onload = function () {
         });
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
-        document.getElementById("launchChangeZipcode").addEventListener('click', launchChangeZipcode);
+        document.getElementById("changeZipcode").addEventListener('click', launchChangeZipcode);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("filter-search-button").addEventListener("click", filterPokedex);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
