@@ -106,14 +106,21 @@ async function fetchPlayerItemsFromDb(username) {
     });
 }
 
-async function fetchPlayerBadgesFromDb(username, gym = null) {
+async function fetchPlayerBadgesFromDb(username) {
     return await withOracleDB(async (connection) => {
-        let result;
-        if (gym == null) {
-            result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = :username`, [username]);
-        } else {
-            result = await connection.execute(`SELECT badge FROM Trainer_Badges WHERE username = :username AND gym = :gym`, [username, gym]);
-        }
+        const result = await connection.execute(`SELECT badge, gym FROM Trainer_Badges WHERE username = :username`, [username]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchPlayerBadgesRemainingFromDb(username, gym) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = :gym 
+            MINUS 
+            SELECT badge FROM Trainer_Badges WHERE username = :username AND gym = :gym`, 
+            [gym, username, gym]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -336,15 +343,6 @@ async function updateUserZipcode(username, zipcode) {
 async function fetchGymsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Gym');
-        return result.rows;
-    }).catch(() => {
-        return [];
-    });
-}
-
-async function fetchGymBadgesFromDb(gym) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = :gym`, [gym]);
         return result.rows;
     }).catch(() => {
         return [];
@@ -742,7 +740,6 @@ module.exports = {
     fetchTypeMatchupFromDb,
     fetchPokemonByNameFromDb,
     fetchPokemonStatsFromDb,
-    fetchGymBadgesFromDb,
     insertPlayerBadge,
     insertPlayerPokemon, 
     insertPlayerPokemonMove,
@@ -762,5 +759,6 @@ module.exports = {
     fetchColumnNames,
     fetchSpecifiedColumnsFromDB,
     fetchPokedexFiltersFromDb,
-    fetchFrequentBuyersFromDb
+    fetchFrequentBuyersFromDb,
+    fetchPlayerBadgesRemainingFromDb
 };

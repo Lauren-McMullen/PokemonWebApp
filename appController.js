@@ -170,22 +170,16 @@ router.post("/player-badges", async (req, res) => {
     }
 });
 
-// get player badges received from specific gym
-router.get('/player-badges/:gym', async (req, res) => {
-    const { gym } = req.params;
-    const tableContent = await appService.fetchPlayerBadgesFromDb(req.headers['username'], gym);
-    res.json({data: tableContent});
-});
 
 router.get('/gym', async (req, res) => {
     const tableContent = await appService.fetchGymsFromDb();
     res.json({data: tableContent});
 });
 
-// get the names of badges a particular gym offers
-router.get('/badges/:gym', async (req, res) => {
-    const { gym } = req.params;
-    const tableContent = await appService.fetchGymBadgesFromDb(gym);
+// get badges a player has not yet received from specific gym
+router.get('/player-badges-remaining/:gym/:username', async (req, res) => {
+    const {gym, username} = req.params;
+    const tableContent = await appService.fetchPlayerBadgesRemainingFromDb(username, gym);
     res.json({data: tableContent});
 });
 
