@@ -170,7 +170,8 @@ async function challengeGym(event) {
     let username = sessionStorage.getItem("user");
 
     const gymName = document.getElementById('searchName').value;
-    const gymNameClean = gymName.toLowerCase().split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
+    let gymNameClean  = sanitize_tolowercase(gymName, regex_lowercase_withspace);
+    gymNameClean = gymNameClean.split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
 
     const date = new Date();
     let currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
@@ -1227,6 +1228,14 @@ window.onload = function () {
         });
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
+        document.getElementById("gym-table").addEventListener('click', (e) => {
+            if (e.target.tagName === 'TD') {
+                let row = e.target.parentElement
+                let rowElements = row.getElementsByTagName('TD');
+                let gymName = rowElements[0].textContent;
+                document.getElementById('searchName').value = gymName;
+            }
+        });
     } else if (document.body.id == 'team') {
         let user = sessionStorage.getItem("user");
         if (user === null) {
