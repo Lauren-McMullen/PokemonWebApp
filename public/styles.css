@@ -175,7 +175,7 @@ h1 {
     padding: 20px;
 }
 
-#effectiveness-button{
+#effectiveness-button, #reset-attribute-button, #select-item {
     margin-bottom: 20px;
 }
 
@@ -183,6 +183,10 @@ h1 {
     margin-right: 30px;
     margin-bottom: 0px;
     width:30px;
+}
+
+#blissey-img {
+    padding: 30px;
 }
 
 
