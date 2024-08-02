@@ -160,19 +160,9 @@ async function getEffectiveness() {
 
 }
 
-// Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
-// badges won during challenge to player inventory
-// Sorry for how long and complex this function is ---- TODO: make more readable
-async function challengeGym(event) {
-    event.preventDefault();
-    let winner;
-    Math.random() > 0.5 ? winner = 'player' : winner = 'leader';   // determine battle victor
-    let username = sessionStorage.getItem("user");
-
-    const gymName = document.getElementById('searchName').value;
-    let gymNameClean  = sanitize_tolowercase(gymName, regex_lowercase_withspace);
-    gymNameClean = gymNameClean.split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
-
+// Creates battle record with current date and winner
+// Returns generated battle id or -1 if problem occured during post request
+async function createBattleRecord(winner) {
     const date = new Date();
     let currentDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
 
@@ -191,24 +181,87 @@ async function challengeGym(event) {
     const battleid = responseData.id;
     if (!responseData.success) {
         alert("Error inserting battle");
+        return -1;
     }
+    return battleid;
+}
 
-    // challenge gym 
+// Creates gym challenge record
+// Returns true if record created successfully; false otherwise
+async function createChallengeRecord(gym, user, battleid) {
     const challengeResponse = await fetch('/challenge-gym', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            gym: gymNameClean,
-            username: username,
+            gym: gym,
+            username: user,
             battle: battleid
         })
     });
     const challengeResponseData = await challengeResponse.json();
+    return challengeResponseData.success;
+}
+
+// Collects new badge if user has not already collected all badges from particular gym
+async function collectGymBadge(gym, username) {
+    const badgesRemaining = await fetch(`/player-badges-remaining/${gym}/${username}`, {
+        method: 'GET'
+    });
+    
+    const badgesRemainingJson = await badgesRemaining.json();
+
+    let badgesNotAquired = []
+    Object.values(badgesRemainingJson.data).forEach(value => badgesNotAquired.push(value[0]));
+
     const messageElement = document.getElementById('gymResultMsg');
 
-    if (challengeResponseData.success) {
+    if (badgesNotAquired.length === 0) {
+        messageElement.textContent += ` You have already aquired all possible badges from ${gym}`;
+    } else {
+
+        const newBadge = badgesNotAquired[0];
+
+        const response = await fetch('/player-badges', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                gym: gym,
+                username: username,
+                badge: newBadge
+            })
+        });
+
+        const responseData = await response.json();
+        if (responseData.success) {
+            messageElement.textContent += ` You aquire the ${newBadge} badge from ${gym}`;
+        } else{
+            alert("Error collecting gym badge. Please try again");
+        }
+    }
+}
+
+// Challenges the gym whose name is entered. Creates record of gym battle, gym challenge, and adds any
+// badges won during challenge to player inventory
+async function challengeGym(event) {
+    event.preventDefault();
+    let winner;
+    Math.random() > 0.5 ? winner = 'player' : winner = 'leader';   // determine battle victor
+    let username = sessionStorage.getItem("user");
+
+    const gymName = document.getElementById('searchName').value;
+    let gymNameClean  = sanitize_tolowercase(gymName, regex_lowercase_withspace);
+    gymNameClean = gymNameClean.split(' ').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
+
+    let battleId = await createBattleRecord(winner);
+
+    // challenge gym 
+    const messageElement = document.getElementById('gymResultMsg');
+
+    if (await createChallengeRecord(gymNameClean, username, battleId)) {
         if (winner === 'player') {
             messageElement.textContent = `Congratulations! You won the battle at ${gymNameClean}!!!`
         } else {
@@ -220,51 +273,12 @@ async function challengeGym(event) {
         } else {
             messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
         }
+        return;
     }
 
     // if player won battle, player receives badge from gym if they haven't already collected them all
-    if (winner === 'player' && challengeResponseData.success) {
-
-        // get array of badges that particular gym offers
-        const gymBadgeResponse = await fetch(`/badges/${gymNameClean}`, {
-            method: 'GET',
-        });
-        const gymBadgesJson = await gymBadgeResponse.json();
-        let gymBadgesOffered = [];
-        Object.values(gymBadgesJson.data).forEach(value => gymBadgesOffered.push(value[0]));
-
-        // get array of badges player has already acquired from that gym 
-        const playerBadgesResponse = await fetch(`/player-badges/${gymNameClean}`, {
-            method: 'GET',
-            headers: {
-                'username': username
-            }
-        });
-        const playerBadgesJson = await playerBadgesResponse.json();
-        let playerBadges = [];
-        Object.values(playerBadgesJson.data).forEach(value => playerBadges.push(value[0]));
-
-        const badgesNotAquired = gymBadgesOffered.filter((badge) => !playerBadges.includes(badge));
-        if (badgesNotAquired.length === 0) {
-            messageElement.textContent += ` You have already aquired all possible badges from ${gymNameClean}`;
-        } else {
-
-            const newBadge = badgesNotAquired[0];
-
-            const challengeResponse = await fetch('/player-badges', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    gym: gymNameClean,
-                    username: username,
-                    badge: newBadge
-                })
-            });
-
-            messageElement.textContent += ` You aquire the ${newBadge} badge from ${gymNameClean}`;
-        }
+    if (winner === 'player') {
+        collectGymBadge(gymNameClean, username);   
     }
 }
 
