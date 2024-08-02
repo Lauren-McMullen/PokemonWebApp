@@ -1221,13 +1221,6 @@ window.onload = function () {
         window.location.href = 'login.html';
         return;
     }
-    if ((sessionStorage.getItem("user") === 'admin')) {
-        console.log('In admin block');
-        document.getElementById("admin-button").style.display = "inline-block";
-        document.getElementById("admin-button").addEventListener('click', () => {
-            window.location.href = 'admin.html';
-        });
-    }
     if (document.body.id == 'home') {
         loadProfileInfo();
         document.getElementById("logout-button").addEventListener('click', () => {
@@ -1236,6 +1229,12 @@ window.onload = function () {
                 window.location.href = 'login.html';
             }
         });
+        if ((sessionStorage.getItem("user") === 'admin')) {
+            document.getElementById("admin-button").style.display = "inline-block";
+            document.getElementById("admin-button").addEventListener('click', () => {
+                window.location.href = 'admin.html';
+            });
+        }
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
         document.getElementById("changeZipcode").addEventListener('click', launchChangeZipcode);
