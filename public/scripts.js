@@ -604,8 +604,8 @@ async function keepCaughtPokemon(caughtPokeInfo) {
 }
 
 function getNickname() {
-    var nickname;
-    nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    let nickname = prompt("Please enter a nickname for your new pokemon", "nickname");
+    nickname = sanitize(nickname, regex_withspace);
     return nickname;
 }
 
@@ -873,15 +873,15 @@ async function insertUser(event) {
     const zipcode = document.getElementById('zipcode').value;
     const startdate = getCurrentFormattedDate();
     const timezone = document.getElementById('timezone').value;
-    console.log("load parameters");
-    console.log(username);
-    console.log(name);
-    console.log(password);
-    console.log(startdate);
-    console.log(zipcode);
+    // console.log("load parameters");
+    // console.log(username);
+    // console.log(name);
+    // console.log(password);
+    // console.log(startdate);
+    // console.log(zipcode);
 
     // verify if the username already taken
-    const verify_user_result = await verifyUsername(username); //important to add, otherwise all the other function will run at the same time
+    const verify_user_result = await verifyUsername(username);
     if (!verify_user_result) {
         alert("username already exist. please use another one");
         return;
@@ -1027,6 +1027,7 @@ async function changeName(event) {
     const username = sessionStorage.getItem('user');
 
     let newNameValue = prompt("Please enter your new name", "new name");
+    newNameValue = sanitize(newNameValue, regex_withspace);
 
     if (newNameValue == null) {
         alert('Please enter a name and try again');
