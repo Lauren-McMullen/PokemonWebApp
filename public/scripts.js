@@ -1076,6 +1076,7 @@ async function changePassword(event) {
     const infoResponseData = await infoResponse.json();
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
+    oldPasswordValue = sanitize(oldPasswordValue, regex_withspace);
 
     if (oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
@@ -1083,6 +1084,7 @@ async function changePassword(event) {
     }
 
     let newPasswordValue = prompt("Please enter your new password", "new password");
+    newPasswordValue = sanitize(newPasswordValue, regex_withspace);
     if (newPasswordValue === null || newPasswordValue === "new password") {
         return;
     }
