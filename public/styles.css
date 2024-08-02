@@ -27,9 +27,9 @@ table {
     display: block;
 }
 
-th, td {
+th, td { 
     padding: 12px 15px;
-    width: 100%;
+    width: 100%; 
     border-bottom: 1px solid #ddd;
 }
 

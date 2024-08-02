@@ -28,12 +28,12 @@ async function checkDbConnection() {
     statusElem.style.display = 'inline';
 
     response.text()
-    .then((text) => {
-        statusElem.textContent = text;
-    })
-    .catch((error) => {
-        statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
-    });
+        .then((text) => {
+            statusElem.textContent = text;
+        })
+        .catch((error) => {
+            statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
+        });
 }
 
 // Fetches data from the demotable and displays it.
@@ -75,19 +75,19 @@ async function filterPokedex() {
     //Construct object to dynamically add given filter types
     const pokeBinds = {};
 
-    if(document.getElementById("type-option").checked && document.getElementById("pokemonType").value != 'all') {
+    if (document.getElementById("type-option").checked && document.getElementById("pokemonType").value != 'all') {
         pokeBinds.poketype = document.getElementById("pokemonType").value.toString();
     }
 
-    if(document.getElementById("attack-option").checked) {
+    if (document.getElementById("attack-option").checked) {
         pokeBinds.pokeattack = document.getElementById("attack-input").value.toString();
     }
 
-    if(document.getElementById("defence-option").checked) {
+    if (document.getElementById("defence-option").checked) {
         pokeBinds.pokedefence = document.getElementById("defence-input").value.toString();
     }
 
-    if(document.getElementById("speed-option").checked) {
+    if (document.getElementById("speed-option").checked) {
         pokeBinds.pokespeed = document.getElementById("speed-input").value.toString();
     }
 
@@ -199,7 +199,7 @@ async function challengeGym(event) {
             messageElement.textContent = `You were defeated in battle at ${gymNameClean}...`
         }
     } else {
-        if (username === null ) {
+        if (username === null) {
             messageElement.textContent = `Error challenging gym: ${gymNameClean}. Log in before attempting gym challenge!`;
         } else {
             messageElement.textContent = `Error challenging gym: ${gymNameClean}. Check that the entered gym name actually exists`;
@@ -211,11 +211,11 @@ async function challengeGym(event) {
 
         // get array of badges that particular gym offers
         const gymBadgeResponse = await fetch(`/badges/${gymNameClean}`, {
-            method: 'GET', 
+            method: 'GET',
         });
         const gymBadgesJson = await gymBadgeResponse.json();
         let gymBadgesOffered = [];
-        Object.values(gymBadgesJson.data).forEach(value => gymBadgesOffered.push(value[0])); 
+        Object.values(gymBadgesJson.data).forEach(value => gymBadgesOffered.push(value[0]));
 
         // get array of badges player has already acquired from that gym 
         const playerBadgesResponse = await fetch(`/player-badges/${gymNameClean}`, {
@@ -226,7 +226,7 @@ async function challengeGym(event) {
         });
         const playerBadgesJson = await playerBadgesResponse.json();
         let playerBadges = [];
-        Object.values(playerBadgesJson.data).forEach(value => playerBadges.push(value[0])); 
+        Object.values(playerBadgesJson.data).forEach(value => playerBadges.push(value[0]));
 
         const badgesNotAquired = gymBadgesOffered.filter((badge) => !playerBadges.includes(badge));
         if (badgesNotAquired.length === 0) {
@@ -280,7 +280,7 @@ async function fillLeaderBoard() {
                 const cell = row.insertCell(index);
                 cell.textContent = field.slice(0, 10);
             }
-            
+
         });
     });
 
@@ -304,13 +304,13 @@ function resetItemStats() {
 }
 
 // Buy item for the trainer on click buy button
-async function buyItem(){
+async function buyItem() {
 
     console.log("buyItem funtion run");
     const username = sessionStorage.getItem("user");
     const name_raw = document.getElementById('item-to-buy-input').value;
     const name = sanitize_tolowercase(name_raw, regex_lowercase_withspace); // sanitize the input string
-  
+
     console.log(username);
     console.log(name);
 
@@ -322,17 +322,9 @@ async function buyItem(){
     const responseData_qty = await response_qty.json();
     const contentRows_qty = responseData_qty.data;
 
-    // If no items are found
-    if (responseData_qty.data.length == 0) {
-        //console.log("No item found");
-        alert("Item not found. Please try again");
-    } else {
-        alert("Item is added to your bags successfully! (˶ᵔ ᵕ ᵔ˶) ");
-    }
-
     //update the Trainer_Items table
     if (responseData_qty.data.length == 0) {
-        console.log("No item found");
+        // console.log("No item found");
         const response_addnew = await fetch('/trainer_items', {
             method: 'POST',
             headers: {
@@ -344,21 +336,20 @@ async function buyItem(){
                 quantity: 1
             })
         });
-    
+
         const responseData_addnew = await response_addnew.json();
-    
+
         if (responseData_addnew.success) {
             console.log("new item added!");
+            alert("Item is added to your bag successfully!")
         } else {
             console.log("Fail to add new item");
+            alert("Item cannot be added to your bag!")
         }
 
     } else {
-        console.log("Item found");
-        const newqty = contentRows_qty[0][2] + 1;
-        console.log(`newQuantity in scripts ${newqty}`);
-
-        //This is the BUG!!!
+        let newqty = contentRows_qty[0][2] + 1;
+        console.log("new quantity is", newqty);
         const response_addold = await fetch(`/trainer_items/:name/:username/:quantity`, {
             method: 'POST',
             headers: {
@@ -367,17 +358,18 @@ async function buyItem(){
             body: JSON.stringify({
                 name: name,
                 username: username,
-                // quantity: contentRows_qty[0][2],
                 quantity: newqty
             })
         });
-    
+
         const responseData_addold = await response_addold.json();
-    
+
         if (responseData_addold.success) {
             console.log("new item added!");
+            alert("Item is added to your bag successfully!")
         } else {
             console.log("Fail to add new item");
+            alert("Item cannot be added to your bag!")
         }
     }
 
@@ -392,7 +384,7 @@ async function populateItemStats(itemName) {
     // check the item is berry or medicine
     if (itemName.includes("berry")) {
         const response = await fetch(`/berries/${itemName}`, {
-            method: 'GET', 
+            method: 'GET',
         });
 
         const responseData = await response.json();
@@ -403,16 +395,13 @@ async function populateItemStats(itemName) {
             return;
         }
 
-        // console.log("Berry found!");
-        // console.log(contentRows[0][1]);
-
         // fill the berry attribute
         const flavor = document.getElementById('flavor');
         flavor.innerHTML += contentRows[0][1];
-          
+
     } else {
         const response = await fetch(`/medicine/${itemName}`, {
-            method: 'GET', 
+            method: 'GET',
         });
 
         const responseData = await response.json();
@@ -435,7 +424,7 @@ async function populateItemStats(itemName) {
         const cures = document.getElementById('cures');
         if (cures) {
             cures.innerHTML += contentRows[0][3];
-        } 
+        }
         const cost = document.getElementById('cost');
         if (cost) {
             cost.innerHTML += contentRows[0][4];
@@ -466,7 +455,7 @@ async function filterItems() {
 // Find items by entering name
 async function findItemByName() {
     let item_raw = document.getElementById("findbyname").value;
-    const item  = sanitize_tolowercase(item_raw, regex_lowercase_withspace); //sanitize string
+    const item = sanitize_tolowercase(item_raw, regex_lowercase_withspace); //sanitize string
     const tableElement = document.getElementById("item-table");
     const tableBody = tableElement.querySelector('tbody');
 
@@ -487,7 +476,7 @@ async function findItemByName() {
 
 // Helper to allow Pokemon search action by name at "enter" key press
 async function searchEnter(e) {
-    if(e.key =='Enter') {
+    if (e.key == 'Enter') {
         getPokemonByName();
     }
 }
@@ -516,86 +505,86 @@ async function encounterWildPokemon(caughtPokeInfo) {
     // display Learned Moves
     const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
 
-    while(learnedMovesTemp.length > 0) {
+    while (learnedMovesTemp.length > 0) {
         const move = learnedMovesTemp.pop();
         if (learnedMovesTemp.length != 0) {
             learnedMovesAttribute.innerHTML += `${move}, `;
         } else {
             learnedMovesAttribute.innerHTML += `${move}`;
         }
-        
+
     }
 }
 
 // Realease an 'encountered' pokemon on the catch page
 async function releaseCaughtPokemon(caughtPokeInfo) {
-    
+
     caughtPokeInfo.name = '';
     caughtPokeInfo.learnedMoves = "";
     resetStats();
     resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
-    
+
 }
 
 // Keep an 'encountered' pokemon on the catch page
 async function keepCaughtPokemon(caughtPokeInfo) {
-        const username = sessionStorage.getItem("user");
-        const nickname = getNickname();
+    const username = sessionStorage.getItem("user");
+    const nickname = getNickname();
 
-        if(nickname == null || nickname == 'nickname') {
-            alert("Error: Pokemon must have a nickname to be added to your team.");
-            return;
-        }
-    
-        //Player Pokemon POST
-        const response = await fetch('/player-pokemon/catch', {
+    if (nickname == null || nickname == 'nickname') {
+        alert("Error: Pokemon must have a nickname to be added to your team.");
+        return;
+    }
+
+    //Player Pokemon POST
+    const response = await fetch('/player-pokemon/catch', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: caughtPokeInfo.name.toString(),
+            nickname: nickname,
+            tr_username: username,
+            pp_level: 1
+        })
+    });
+    const responseData = await response.json();
+    if (!responseData.success) {
+        alert("Error catching pokemon!");
+        return;
+    }
+
+    // Learned Moves POST
+    let learnedMoves = caughtPokeInfo.learnedMoves;
+    for (i = 0; i < learnedMoves.length; i++) {
+        const response = await fetch('/player-pokemon/learned-move', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                move: learnedMoves[i].toString(),
                 name: caughtPokeInfo.name.toString(),
-                nickname: nickname, 
-                tr_username: username, 
-                pp_level: 1
+                nickname: nickname,
+                tr_username: username,
             })
         });
         const responseData = await response.json();
         if (!responseData.success) {
-            alert("Error catching pokemon!");
+            alert("Error adding pokemon move!");
             return;
-        } 
-
-        // Learned Moves POST
-        let learnedMoves = caughtPokeInfo.learnedMoves;
-        for(i = 0; i < learnedMoves.length; i++) {
-            const response = await fetch('/player-pokemon/learned-move', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    move: learnedMoves[i].toString(),
-                    name: caughtPokeInfo.name.toString(),
-                    nickname: nickname, 
-                    tr_username: username, 
-                })
-            });
-            const responseData = await response.json();
-            if (!responseData.success) {
-                alert("Error adding pokemon move!");
-                return;
-            } 
         }
+    }
 
-        
-        alert("Pokemon sucessfully added to your team!");
 
-        //Page clean up
-        caughtPokeInfo.name = '';
-        caughtPokeInfo.learnedMoves = "";
-        resetStats();
-        resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
+    alert("Pokemon sucessfully added to your team!");
+
+    //Page clean up
+    caughtPokeInfo.name = '';
+    caughtPokeInfo.learnedMoves = "";
+    resetStats();
+    resetStatsHelper('pokemon-stats-learned-moves', "LEARNED MOVES: ");
 }
 
 function getNickname() {
@@ -607,7 +596,7 @@ function getNickname() {
 //Create an array of randomly learned moves from a pokemon's can_learn moves
 async function pickLearnedMoves(pokemonName) {
     const movesResponse = await fetch(`/pokemon/stats/${pokemonName}`, {
-        method: 'GET', 
+        method: 'GET',
     });
 
     const movesResponseData = await movesResponse.json();
@@ -619,18 +608,18 @@ async function pickLearnedMoves(pokemonName) {
     }
 
     const moveArray = new Array();
-    for(i = 0; i < allData.length; i++) {
-        if(!moveArray.includes(allData[i][6])) {
+    for (i = 0; i < allData.length; i++) {
+        if (!moveArray.includes(allData[i][6])) {
             moveArray.push(allData[i][6]);
         }
     }
 
     let moveNum = Math.floor(Math.random() * (moveArray.length - 1)) + 1;
     let learnedMoves = new Array();
-    for(i = 0; i < moveNum; i++) {
+    for (i = 0; i < moveNum; i++) {
         learnedMoves.push(moveArray[i]);
     }
-    
+
     return learnedMoves;
 }
 
@@ -641,7 +630,7 @@ async function populatePokemonStats(pokemonName) {
 
     // GET data
     const response = await fetch(`/pokemon/stats/${pokemonName}`, {
-        method: 'GET', 
+        method: 'GET',
     });
 
     const responseData = await response.json();
@@ -671,12 +660,12 @@ async function populatePokemonStats(pokemonName) {
     //TYPE
     const typeAttribute = document.getElementById('pokemon-stats-type');
     const typeArray = new Array();
-    for(i = 0; i < contentRows.length; i++) {
-        if(!typeArray.includes(contentRows[i][5])) {
+    for (i = 0; i < contentRows.length; i++) {
+        if (!typeArray.includes(contentRows[i][5])) {
             typeArray.push(contentRows[i][5]);
         }
     }
-    while(typeArray.length > 1) {
+    while (typeArray.length > 1) {
         const type = typeArray.pop();
         typeAttribute.innerHTML += `${type}, `;
     }
@@ -689,19 +678,19 @@ async function populatePokemonStats(pokemonName) {
 
     if (moveAttribute) {
         const moveArray = new Array();
-        for(i = 0; i < contentRows.length; i++) {
-            if(!moveArray.includes(contentRows[i][6])) {
+        for (i = 0; i < contentRows.length; i++) {
+            if (!moveArray.includes(contentRows[i][6])) {
                 moveArray.push(contentRows[i][6]);
             }
         }
-        while(moveArray.length > 0) {
+        while (moveArray.length > 0) {
             const move = moveArray.pop();
             if (moveArray.length != 0) {
                 moveAttribute.innerHTML += `${move}, `;
             } else {
                 moveAttribute.innerHTML += `${move}`;
             }
-        
+
         }
     }
 
@@ -724,7 +713,7 @@ async function resetStats() {
 async function resetStatsHelper(elementID, text) {
     const attribute = document.getElementById(elementID);
     const strongName = document.createElement('strong');
-    strongName.textContent = text; 
+    strongName.textContent = text;
     attribute.textContent = '';
     attribute.appendChild(strongName);
 }
@@ -738,22 +727,22 @@ async function populatePlayerPokemonStats(nickname, name, level) {
     document.getElementById('pokemon-stats-level').innerHTML += level;
 
     const response = await fetch(`learned-move/${sessionStorage.getItem("user")}/${name}/${nickname}`, {
-        method: 'GET', 
+        method: 'GET',
     });
     const responseData = await response.json();
-    
+
     const learnedMovesTemp = responseData.data;
-    
+
     // display Learned Moves
     const learnedMovesAttribute = document.getElementById('pokemon-stats-learned-moves');
 
-    while(learnedMovesTemp.length > 0) {
+    while (learnedMovesTemp.length > 0) {
         const move = learnedMovesTemp.pop();
         if (learnedMovesTemp.length != 0) {
             learnedMovesAttribute.innerHTML += `${move}, `;
         } else {
             learnedMovesAttribute.innerHTML += `${move}`;
-        } 
+        }
     }
 }
 
@@ -803,7 +792,7 @@ async function verifyUsername(username) {
     } else {
         console.log("user exists");
         return false;
-    }    
+    }
 };
 
 // Verify if the zipcode already exist in timezone table
@@ -815,12 +804,11 @@ async function verifyZipcode(zipcode) {
 
     const responseData = await response.json();
 
-    // If username and password does not match, pop up alert window.
     if (responseData.data.length == 0) {
         return true;
     } else {
         return false;
-    }    
+    }
 };
 
 // Generate new date following specified format
@@ -837,6 +825,7 @@ function getCurrentFormattedDate() {
 
 // Insert user timezone into timezone
 async function insertZipcode(zipcode, timezone) {
+    console.log("insertZipcode function run")
     const response_timezone = await fetch('/insert-timezone', {
         method: 'POST',
         headers: {
@@ -851,36 +840,12 @@ async function insertZipcode(zipcode, timezone) {
     const responseData_timezone = await response_timezone.json();
     if (responseData_timezone.success) {
         console.log("Timezone inserted successfully!");
+        return true;
     } else {
         console.log("Timezone inserted NOT WORK");
-    }
-    return true;
-}
-
-// Insert new user to trainer table
-async function insertNewUser(username, name, password, startdate, zipcode) {
-    const response_user = await fetch('/insert-user', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: username,
-            name: name,
-            password: password,
-            startdate: startdate,
-            zipcode: zipcode
-        })
-    });
-
-    const responseData_user = await response_user.json();
-    if (responseData_user.success) {
-        console.log("User inserted successfully!");
-    } else {
-        console.log("User inserted NOT WORK");
+        return false;
     }
 }
-
 
 // Inserts new user information into the trainer table
 async function insertUser(event) {
@@ -903,8 +868,8 @@ async function insertUser(event) {
     const verify_user_result = await verifyUsername(username); //important to add, otherwise all the other function will run at the same time
     if (!verify_user_result) {
         alert("username already exist. please use another one");
-        return; 
-    } 
+        return;
+    }
     console.log("finish run verify user, start verify zipcode")
     // verify if the zipcode already in the timezone table
     const verify_zipcod_result = await verifyZipcode(zipcode);
@@ -918,11 +883,28 @@ async function insertUser(event) {
 
     console.log("finish run verify zipcode, start insert user");
     // insert the new user to trainer table;
-    insertNewUser(username, name, password, startdate, zipcode);
-    // redirect to the login page 
-    alert("new user sign up successfully!");
-    window.location.href = 'login.html';
-    }
+    const insertNewUserResult = await fetch('/insert-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            name: name,
+            password: password,
+            startdate: startdate,
+            zipcode: zipcode
+        })
+    });
+
+    const insert_new_user_result = await insertNewUserResult.json();
+    if (insert_new_user_result) {
+        alert("Signup successfully!");
+        window.location.href ='login.html';
+    } else {
+        alert("Sorry there is something wrong with your signup");
+    } 
+}
 
 // Delete selected player pokemon
 async function deletePokemon() {
@@ -957,7 +939,7 @@ async function deletePokemon() {
         }
     }
 }
-    
+
 // increase pokemon level by 1    
 async function trainPokemon() {
     let pokemon = document.getElementById('pokemon-stats-name').textContent;
@@ -1003,10 +985,10 @@ async function countPokemonByType() {
 }
 
 async function loadProfileInfo() {
-    
+
     const username = sessionStorage.getItem('user');
 
-    if(username == null) {return;}
+    if (username == null) { return; }
 
     const response = await fetch('/user-info', {
         method: 'GET',
@@ -1020,18 +1002,17 @@ async function loadProfileInfo() {
     document.getElementById('username-text').innerHTML += username;
     document.getElementById('name-text').innerHTML += responseData.name;
     document.getElementById('zip-text').innerHTML += responseData.zip;
-
 }
 
 // Change user's name
 async function changeName(event) {
-    
+
     event.preventDefault();
     const username = sessionStorage.getItem('user');
 
     let newNameValue = prompt("Please enter your new name", "new name");
-    
-    if(newNameValue == null) {
+
+    if (newNameValue == null) {
         alert('Please enter a name and try again');
         return;
     }
@@ -1064,7 +1045,7 @@ async function changeName(event) {
 
 // Change user's password
 async function changePassword(event) {
-    
+
     event.preventDefault();
     const username = sessionStorage.getItem('user');
 
@@ -1078,14 +1059,14 @@ async function changePassword(event) {
     const infoResponseData = await infoResponse.json();
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
-    
-    if(oldPasswordValue != infoResponseData.password) {
+
+    if (oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
         return;
     }
 
     let newPasswordValue = prompt("Please enter your new password", "new password");
-    if(newPasswordValue === null || newPasswordValue === "new password") {
+    if (newPasswordValue === null || newPasswordValue === "new password") {
         return;
     }
 
@@ -1111,6 +1092,69 @@ async function changePassword(event) {
     } else {
         alert("Error updating Password! Please try again.");
     }
+}
+
+// Change user's zipcode and timezone
+async function changeZipcode(event) {
+    event.preventDefault();
+
+    //Get the username
+    const username = sessionStorage.getItem('user');
+
+    console.log("to run the prompt")
+
+    // get the new zipcode from the window dialog box
+    let newZipcode = prompt("Please enter your new zipcode", "new zipcode");
+    if (newZipcode == null) {
+        alert('Please enter a zipcode and try again');
+        return;
+    }
+    console.log("user input new zipcode is", newZipcode);
+
+    // get the new timezone from the window dialog box
+    let newTimezone = prompt("Please enter your new timezone", "new timezone");
+    if (newTimezone == null) {
+        alert('Please enter a newTimezone and try again');
+        return;
+    }
+    console.log("user input new timezone is", newTimezone);
+
+    let responseSearchZip = await fetch(`/timezone/${newZipcode}`, {
+        method: 'GET',
+    });
+
+    const responseZipcode = await responseSearchZip.json();
+
+    if (responseZipcode.data.length == 0) {
+        alert("Zipcode does not exist. Need to insert into timezone table");
+        await insertZipcode(newZipcode, newTimezone);
+    } else {
+        alert("Zipcode already exist! No need to update timezone table");
+    };
+
+    //Update the zipcode of trainer
+    const responseUpdateZipcode = await fetch(`/update_zipcode`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            zipcode: newZipcode
+        })
+    })
+
+    const responseUpdateZipcodeData = await responseUpdateZipcode.json();
+
+    if (responseUpdateZipcodeData.success) {
+        resetStatsHelper('username-text', "USERNAME: ");
+        resetStatsHelper('name-text', "NAME: ");
+        resetStatsHelper('zip-text', "ZIP/POSTAL CODE: ");
+        loadProfileInfo();
+        alert("Trainer zipcode updated correctly");
+    } else {
+        alert("Trainer zipcode cannot be updated. Please try again.");
+    }
 
 }
 
@@ -1133,7 +1177,7 @@ async function getPokemonCount() {
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
-window.onload = function() {
+window.onload = function () {
     fetchTableData();
     if (sessionStorage.getItem('user') == null && (document.body.id != 'login') && (document.body.id != 'signup')) {
         window.location.href = 'login.html';
@@ -1149,6 +1193,7 @@ window.onload = function() {
         });
         document.getElementById("changeName-button").addEventListener('click', changeName);
         document.getElementById("password-button").addEventListener('click', changePassword);
+        document.getElementById("changeZipcode").addEventListener('click', changeZipcode);
     } else if (document.body.id == 'pokedex') {
         document.getElementById("filter-search-button").addEventListener("click", filterPokedex);
         document.getElementById("effectiveness-button").addEventListener("click", getEffectiveness);
@@ -1159,7 +1204,7 @@ window.onload = function() {
         });
         document.getElementById("nameInput").addEventListener('keypress', searchEnter);
         document.getElementById("pokedex-pokemon-table").addEventListener('click', (e) => {
-            if (e.target.tagName === 'TD') {populatePokemonStats(e.target.textContent);}
+            if (e.target.tagName === 'TD') { populatePokemonStats(e.target.textContent); }
         });
     } else if (document.body.id == 'gym') {
         document.getElementById("gym-search").addEventListener("submit", challengeGym);
@@ -1189,7 +1234,7 @@ window.onload = function() {
         document.getElementById("reset-attribute-button").addEventListener("click", resetItemStats);
         document.getElementById("item-table").addEventListener('click', (e) => {
             //tagName = 'TD' check the tag tabledata cell
-            if (e.target.tagName == 'TD') {populateItemStats(e.target.textContent);}
+            if (e.target.tagName == 'TD') { populateItemStats(e.target.textContent); }
             //set the item to buy input box as the clicked item
             document.getElementById('item-to-buy-input').value = e.target.textContent;
         });
@@ -1207,7 +1252,7 @@ window.onload = function() {
 
         const caughtPokeInfo = {
             "Name": "",
-            "Learned Moves": "", 
+            "Learned Moves": "",
         }
 
         document.getElementById('catch-button').addEventListener('click', () => {
@@ -1220,7 +1265,7 @@ window.onload = function() {
             releaseCaughtPokemon(caughtPokeInfo);
         });
 
-        
+
     }
 };
 
@@ -1245,7 +1290,6 @@ function fetchTableData() {
 }
 
 //Helper function for data sanitize
-
 const regex_lowercase_withspace = /^[a-z\s]+$/ //regex identify lowercase letter with whitesapce inbetween
 const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter without whitesapce inbetween
 const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
@@ -1254,48 +1298,48 @@ const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter wi
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)
 function sanitize_tolowercase(str, regex) {
-  //trim the leading the tailing white space, and convert to lowercase
-  let trim_str = str.trim().toLowerCase();
-  let sanitized_str = '';
+    //trim the leading the tailing white space, and convert to lowercase
+    let trim_str = str.trim().toLowerCase();
+    let sanitized_str = '';
 
-  for (let char of trim_str) {
-    if (regex.test(char)) {
-      sanitized_str += char;
+    for (let char of trim_str) {
+        if (regex.test(char)) {
+            sanitized_str += char;
+        }
     }
-  }
 
-  result = sanitized_str.trim();
+    result = sanitized_str.trim();
 
-  if (result !== '') {
-    console.log("sanitized string is", result);
-    return result;
-  } else {
-    console.log('Input is invalid. Please try again');
-    return;
-  }
+    if (result !== '') {
+        console.log("sanitized string is", result);
+        return result;
+    } else {
+        console.log('Input is invalid. Please try again');
+        return;
+    }
 };
 
 // sanitize to letter sensitive string
 // used for renaming (pokemon, nickname)
 function sanitize(str, regex) {
-  // trim the leading the tailing white space, and convert to lowercase
-  let trim_str = str.trim();
-  let sanitized_str = '';
+    // trim the leading the tailing white space, and convert to lowercase
+    let trim_str = str.trim();
+    let sanitized_str = '';
 
-  //create a regex for matching the string
-  for (let char of trim_str) {
-    if (regex.test(char)) {
-      sanitized_str += char;
+    //create a regex for matching the string
+    for (let char of trim_str) {
+        if (regex.test(char)) {
+            sanitized_str += char;
+        }
     }
-  }
 
-  result = sanitized_str.trim();
+    result = sanitized_str.trim();
 
-  if (result !== '') {
-    console.log("sanitized string is", result);
-    return result;
-  } else {
-    console.log('Input is invalid. Please try again');
-    return;
-  }
+    if (result !== '') {
+        console.log("sanitized string is", result);
+        return result;
+    } else {
+        console.log('Input is invalid. Please try again');
+        return;
+    }
 };

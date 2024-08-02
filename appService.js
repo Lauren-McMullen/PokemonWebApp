@@ -181,16 +181,6 @@ async function fetchItembyNameFromDb(name) {
     });
 }
 
-//Helper function to fetch data to /trainer_items
-// async function fetchTrainerItemsFromDb() {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute('SELECT * FROM Trainer_Items');
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
-
 //function to fetch trainer_items by username and item
 //Use username: Suicune7 for testing
 async function fetchUserAndItemFromDb(username, itemname) {
@@ -201,16 +191,6 @@ async function fetchUserAndItemFromDb(username, itemname) {
         return [];
     });
 }
-
-// fetch quantity from trainer_items with specified item and username
-// async function fetchQtyFromDb(name, username) {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute(`SELECT quantity FROM Trainer_Items WHERE name = :name AND username= :username`, { name: name, username: username });
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
 
 // Option: function to insert itemname, username, quantity to trainer_item table
 async function insertTrainerAndItem(name, username, quantity) {
@@ -261,7 +241,6 @@ async function insertTimezoneDb(zipcode, timezone) {
 }
 
 //function to fetch trainer by username and password
-//Use username: Suicune7, password: cpsc304IsCool to test for now
 async function fetchUserFromDb(username, password) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT * FROM Trainer WHERE username = :username AND password = :password`, { username: username, password: password });
@@ -330,6 +309,22 @@ async function insertUserToDb(username, name, password, startdate, zipcode) {
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+// Update user zipcode
+async function updateUserZipcode(username, zipcode) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE Trainer 
+            SET zip_postal_code=:zipcode 
+            WHERE username=:username`,
+            [zipcode, username],
             { autoCommit: true }
         );
         return result.rowsAffected && result.rowsAffected > 0;
@@ -720,6 +715,7 @@ module.exports = {
     fetchUserInfoFromDb,
     updateName,
     updatePassword,
+    updateUserZipcode,
     countPlayerPokemonByType,
     countPlayerPokemon,
     updatePokemonLevel,

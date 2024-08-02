@@ -239,7 +239,6 @@ router.get('/medicine/:name', async (req, res) => {
     res.json({data: tableContent});
 });
 
-
 //Add item information to trainer_items table
 router.post("/trainer_items", async (req, res) => {
     const { name, username, quantity } = req.body;
@@ -256,12 +255,6 @@ router.post("/trainer_items", async (req, res) => {
     }
 });
 
-//Fetch data to trainer_items
-// router.get('/trainer_items', async (req, res) => {
-//     const tableContent = await appService.fetchTrainerItemsFromDb();
-//     res.json({data: tableContent});
-// });
-
 //get username and item from trainer_items databse
 router.get('/trainer_items/:username/:itemname', async (req, res) => {
     //parse the parameter from address
@@ -269,18 +262,6 @@ router.get('/trainer_items/:username/:itemname', async (req, res) => {
     const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
     res.json({data: tableContent});
 });
-
-
-
-//update the quantity of trainer item
-// router.post('/trainer_items/:username/:itemname', async (req, res) => {
-//     //parse the parameter from address
-//     const { username, itemname } = req.params;
-//     const tableContent = await appService.fetchUserAndItemFromDb(username, itemname);
-//     res.json({data: tableContent});
-// });
-
-
 
 //update the quantity of trainer item
 router.post("/trainer_items/:name/:username/:quantity", async (req, res) => {
@@ -292,17 +273,6 @@ router.post("/trainer_items/:name/:username/:quantity", async (req, res) => {
         res.status(500).json({ success: false , id: -1});
     }
 });
-
-// Update the quantity of trainer_items with specified name and username
-// router.post("/trainer_items", async (req, res) => {
-//  //parse the parameter from address
-//    const { name, username, quantity } = req.body;
-// //    const { quantity } = req.body; 
-   
-//    const tableContent = await appService.insertTrainerAndItem(name, username, quantity);
-//    res.json({data: tableContent});
-   
-// });
 
 router.post("/insert-timezone", async (req, res) => {
     const { zipcode, timezone } = req.body;
@@ -342,21 +312,25 @@ router.get('/login/:username', async (req, res) => {
     res.json({data: tableContent});
 });
 
-//Verify zipcode for signup, 
-//I did not check both zipcode and timezone because timezone depends on zipcode
-// router.get('/timezone/:zipcode/:timezone', async (req, res) => {
-//     //parse the parameter from address
-//     const { zipcode, timezone } = req.params;
-//     const tableContent = await appService.fetchTimezoneFromDb(zipcode, timezone);
-//     res.json({data: tableContent});
-// });
-
-//Verify zipcode for signup.
-//I did not check both zipcode and timezone because timezone depends on zipcode
+//Verify & Find zipcode for signup and zipcode update.
 router.get('/timezone/:zipcode', async (req, res) => {
     const { zipcode } = req.params;
     const tableContent = await appService.fetchTimezoneFromDb(zipcode);
     res.json({data: tableContent});
+});
+
+//Update zipcode for trainer.
+router.post('/update_zipcode', async (req, res) => {
+    const { username, zipcode } = req.body;
+    const insertResult = await appService.updateUserZipcode(username, zipcode);
+    
+    if (insertResult) {
+        res.json({ success: true , id: insertResult});
+        console.log("post work!");
+    } else {
+        res.status(500).json({ success: false , id: -1});
+        console.log("post NOT work");
+    }
 });
 
 //Get pokemon for display in the pokedex 
