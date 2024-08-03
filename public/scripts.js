@@ -341,7 +341,6 @@ async function buyItem() {
     const username = sessionStorage.getItem("user");
     const name_raw = document.getElementById('item-to-buy-input').value;
     const name = sanitize_tolowercase(name_raw, regex_lowercase_withspace); // sanitize the input string
-
     console.log(username);
     console.log(name);
 
@@ -780,11 +779,18 @@ async function populatePlayerPokemonStats(nickname, name, level) {
 }
 
 // Verify login information
-//Use username: Suicune7, password: cpsc304IsCool to test for now
 async function verifyLogin() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    console.log(username, password);
+
+    const username = document.getElementById("username_text").value.trim();
+    const password = document.getElementById("password_text").value;
+    // console.log("Username is:", username);
+    // console.log("Password is:", password);
+
+    //Verify if the enter box is empty
+    if (username == ''|| password == '') {
+        alert("username and password cannot be empty. please try again");
+        return;
+    }
 
     const response = await fetch(`/login/${username}/${password}`, {
         method: 'GET',
@@ -887,24 +893,43 @@ async function insertUser(event) {
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const name = document.getElementById('nickname').value;
-    const zipcode = document.getElementById('zipcode').value;
+    const name = document.getElementById('nickname').value.trim();
+    const zipcode = document.getElementById('zipcode').value.trim();
     const startdate = getCurrentFormattedDate();
     const timezone = document.getElementById('timezone').value;
-    // console.log("load parameters");
-    // console.log(username);
-    // console.log(name);
-    // console.log(password);
-    // console.log(startdate);
-    // console.log(zipcode);
 
+    if (username == '' || password == '' || name == '' || zipcode == '') {
+        alert("input cannot be empty. please try again");
+        return;
+    }
+
+    if (!regex_valid_username.test(username)){
+        alert("Username is invalid. It needs to be combination of alphanumeric characters or _. please try agin");
+        return;
+    }
+
+    if (!regex_valid_password.test(password)){
+        alert("Password is invalid. It needs to be combination of  alphanumeric characters, !, @, #, &. Your password needs to start and end with alphanumeric characters. The length of your password needs to be at least 3. Please try again");
+        return;
+    }
+
+    // console.log("Input Verification is complete");
+    // console.log("new username:", username);
+    // console.log("new pasword:", password);
+    // console.log("new startdate:", startdate);
+    // console.log("new zipcode:", zipcode);
+
+    // console.log("Start verifyUsername function");
     // verify if the username already taken
     const verify_user_result = await verifyUsername(username);
+    
     if (!verify_user_result) {
         alert("username already exist. please use another one");
         return;
     }
-    console.log("finish run verify user, start verify zipcode")
+    // console.log("finish run verify user, start verify zipcode")
+    
+
     // verify if the zipcode already in the timezone table
     const verify_zipcod_result = await verifyZipcode(zipcode);
 
@@ -915,7 +940,7 @@ async function insertUser(event) {
         alert("zipcode does exist. no need to insert to timezone table");
     }
 
-    console.log("finish run verify zipcode, start insert user");
+    // console.log("finish run verify zipcode, start insert user");
     // insert the new user to trainer table;
     const insertNewUserResult = await fetch('/insert-user', {
         method: 'POST',
@@ -932,7 +957,7 @@ async function insertUser(event) {
     });
 
     const insert_new_user_result = await insertNewUserResult.json();
-    if (insert_new_user_result) {
+    if (insert_new_user_result.success) {
         alert("Signup successfully!");
         window.location.href ='login.html';
     } else {
@@ -1351,6 +1376,8 @@ const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter wit
 const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
+const regex_valid_username = /^[a-zA-Z0-9_]+$/ //regex to for valid username
+const regex_valid_password = /^[a-zA-Z0-9][a-zA-Z0-9!@#&]{1,}[a-zA-Z0-9]$/ //regex for valid password
 
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)
