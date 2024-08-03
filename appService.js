@@ -524,17 +524,6 @@ async function fetchFrequentBuyersFromDb(){
     });
 }
 
-
-// Fetches the pokemon mathcing a given name in the database
-async function fetchUserInfoFromDb(username) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT * FROM Trainer WHERE username=:username`, [username]);
-        return result.rows[0];
-    }).catch(()=> {
-        return [];
-    });
-}
-
 // Update the user's name in the database
 async function updateName(currentuser, newNameValue) {
     return await withOracleDB(async (connection) => {
@@ -732,7 +721,6 @@ module.exports = {
     deletePlayerPokemonFromDb, 
     fetchPokemonLeaderboardFromDb,
     fetchGymLeaderboardFromDb,
-    fetchUserInfoFromDb,
     updateName,
     updatePassword,
     updateUserZipcode,

@@ -403,6 +403,8 @@ async function buyItem() {
         }
     }
 
+    fetchTableData();
+
 }
 
 // Handler for click event on item table
