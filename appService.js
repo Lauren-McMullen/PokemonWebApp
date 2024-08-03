@@ -309,20 +309,6 @@ async function insertTimezoneDb(zipcode, timezone) {
         return false;
     });
 }
-//do we want to write a function to check if the user already exists?
-async function insertUserToDb(username, name, password, startdate, zipcode) {
-    return await withOracleDB(async (connection) => {
-        console.log("insert into trainer table");
-        const result = await connection.execute(
-            `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
-            [username, name, password, startdate, zipcode],
-            { autoCommit: true }
-        );
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
-    });
-}
 
 // Update user zipcode
 async function updateUserZipcode(username, zipcode) {
@@ -538,17 +524,6 @@ async function fetchFrequentBuyersFromDb(){
     });
 }
 
-
-// Fetches the pokemon mathcing a given name in the database
-async function fetchUserInfoFromDb(username) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT * FROM Trainer WHERE username=:username`, [username]);
-        return result.rows[0];
-    }).catch(()=> {
-        return [];
-    });
-}
-
 // Update the user's name in the database
 async function updateName(currentuser, newNameValue) {
     return await withOracleDB(async (connection) => {
@@ -746,7 +721,6 @@ module.exports = {
     deletePlayerPokemonFromDb, 
     fetchPokemonLeaderboardFromDb,
     fetchGymLeaderboardFromDb,
-    fetchUserInfoFromDb,
     updateName,
     updatePassword,
     updateUserZipcode,

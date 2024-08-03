@@ -90,14 +90,14 @@ router.get('/frequentbuyers', async (req, res) => {
 });
 
 
-// fetch and return the leaderboard of all players that have caught all pokemon
+// fetch and return user info
 router.get('/user-info', async (req, res) => {
-    const info = await appService.fetchUserInfoFromDb(req.headers['username']);
-    res.json({  username: info[0],
-                name: info[1],
-                password: info[2],
-                start_date: info[3],
-                zip: info[4]
+    const info = await appService.fetchUserbyUsernameFromDb(req.headers['username']);
+    res.json({  username: info[0][0],
+                name: info[0][1],
+                password: info[0][2],
+                start_date: info[0][3],
+                zip: info[0][4]
     });
 });
 
