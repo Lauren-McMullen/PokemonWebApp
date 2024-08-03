@@ -35,7 +35,7 @@ CREATE TABLE Move(
   accuracy INTEGER NOT NULL,
   type VARCHAR(20) NOT NULL,
   UNIQUE(effect),
-  FOREIGN KEY(type) REFERENCES Type(name)
+  FOREIGN KEY(type) REFERENCES Type(name) ON DELETE CASCADE
 );
  
 /*Items*/
