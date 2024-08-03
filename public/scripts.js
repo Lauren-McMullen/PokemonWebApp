@@ -891,10 +891,19 @@ async function insertUser(event) {
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const name = document.getElementById('nickname').value.trim();
-    const zipcode = document.getElementById('zipcode').value.trim();
+    const name_raw = document.getElementById('nickname').value.trim();
+    const zipcode_raw = document.getElementById('zipcode').value.trim();
     const startdate = getCurrentFormattedDate();
     const timezone = document.getElementById('timezone').value;
+
+    console.log("raw nickname", name_raw);
+    console.log("raw zipcode", zipcode_raw);
+
+    const name = sanitize(name_raw, regex_nickname);
+    const zipcode = sanitize(zipcode_raw, regex_zipcode);
+
+    console.log("sanizied nickname", name);
+    console.log("sanizied zipcode", name);
 
     if (username == '' || password == '' || name == '' || zipcode == '') {
         alert("input cannot be empty. please try again");
@@ -932,10 +941,10 @@ async function insertUser(event) {
     const verify_zipcod_result = await verifyZipcode(zipcode);
 
     if (verify_zipcod_result) {
-        alert("zipcode does not exist. need to insert new row in timezone table");
+        console.log("zipcode does not exist. need to insert new row in timezone table");
         await insertZipcode(zipcode, timezone);
     } else {
-        alert("zipcode does exist. no need to insert to timezone table");
+        console.log("zipcode does exist. no need to insert to timezone table");
     }
 
     // console.log("finish run verify zipcode, start insert user");
@@ -1376,6 +1385,9 @@ const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter wi
 const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
 const regex_valid_username = /^[a-zA-Z0-9_]+$/ //regex to for valid username
 const regex_valid_password = /^[a-zA-Z0-9][a-zA-Z0-9!@#&]{1,}[a-zA-Z0-9]$/ //regex for valid password
+const regex_nickname = /^[a-zA-Z0-9_\s]+$/ //regex to sanitize nickname
+const regex_zipcode = /^[a-zA-Z0-9-\s]+$/ //regex to sanitize zipcode
+
 
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)

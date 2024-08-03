@@ -309,20 +309,6 @@ async function insertTimezoneDb(zipcode, timezone) {
         return false;
     });
 }
-//do we want to write a function to check if the user already exists?
-async function insertUserToDb(username, name, password, startdate, zipcode) {
-    return await withOracleDB(async (connection) => {
-        console.log("insert into trainer table");
-        const result = await connection.execute(
-            `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
-            [username, name, password, startdate, zipcode],
-            { autoCommit: true }
-        );
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
-    });
-}
 
 // Update user zipcode
 async function updateUserZipcode(username, zipcode) {
