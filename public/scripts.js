@@ -506,6 +506,31 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
+// fecth item data and order the list by name in alphabetical order
+async function orderListbyName(){
+    const tableElement = document.getElementById('item-table');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/item_list_orderbyname', {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // Helper to allow Pokemon search action by name at "enter" key press
 async function searchEnter(e) {
     if (e.key == 'Enter') {
@@ -1327,6 +1352,8 @@ window.onload = function () {
             document.getElementById('item-to-buy-input').value = e.target.textContent;
         });
         document.getElementById('buy-button').addEventListener("click", buyItem);
+        //Renbo extra
+        document.getElementById('order-list-by-name').addEventListener('click', orderListbyName);
     } else if (document.body.id == 'login') {
         //sign up button direct to signup page
         document.getElementById("signup-btn").addEventListener("click", function () {

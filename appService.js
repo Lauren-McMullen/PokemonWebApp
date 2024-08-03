@@ -137,6 +137,18 @@ async function fetchItemstableFromDb() {
     });
 }
 
+// Renbo extra
+// Fetch items table order by name alphebetically
+async function fetchItemsAlphabetic() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Items ORDER BY name');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+
 // Fetch item berry table from database*/
 async function fetchItemsberryFromDb() {
     return await withOracleDB(async (connection) => {
@@ -696,6 +708,8 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
+    //Renbo extra
+    fetchItemsAlphabetic,
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
     fetchUserAndItemFromDb,

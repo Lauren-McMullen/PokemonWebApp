@@ -210,6 +210,13 @@ router.get('/store', async (req, res) => {
     res.json({data: tableContent});
 });
 
+// Renbo extra
+// get item from database order by name alphabetically
+router.get('/item_list_orderbyname', async (req, res) => {
+    const tableContent = await appService.fetchItemsAlphabetic();
+    res.json({data: tableContent});
+});
+
 //get items_berries from databse
 router.get('/store_berry', async (req, res) => {
     const tableContent = await appService.fetchItemsberryFromDb();
