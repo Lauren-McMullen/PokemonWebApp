@@ -777,12 +777,10 @@ async function populatePlayerPokemonStats(nickname, name, level) {
 }
 
 // Verify login information
-//Use username: Suicune7, password: cpsc304IsCool to test for now
 async function verifyLogin() {
 
-    const username_raw = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const username = sanitize(username_raw, regex_valid_username);
+    const username = document.getElementById("username_text").value.trim();
+    const password = document.getElementById("password_text").value;
     console.log("Username is:", username);
     console.log("Password is:", password);
 
