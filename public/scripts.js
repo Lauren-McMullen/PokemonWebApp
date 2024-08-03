@@ -341,7 +341,6 @@ async function buyItem() {
     const username = sessionStorage.getItem("user");
     const name_raw = document.getElementById('item-to-buy-input').value;
     const name = sanitize_tolowercase(name_raw, regex_lowercase_withspace); // sanitize the input string
-
     console.log(username);
     console.log(name);
 
@@ -780,9 +779,18 @@ async function populatePlayerPokemonStats(nickname, name, level) {
 // Verify login information
 //Use username: Suicune7, password: cpsc304IsCool to test for now
 async function verifyLogin() {
-    const username = document.getElementById("username").value;
+
+    const username_raw = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    console.log(username, password);
+    const username = sanitize(username_raw, regex_valid_username);
+    console.log("Username is:", username);
+    console.log("Password is:", password);
+
+    //Verify if the enter box is empty
+    if (username == null || username == ''|| password == null || password == '') {
+        alert("username and password cannot be empty. please try again");
+        return;
+    }
 
     const response = await fetch(`/login/${username}/${password}`, {
         method: 'GET',
@@ -1349,6 +1357,7 @@ const regex_lowercase_nospace = /^[a-z]+$/ //regex identify lowercase letter wit
 const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
+const regex_valid_username = /^[a-zA-Z0-9_]+$/ //regex to for valid username
 
 // sanitize to lowercase string
 // used for searching by name (pokemon, item)
