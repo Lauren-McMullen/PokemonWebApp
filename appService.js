@@ -560,7 +560,6 @@ async function updatePassword(currentuser, newPasswordValue) {
 
 
 
-
 // Insert a new player pokemon after catching it
 async function insertPlayerPokemon(name, nickname, tr_username, pp_level) {
     return await withOracleDB(async (connection) => {
