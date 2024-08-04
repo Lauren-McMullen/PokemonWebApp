@@ -137,7 +137,6 @@ async function fetchItemstableFromDb() {
     });
 }
 
-// Renbo extra
 // Fetch items table order by name alphebetically
 async function fetchItemsAlphabetic() {
     return await withOracleDB(async (connection) => {
@@ -200,7 +199,7 @@ async function fetchItembyNameFromDb(name) {
     });
 }
 
-// Renbo extra
+// function the summarize berry count and medicine count
 async function summarizeItem() {
     return await withOracleDB(async (connection) => {
         //Pass name as a variable to sql query
@@ -215,7 +214,6 @@ async function summarizeItem() {
 }
 
 //function to fetch trainer_items by username and item
-//Use username: Suicune7 for testing
 async function fetchUserAndItemFromDb(username, itemname) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT * FROM Trainer_Items WHERE name = :itemname AND username= :username`, { itemname: itemname, username: username });
@@ -242,30 +240,24 @@ async function insertTrainerAndItem(name, username, quantity) {
 // function to insert quantity to trainer_item table
 async function updateQuantity(name, username, quantity) {
     return await withOracleDB(async (connection) => {
-        console.log(quantity);
         const result = await connection.execute(
             `UPDATE Trainer_Items SET quantity=:quantity WHERE name=:name AND username=:username`,
             [quantity, name, username],
             { autoCommit: true }
         );
-        console.log("Update SUCCESS!");
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
-        console.log("Update Fail");
         return false;
     });
 }
 
+// Insert zipcode and timezone to Timezone table
 async function insertTimezoneDb(zipcode, timezone) {
-    //insert function to check if the zipcode and timezone pair already exist
-    console.log(zipcode);
-    console.log(timezone);
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `INSERT INTO Timezone (zip_postal_code, timezone) VALUES (:zipcode, :timezone)`,
             [zipcode, timezone],
             { autoCommit: true }
-            //question: should I insert into Timezone table as well?
         );
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
@@ -303,32 +295,13 @@ async function fetchTimezoneFromDb(zipcode) {
     });
 }
 
-//function to fetch trainer data and insert new user
-//do we want to write a function to check if the user already exists?
+//function to insert new user
 async function insertUserToDb(username, name, password, startdate, zipcode) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `INSERT INTO Trainer (username, name, password, start_date, zip_postal_code) VALUES (:username, :name, :password, :startdate, :zipcode)`,
             [username, name, password, startdate, zipcode],
             { autoCommit: true }
-        );
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
-    });
-}
-
-//Insert into timezone table
-async function insertTimezoneDb(zipcode, timezone) {
-    //insert function to check if the zipcode and timezone pair already exist
-    console.log(zipcode);
-    console.log(timezone);
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `INSERT INTO Timezone (zip_postal_code, timezone) VALUES (:zipcode, :timezone)`,
-            [zipcode, timezone],
-            { autoCommit: true }
-            //question: should I insert into Timezone table as well?
         );
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
@@ -722,9 +695,7 @@ module.exports = {
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
-    //Renbo extra
     fetchItemsAlphabetic,
-    //Renbo extra
     summarizeItem,
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
