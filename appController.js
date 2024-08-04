@@ -210,14 +210,12 @@ router.get('/store', async (req, res) => {
     res.json({data: tableContent});
 });
 
-// Renbo extra
 // get item from database order by name alphabetically
 router.get('/item_list_orderbyname', async (req, res) => {
     const tableContent = await appService.fetchItemsAlphabetic();
     res.json({data: tableContent});
 });
 
-//Renbo extra
 // get item summary data (berry count & medicine count) from database
 router.get('/summarize_item', async (req, res) => {
     const tableContent = await appService.summarizeItem();
@@ -295,6 +293,7 @@ router.post("/trainer_items/:name/:username/:quantity", async (req, res) => {
     }
 });
 
+//insert zipcode and timezone to timezone table
 router.post("/insert-timezone", async (req, res) => {
     const { zipcode, timezone } = req.body;
     const insertResult = await appService.insertTimezoneDb(zipcode, timezone);
@@ -305,6 +304,7 @@ router.post("/insert-timezone", async (req, res) => {
     }
 });
 
+// Insert new user to trainer table
 router.post("/insert-user", async (req, res) => {
     const { username, name, password, startdate, zipcode } = req.body;
     const insertResult = await appService.insertUserToDb(username, name, password, startdate, zipcode);
@@ -316,10 +316,7 @@ router.post("/insert-user", async (req, res) => {
 });
 
 //get users by username and password from databse
-//Use username: Suicune7, password: cpsc304IsCool to test for now
-//Issues: the username and password is not case sensitive
 router.get('/login/:username/:password', async (req, res) => {
-    //parse the parameter from address
     const { username, password } = req.params;
     const tableContent = await appService.fetchUserFromDb(username, password);
     res.json({data: tableContent});
@@ -327,7 +324,6 @@ router.get('/login/:username/:password', async (req, res) => {
 
 //Verify username for login and signup
 router.get('/login/:username', async (req, res) => {
-    //parse the parameter from address
     const { username } = req.params;
     const tableContent = await appService.fetchUserbyUsernameFromDb(username);
     res.json({data: tableContent});

@@ -337,12 +337,9 @@ function resetItemStats() {
 // Buy item for the trainer on click buy button
 async function buyItem() {
 
-    console.log("buyItem funtion run");
     const username = sessionStorage.getItem("user");
     const name_raw = document.getElementById('item-to-buy-input').value;
     const name = sanitize_tolowercase(name_raw, regex_lowercase_withspace); // sanitize the input string
-    console.log(username);
-    console.log(name);
 
     // Check quantity of the item
     const response_qty = await fetch(`/trainer_items/${username}/${name}`, {
@@ -354,7 +351,6 @@ async function buyItem() {
 
     //update the Trainer_Items table
     if (responseData_qty.data.length == 0) {
-        // console.log("No item found");
         const response_addnew = await fetch('/trainer_items', {
             method: 'POST',
             headers: {
@@ -370,16 +366,13 @@ async function buyItem() {
         const responseData_addnew = await response_addnew.json();
 
         if (responseData_addnew.success) {
-            console.log("new item added!");
             alert("Item is added to your bag successfully!")
         } else {
-            console.log("Fail to add new item");
             alert("Item cannot be added to your bag!")
         }
 
     } else {
         let newqty = contentRows_qty[0][2] + 1;
-        console.log("new quantity is", newqty);
         const response_addold = await fetch(`/trainer_items/:name/:username/:quantity`, {
             method: 'POST',
             headers: {
@@ -395,10 +388,8 @@ async function buyItem() {
         const responseData_addold = await response_addold.json();
 
         if (responseData_addold.success) {
-            console.log("new item added!");
             alert("Item is added to your bag successfully!")
         } else {
-            console.log("Fail to add new item");
             alert("Item cannot be added to your bag!")
         }
     }
@@ -411,7 +402,6 @@ async function buyItem() {
 async function populateItemStats(itemName) {
     resetItemStats();
 
-    // console.log("item found!");
 
     // check the item is berry or medicine
     if (itemName.includes("berry")) {
@@ -469,9 +459,6 @@ async function filterItems() {
     const itemElement = document.getElementById("items");
     const item = itemElement.value;
 
-    const tableElement = document.getElementById("item-table");
-    const tableBody = tableElement.querySelector('tbody');
-
     if (item == "berries") {
         await fetchAndDisplayUsers('item-table', '/store_berry');
         return;
@@ -489,7 +476,6 @@ async function findItemByName() {
     let item_raw = document.getElementById("findbyname").value;
     const item = sanitize_tolowercase(item_raw, regex_lowercase_withspace); //sanitize string
     const tableElement = document.getElementById("item-table");
-    const tableBody = tableElement.querySelector('tbody');
 
     const response = await fetch(`/store/${item}`, {
         method: 'GET',
@@ -506,7 +492,6 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
-//Renbo extra
 // Calculate berry count and medicine count
 async function summarizeItem() {
     const response = await fetch('/summarize_item', {
@@ -515,12 +500,6 @@ async function summarizeItem() {
 
     const responseData = await response.json();
     const columnrows = responseData.data;
-
-    if (responseData.data.length == 0) {
-        console.log("data retrieval fail");
-    } else {
-        console.log("data retrieval success");
-    }
 
     const berry_count = columnrows[0][0];
     const medicine_count = columnrows[0][1];
@@ -839,8 +818,6 @@ async function verifyLogin() {
 
     const username = document.getElementById("username_text").value.trim();
     const password = document.getElementById("password_text").value;
-    // console.log("Username is:", username);
-    // console.log("Password is:", password);
 
     //Verify if the enter box is empty
     if (username == ''|| password == '') {
@@ -872,8 +849,6 @@ async function verifyLogin() {
 // Everify if the username already taken when sign up
 async function verifyUsername(username) {
     const user = username;
-    console.log("verify username function is running");
-    console.log(user);
 
     const response = await fetch(`/login/${user}`, {
         method: 'GET',
@@ -882,10 +857,8 @@ async function verifyUsername(username) {
     const responseData = await response.json();
 
     if (responseData.data.length == 0) {
-        console.log("user does not exist");
         return true;
     } else {
-        console.log("user exists");
         return false;
     }
 };
@@ -920,7 +893,6 @@ function getCurrentFormattedDate() {
 
 // Insert user timezone into timezone
 async function insertZipcode(zipcode, timezone) {
-    console.log("insertZipcode function run")
     const response_timezone = await fetch('/insert-timezone', {
         method: 'POST',
         headers: {
@@ -934,11 +906,8 @@ async function insertZipcode(zipcode, timezone) {
 
     const responseData_timezone = await response_timezone.json();
     if (responseData_timezone.success) {
-        console.log("Timezone inserted successfully!");
-        console.log(timezone);
         return true;
     } else {
-        console.log("Timezone inserted NOT WORK");
         return false;
     }
 }
@@ -954,14 +923,8 @@ async function insertUser(event) {
     const startdate = getCurrentFormattedDate();
     const timezone = document.getElementById('timezone').value;
 
-    console.log("raw nickname", name_raw);
-    console.log("raw zipcode", zipcode_raw);
-
     const name = sanitize(name_raw, regex_nickname);
     const zipcode = sanitize(zipcode_raw, regex_zipcode);
-
-    console.log("sanizied nickname", name);
-    console.log("sanizied zipcode", name);
 
     if (username == '' || password == '' || name == '' || zipcode == '') {
         alert("input cannot be empty. please try again");
@@ -978,13 +941,6 @@ async function insertUser(event) {
         return;
     }
 
-    // console.log("Input Verification is complete");
-    // console.log("new username:", username);
-    // console.log("new pasword:", password);
-    // console.log("new startdate:", startdate);
-    // console.log("new zipcode:", zipcode);
-
-    // console.log("Start verifyUsername function");
     // verify if the username already taken
     const verify_user_result = await verifyUsername(username);
     
@@ -992,20 +948,16 @@ async function insertUser(event) {
         alert("username already exist. please use another one");
         return;
     }
-    // console.log("finish run verify user, start verify zipcode")
     
-
     // verify if the zipcode already in the timezone table
     const verify_zipcod_result = await verifyZipcode(zipcode);
 
     if (verify_zipcod_result) {
-        console.log("zipcode does not exist. need to insert new row in timezone table");
         await insertZipcode(zipcode, timezone);
     } else {
         console.log("zipcode does exist. no need to insert to timezone table");
     }
 
-    // console.log("finish run verify zipcode, start insert user");
     // insert the new user to trainer table;
     const insertNewUserResult = await fetch('/insert-user', {
         method: 'POST',
@@ -1285,7 +1237,6 @@ async function updateZipCode(zipCode) {
     } else {
         alert("Trainer zipcode cannot be updated. Please try again.");
     }
-
 }
 
 // count number of player pokemon
@@ -1383,17 +1334,13 @@ window.onload = function () {
             document.getElementById('item-to-buy-input').value = e.target.textContent;
         });
         document.getElementById('buy-button').addEventListener("click", buyItem);
-        //Renbo extra
         document.getElementById('order-list-by-name').addEventListener('click', orderListbyName);
-        //Renbo extra
         document.getElementById('summarize-item').addEventListener('click', summarizeItem);
         document.getElementById('reset-summary-data').addEventListener('click', resetSummaryData);
     } else if (document.body.id == 'login') {
-        //sign up button direct to signup page
         document.getElementById("signup-btn").addEventListener("click", function () {
             window.location.href = 'signup.html';
         });
-        //login button to login
         document.getElementById("login-btn").addEventListener("click", verifyLogin);
     } else if (document.body.id == 'signup') {
         document.getElementById("register-btn").addEventListener("click", insertUser);
@@ -1483,7 +1430,7 @@ function sanitize(str, regex) {
     let trim_str = str.trim();
     let sanitized_str = '';
 
-    //create a regex for matching the string
+    //use regex for matching the string
     for (let char of trim_str) {
         if (regex.test(char)) {
             sanitized_str += char;
