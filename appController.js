@@ -217,6 +217,13 @@ router.get('/item_list_orderbyname', async (req, res) => {
     res.json({data: tableContent});
 });
 
+//Renbo extra
+// get item summary data (berry count & medicine count) from database
+router.get('/summarize_item', async (req, res) => {
+    const tableContent = await appService.summarizeItem();
+    res.json({data: tableContent});
+});
+
 //get items_berries from databse
 router.get('/store_berry', async (req, res) => {
     const tableContent = await appService.fetchItemsberryFromDb();

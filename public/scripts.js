@@ -506,6 +506,37 @@ async function findItemByName() {
     fetchAndDisplayUsers('item-table', `/store/${item}`);
 }
 
+//Renbo extra
+// Calculate berry count and medicine count
+async function summarizeItem() {
+    const response = await fetch('/summarize_item', {
+        method: 'GET',
+    });
+
+    const responseData = await response.json();
+    const columnrows = responseData.data;
+
+    if (responseData.data.length == 0) {
+        console.log("data retrieval fail");
+    } else {
+        console.log("data retrieval success");
+    }
+
+    const berry_count = columnrows[0][0];
+    const medicine_count = columnrows[0][1];
+    console.log("berry count is:", berry_count);
+    console.log("medicine count is:", medicine_count);
+
+    document.getElementById("berry-count").textContent = berry_count;
+    document.getElementById("medicine-count").textContent = medicine_count;
+}
+
+//Reset the summary data to TBD
+function resetSummaryData() {
+    document.getElementById("berry-count").textContent = 'TBD';
+    document.getElementById("medicine-count").textContent = 'TBD';
+}
+
 // fecth item data and order the list by name in alphabetical order
 async function orderListbyName(){
     const tableElement = document.getElementById('item-table');
@@ -1354,6 +1385,9 @@ window.onload = function () {
         document.getElementById('buy-button').addEventListener("click", buyItem);
         //Renbo extra
         document.getElementById('order-list-by-name').addEventListener('click', orderListbyName);
+        //Renbo extra
+        document.getElementById('summarize-item').addEventListener('click', summarizeItem);
+        document.getElementById('reset-summary-data').addEventListener('click', resetSummaryData);
     } else if (document.body.id == 'login') {
         //sign up button direct to signup page
         document.getElementById("signup-btn").addEventListener("click", function () {

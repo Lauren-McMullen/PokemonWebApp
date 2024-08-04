@@ -60,7 +60,7 @@ async function withOracleDB(action) {
             } catch (err) {
                 console.error(err);
             }
-        }          
+        }
     }
 }
 
@@ -119,7 +119,7 @@ async function fetchPlayerBadgesRemainingFromDb(username, gym) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT name FROM Badge WHERE gym_name = :gym 
             MINUS 
-            SELECT badge FROM Trainer_Badges WHERE username = :username AND gym = :gym`, 
+            SELECT badge FROM Trainer_Badges WHERE username = :username AND gym = :gym`,
             [gym, username, gym]);
         return result.rows;
     }).catch(() => {
@@ -194,6 +194,20 @@ async function fetchItembyNameFromDb(name) {
     return await withOracleDB(async (connection) => {
         //Pass name as a variable to sql query
         const result = await connection.execute(`SELECT * FROM Items WHERE NAME = :name`, [name]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+// Renbo extra
+async function summarizeItem() {
+    return await withOracleDB(async (connection) => {
+        //Pass name as a variable to sql query
+        const result = await connection.execute(
+            `SELECT COUNT(CASE WHEN name LIKE '%berry%' THEN 1 END) AS berry_count, 
+            COUNT(CASE WHEN name NOT LIKE '%berry' THEN 1 END) AS medicine 
+            FROM items`);
         return result.rows;
     }).catch(() => {
         return [];
@@ -370,7 +384,7 @@ async function insertBattle(date, winner) {
             [battle_date, winner],
             { autoCommit: true }
         );
-        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = :lastRow`, {lastRow: `${result.lastRowid}`});
+        const battleid = await connection.execute(`SELECT id FROM Battle WHERE ROWID = :lastRow`, { lastRow: `${result.lastRowid}` });
         return battleid.rows[0][0];
     }).catch(() => {
         return -1;
@@ -394,9 +408,9 @@ async function insertGymChallenge(gym, username, battle) {
 // fetches all pokemon names in the current databse
 async function fetchPokemonFromDb() {
     return await withOracleDB(async (connection) => {
-       const result = await connection.execute('SELECT name FROM Pokemon');
-       return result.rows;
-    }).catch(()=> {
+        const result = await connection.execute('SELECT name FROM Pokemon');
+        return result.rows;
+    }).catch(() => {
         return [];
     });
 }
@@ -404,21 +418,21 @@ async function fetchPokemonFromDb() {
 // fetches all the moves an player pokemon has learned
 async function fetchLearnedMovesFromDb(username, pokemon, nickname) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT move FROM Learned_Moves WHERE name=:pokemon AND nickname=:nickname AND tr_username=:username', 
+        const result = await connection.execute('SELECT move FROM Learned_Moves WHERE name=:pokemon AND nickname=:nickname AND tr_username=:username',
             [pokemon, nickname, username]
         );
         return result.rows;
-     }).catch(()=> {
-         return [];
-     });
+    }).catch(() => {
+        return [];
+    });
 }
 
 // Fetches the evolutions chart from the database
 async function fetchEvolutionsFromDb() {
     return await withOracleDB(async (connection) => {
-       const result = await connection.execute('SELECT * FROM Evolutions');
-       return result.rows;
-    }).catch(()=> {
+        const result = await connection.execute('SELECT * FROM Evolutions');
+        return result.rows;
+    }).catch(() => {
         return [];
     });
 }
@@ -431,14 +445,14 @@ async function fetchPokedexFiltersFromDb(pokeBinds) {
     return await withOracleDB(async (connection) => {
         let filter_sql = "SELECT DISTINCT p.name FROM Pokemon p, Pokemon_Type pt WHERE p.name=pt.name";
         let sql_map = {
-            "pokeattack":` and p.attack >= `,
+            "pokeattack": ` and p.attack >= `,
             "pokedefence": ` and p.defence >= `,
             "pokespeed": ` and p.speed >= `,
             "poketype": ` and pt.type = `
         }
 
-        for(const [key, value] of pokeBinds) {
-            if(key === 'type') {
+        for (const [key, value] of pokeBinds) {
+            if (key === 'type') {
                 filter_sql += `${sql_map[key]}`;
                 filter_sql += `':${key}'`;
             } else {
@@ -457,11 +471,11 @@ async function fetchPokedexFiltersFromDb(pokeBinds) {
 // Fetches the effectiveness multiplier for the given attack and defense type
 async function fetchTypeMatchupFromDb(attack, defence) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`, 
+        const result = await connection.execute(`SELECT effect_multiplier FROM Type_Versus WHERE attack_type=:attack and defense_type=:defence`,
             [attack, defence]
         );
         return result.rows[0][0];
-    }).catch(()=> {
+    }).catch(() => {
         return -1;
     });
 
@@ -472,9 +486,9 @@ async function fetchTypeMatchupFromDb(attack, defence) {
 async function fetchPokemonByNameFromDb(name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT name FROM Pokemon 
-                                                WHERE name LIKE :name`, {name: `%${name}%`});
+                                                WHERE name LIKE :name`, { name: `%${name}%` });
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 
@@ -495,7 +509,7 @@ async function fetchPokemonLeaderboardFromDb() {
                                                                          FROM Player_Pokemon pp2
                                                                          WHERE pp2.tr_username=pp1.tr_username)))`);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 
@@ -510,13 +524,13 @@ async function fetchGymLeaderboardFromDb() {
                                                 HAVING COUNT(badge) >= 1
                                                 ORDER BY COUNT(badge) DESC`);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 }
 
 // Fetches the pokemon mathcing a given name in the database
-async function fetchFrequentBuyersFromDb(){
+async function fetchFrequentBuyersFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT username, SUM(quantity) 
                                                 FROM Trainer_Items 
@@ -531,7 +545,7 @@ async function fetchFrequentBuyersFromDb(){
                                                                          )
                                                 ORDER BY SUM(quantity) DESC `);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 }
@@ -598,7 +612,7 @@ async function deletePlayerPokemonFromDb(username, pokemon, nickname) {
             [username, pokemon, nickname],
             { autoCommit: true }
         );
-        
+
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
         return false;
@@ -638,8 +652,8 @@ async function fetchPokemonStatsFromDb(pokemonName) {
         const result = await connection.execute(`SELECT hp, attack, defence, speed, generation, type, move
                                                 FROM Pokemon p, Pokemon_Type t, Can_Learn l
                                                 WHERE p.name=t.name and t.name=l.pokemon and p.name=:pokemonName`, [pokemonName]);
-        return result.rows; 
-    }).catch(()=> {
+        return result.rows;
+    }).catch(() => {
         return [];
     });
 }
@@ -674,7 +688,7 @@ async function fetchTableNames() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT TABLE_NAME FROM USER_TABLES`);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 }
@@ -683,7 +697,7 @@ async function fetchColumnNames(tableName) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT COLUMN_NAME FROM USER_TAB_COLS WHERE TABLE_NAME = :tableName`, [tableName]);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 }
@@ -692,7 +706,7 @@ async function fetchSpecifiedColumnsFromDB(tableName, columnsList) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`SELECT ${columnsList} FROM ${tableName}`);
         return result.rows;
-    }).catch(()=> {
+    }).catch(() => {
         return [];
     });
 }
@@ -703,13 +717,15 @@ module.exports = {
     fetchPlayerPokemonFromDb,
     fetchGymsFromDb,
     fetchPokemonFromDb,
-    fetchEvolutionsFromDb, 
+    fetchEvolutionsFromDb,
     fetchItemstableFromDb,
     fetchItemsberryFromDb,
     fetchItemsmedicineFromDb,
     fetchItembyNameFromDb,
     //Renbo extra
     fetchItemsAlphabetic,
+    //Renbo extra
+    summarizeItem,
     fetchBerryByNameFromDb,
     fetchMedicineByNameFromDb,
     fetchUserAndItemFromDb,
@@ -717,7 +733,7 @@ module.exports = {
     insertTrainerAndItem,
     insertTimezoneDb,
     fetchUserbyUsernameFromDb,
-    fetchTimezoneFromDb, 
+    fetchTimezoneFromDb,
     insertBattle,
     fetchPlayerBadgesFromDb,
     insertGymChallenge,
@@ -728,11 +744,11 @@ module.exports = {
     fetchPokemonByNameFromDb,
     fetchPokemonStatsFromDb,
     insertPlayerBadge,
-    insertPlayerPokemon, 
+    insertPlayerPokemon,
     insertPlayerPokemonMove,
     fetchLearnedMovesFromDb,
     fetchPlayerItemsFromDb,
-    deletePlayerPokemonFromDb, 
+    deletePlayerPokemonFromDb,
     fetchPokemonLeaderboardFromDb,
     fetchGymLeaderboardFromDb,
     updateName,
