@@ -1,9 +1,9 @@
 # CPSC 304 Project Breakdown #
 
 ## Group Members ##
-* k4q8w
-* u6u4a
-* n0x9v
+* Lauren
+* Dana
+* Renbo
 
 ## Project Description ##
 We plan to model a database for the Pokémon franchise (with slight variations 
@@ -107,6 +107,7 @@ are all new to the language.
     - Code not used directly, but used to help us understand how to sanitize inputs
 - https://node-oracledb.readthedocs.io/en/latest/user_guide/bind.html#sqlwherein
     - Used to help us understand how binding variables work with SQL
-
+- https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
+    - Used to help us understand usage of SessionStorage for logins and storing usernames
 
 
