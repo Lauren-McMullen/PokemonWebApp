@@ -10,7 +10,7 @@ We plan to model a database for the Pokémon franchise (with slight variations
 to better suit CPSC 304 project requirements), highlighting some key behaviours 
 that a player would use while interacting with the game. The purpose of this application 
 is to monitor trainers’ progress (including collected pokémon, badges earned, items collected, 
-and gym battle records) and the development of their pokémon (such as levels and evolutions).
+and gym battle records) and the development of their pokémon (such as levels and evolutions).f
 
 ### Project Timeline  ###
 
@@ -85,7 +85,7 @@ across these pages.
     ***MISC.***
 7. Build Navigation bar / logic (Lauren) - July 29 - DONE
 8. Build .SQL init files (Dana) - July 29 - DONE
-9. Final debugging and details (All) - Aug 2-Aug 4 
+9. Final debugging and details (All) - Aug 2-Aug 4 - DONE
 
 ### Potential Challenges ###
 - None of us have much experience building full stack applications, so we 

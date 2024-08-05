@@ -937,7 +937,7 @@ async function insertUser(event) {
     }
 
     if (!regex_valid_password.test(password)){
-        alert("Password is invalid. It needs to be combination of  alphanumeric characters, !, @, #, &. Your password needs to start and end with alphanumeric characters. The length of your password needs to be at least 3. Please try again");
+        alert("Password is invalid. It needs to be combination of  alphanumeric characters, !, @, #, &. Please try again");
         return;
     }
 
@@ -1136,7 +1136,9 @@ async function changePassword(event) {
     const infoResponseData = await infoResponse.json();
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
-    oldPasswordValue = sanitize(oldPasswordValue, regex_withspace);
+    oldPasswordValue = sanitize(oldPasswordValue, regex_valid_password);
+    console.log(oldPasswordValue);
+    console.log(infoResponseData.password);
 
     if (oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
@@ -1144,10 +1146,13 @@ async function changePassword(event) {
     }
 
     let newPasswordValue = prompt("Please enter your new password", "new password");
-    newPasswordValue = sanitize(newPasswordValue, regex_withspace);
+    newPasswordValue = sanitize(newPasswordValue, regex_valid_password);
     if (newPasswordValue === null || newPasswordValue === "new password") {
         return;
     }
+    console.log(newPasswordValue);
+
+    
 
     const response = await fetch('/update-password', {
         method: 'POST',
@@ -1394,7 +1399,7 @@ const regex_withspace = /^[a-zA-Z\s]+$/ //regex to identify case-sensitive lette
 const regex_nospace = /^[a-zA-Z]+$/ //regex to identify case-sensitive letter with whitespace inbetween
 const regex_digit = /^[0-9]*$/ //regex to identify digit only inputs
 const regex_valid_username = /^[a-zA-Z0-9_]+$/ //regex to for valid username
-const regex_valid_password = /^[a-zA-Z0-9][a-zA-Z0-9!@#&]{1,}[a-zA-Z0-9]$/ //regex for valid password
+const regex_valid_password = /^[a-zA-Z0-9!@#&]+$/ //regex for valid password
 const regex_nickname = /^[a-zA-Z0-9_\s]+$/ //regex to sanitize nickname
 const regex_zipcode = /^[a-zA-Z0-9-\s]+$/ //regex to sanitize zipcode
 

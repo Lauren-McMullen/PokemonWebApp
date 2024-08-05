@@ -1968,19 +1968,19 @@ INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
 VALUES('DatabasePro', 'Seva', 'd@t@b@seGuy101', '20-JUL-24', 'V5T 6N9');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
-VALUES('TheVeryBest', 'Joe', 'awesomePass99*', '07-JUL-24',  'T8N 1V9');
+VALUES('TheVeryBest', 'Joe', 'awesomePass99', '07-JUL-24',  'T8N 1V9');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
-VALUES('pikachu', 'Sarah', 'aSHw8nakd78bs*', '09-JUL-24', 'T8N 0M8');
+VALUES('pikachu', 'Sarah', 'aSHw8nakd78bs', '09-JUL-24', 'T8N 0M8');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
-VALUES('redOctapus', 'Octo', 'kslfA843gg3eq2!', '09-JUL-24', 'C1A 9B6');
+VALUES('redOctapus', 'Octo', 'kslfA843gg3eq2', '09-JUL-24', 'C1A 9B6');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
 VALUES('Bob', 'Bob', '123456Abc', '10-JUL-24',  'C1C 7T6');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
-VALUES('Suicune7', 'Jamie', 'cpsc304IsCool', '10-JUL-24',  'X1A 5P3');
+VALUES('Suicune7', 'Jamie', 'cpsc304', '10-JUL-24',  'X1A 5P3');
 
 INSERT INTO Trainer(username, name, password, start_date, zip_postal_code)
 VALUES('admin', 'admin', '1234', '31-JUL-24',  'V5Y 1C8');
@@ -2116,7 +2116,7 @@ INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('lum berry', 'TheVeryBest', 3);
 
 INSERT INTO Trainer_Items(name, username, quantity)
-VALUES('lum berry', 'redOctapus', 8);
+VALUES('lum berry', 'redOctapus', 2);
 
 INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('lemonade', 'redOctapus', 1);
@@ -2128,22 +2128,22 @@ INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('persim berry', 'redOctapus', 4);
 
 INSERT INTO Trainer_Items(name, username, quantity)
-VALUES('razz berry', 'pokemonLvr', 10);
+VALUES('razz berry', 'pokemonLvr', 1);
 
 INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('antidote', 'pokemonLvr', 2);
 
 INSERT INTO Trainer_Items(name, username, quantity)
-VALUES('elixir', 'pokemonLvr', 5);
+VALUES('elixir', 'pokemonLvr', 3);
 
 INSERT INTO Trainer_Items(name, username, quantity)
-VALUES('elixir', 'DatabasePro', 6);
+VALUES('elixir', 'DatabasePro', 2);
 
 INSERT INTO Trainer_Items(name, username, quantity)
 VALUES('sitrus berry', 'DatabasePro', 7);
 
 INSERT INTO Trainer_Items(name, username, quantity)
-VALUES('potion', 'DatabasePro', 18);
+VALUES('potion', 'DatabasePro', 8);
 
 -- TRAINER BADGES
 INSERT INTO Trainer_Badges(gym, username, badge)
@@ -2356,3 +2356,5 @@ VALUES('energy ball','ivysaur', 'Thorn', 'Suicune7');
 
 INSERT INTO Learned_Moves(move,name,nickname,tr_username)
 VALUES('razor leaf','ivysaur', 'Thorn', 'Suicune7');
+
+COMMIT;
