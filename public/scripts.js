@@ -932,7 +932,7 @@ async function insertUser(event) {
     }
 
     if (!regex_valid_username.test(username)){
-        alert("Username is invalid. It needs to be combination of alphanumeric characters or _. please try agin");
+        alert("Username is invalid. It needs to be combination of alphanumeric characters or _. please try again");
         return;
     }
 
