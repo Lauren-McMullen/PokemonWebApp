@@ -1260,6 +1260,21 @@ async function getPokemonCount() {
     }
 }
 
+// displays user's name followed by display message on object with elementId
+async function displayName(elementId, username, displaymessage) {
+    const response = await fetch('/user-info', {
+        method: 'GET',
+        headers: {
+            'username': username
+        }
+    });
+
+    const responseData = await response.json();
+    let message = responseData.name;
+    message += displaymessage;
+    document.getElementById(elementId).innerHTML = (message);
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
@@ -1313,7 +1328,7 @@ window.onload = function () {
         if (user === null) {
             document.getElementById("userTeamHeader").innerHTML = ("Log in to view team!");
         } else {
-            document.getElementById("userTeamHeader").innerHTML = (user + "'s Team");
+            displayName("userTeamHeader", user, "'s Team");
         }
         document.getElementById("team-pokemon-table").addEventListener('click', (e) => {
             if (e.target.tagName === 'TD') {
