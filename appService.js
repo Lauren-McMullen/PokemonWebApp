@@ -223,7 +223,7 @@ async function fetchUserAndItemFromDb(username, itemname) {
     });
 }
 
-// Option: function to insert itemname, username, quantity to trainer_item table
+// Function to insert itemname, username, quantity to trainer_item table
 async function insertTrainerAndItem(name, username, quantity) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(

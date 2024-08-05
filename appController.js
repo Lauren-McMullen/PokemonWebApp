@@ -261,16 +261,11 @@ router.get('/medicine/:name', async (req, res) => {
 //Add item information to trainer_items table
 router.post("/trainer_items", async (req, res) => {
     const { name, username, quantity } = req.body;
-    console.log("request body");
-    console.log(req.body);
     const insertResult = await appService.insertTrainerAndItem(name, username, quantity);
-    console.log(insertResult);
     if (insertResult) {
         res.json({ success: true , id: insertResult});
-        console.log("post work!");
     } else {
         res.status(500).json({ success: false , id: -1});
-        console.log("post NOT work");
     }
 });
 
@@ -343,10 +338,8 @@ router.post('/update_zipcode', async (req, res) => {
     
     if (insertResult) {
         res.json({ success: true , id: insertResult});
-        console.log("post work!");
     } else {
         res.status(500).json({ success: false , id: -1});
-        console.log("post NOT work");
     }
 });
 

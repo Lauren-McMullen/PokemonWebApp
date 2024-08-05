@@ -325,7 +325,6 @@ async function getPokemonByName() {
 
 // Reset the item attribute display panel
 function resetItemStats() {
-    console.log("resetItemStats function run");
 
     resetStatsHelper('flavor', "Flavor: ");
     resetStatsHelper('hp-restored', "HP Restored: ");
@@ -503,8 +502,6 @@ async function summarizeItem() {
 
     const berry_count = columnrows[0][0];
     const medicine_count = columnrows[0][1];
-    console.log("berry count is:", berry_count);
-    console.log("medicine count is:", medicine_count);
 
     document.getElementById("berry-count").textContent = berry_count;
     document.getElementById("medicine-count").textContent = medicine_count;
@@ -1137,8 +1134,7 @@ async function changePassword(event) {
 
     let oldPasswordValue = prompt("Please enter your old password", "old password");
     oldPasswordValue = sanitize(oldPasswordValue, regex_valid_password);
-    console.log(oldPasswordValue);
-    console.log(infoResponseData.password);
+
 
     if (oldPasswordValue != infoResponseData.password) {
         alert("Incorrect password! Please try again.");
@@ -1150,7 +1146,6 @@ async function changePassword(event) {
     if (newPasswordValue === null || newPasswordValue === "new password") {
         return;
     }
-    console.log(newPasswordValue);
 
     
 
