@@ -13,13 +13,14 @@ This Pokemon web Application was developed using:
 - Express
 - Oracale and SQL
 
-## Pokemon Pages 🌿🔥💧
+# Pokemon Pages 🌿🔥💧
 
 Currently, we cannot offer a live demo set as the database has not been set up on a remote server. Due to the nature of the project, proper password encryption is not implemented. Thus, we hope the following photos and gifs can provide a full picture of our application behaviour.
 
-### Login / Signup
+## Login / Signup
 
-![Pokemon Login Page](https://github.com/[Lauren-McMullen]/[PokemonWebApp]/blob/[main]/public/demo-assets/../pokemon-login.png?raw=true)
+![Pokemon Login Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-login.png?raw=true)
+![Pokemon Login Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-signup.png?raw=true)
 
 ### Home Page
 
