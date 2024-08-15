@@ -20,19 +20,28 @@ Currently, we cannot offer a live demo set as the database has not been set up o
 ## Login / Signup
 
 ![Pokemon Login Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-login.png?raw=true)
-![Pokemon Login Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-signup.png?raw=true)
+![Pokemon signup Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-signup.png?raw=true)
 
-### Home Page
+## Home Page
+![Pokemon homepage ](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-homepage-notonleaderboard.png?raw=true)
+![Pokemon homepage ](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/pokemon-homepage-2.png?raw=true)
 
-### Catch Pokemon
+## Catch Pokemon
+![Pokemon catching Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/Catch-Demo.gif?raw=true)
 
-### Team Pokemon
+## Team Pokemon
+![Pokemon team Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/Team-Pokemon-Demo.gif?raw=true)
 
-### Gym Battles
 
-### Item Shop
+## Gym Battles
+![Pokemon gym Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/Gym-demo.gif?raw=true)
 
-### Admin Page
+## Item Shop
+![Pokemon item Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/Store-demo.gif?raw=true)
+
+## Admin Page
+![Pokemon admin Page](https://github.com/Lauren-McMullen/PokemonWebApp/blob/main/./demo-assets/admin-demo.gif?raw=true)
+
 
 
 
